@@ -14,8 +14,15 @@
     <packaging>pom</packaging>
 
     <properties>
+        <ed.group>${project.groupId}</ed.group>
+        <ed.version>${project.version}</ed.version>
+
         <spring.version>4.3.7.RELEASE</spring.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
+        <lombok.version>1.16.10</lombok.version>
+        <postgresql.version>9.4.1212</postgresql.version>
+        <hikari.version>2.5.1</hikari.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
