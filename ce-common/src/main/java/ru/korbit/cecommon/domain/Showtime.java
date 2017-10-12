@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by Artur Belogur on 10.10.17.
  */
 @Entity
-@Table(name = "showtime")
+@Table(name = "showtimes")
 @Data
 public class Showtime {
 

@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "simple_event")
+@Table(name = "simple_events")
 @Data
 public class SimpleEvent extends Event {
 

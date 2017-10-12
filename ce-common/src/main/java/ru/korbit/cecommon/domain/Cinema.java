@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by Artur Belogur on 10.10.17.
  */
 @Entity
-@Table(name = "cinema")
+@Table(name = "cinemas")
 @Data
 public class Cinema {
 

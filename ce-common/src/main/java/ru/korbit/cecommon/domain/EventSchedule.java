@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Artur Belogur on 11.10.17.
  */
 @Entity
-@Table(name = "event_schedule")
+@Table(name = "events_schedules")
 @Data
 public class EventSchedule {
 
