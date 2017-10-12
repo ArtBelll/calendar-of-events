@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +12,17 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "showtime")
+@Data
 public class Showtime {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    @Getter @Setter
     private long id;
 
     @Column(name = "start_time")
-    @Getter @Setter
     private Date startTime;
 
     @Column(name = "price")
-    @Getter @Setter
     private int price;
 }

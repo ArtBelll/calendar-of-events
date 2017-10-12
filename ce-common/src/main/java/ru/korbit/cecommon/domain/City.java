@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +12,17 @@ import java.util.List;
  */
 @Entity
 @Table(name = "cities")
+@Data
 public class City {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    @Getter @Setter
     private long id;
 
     @Column(name = "name")
-    @Getter @Setter
     private String name;
 
     @OneToMany(mappedBy = "city")
-    @Getter @Setter
     private List<Event> events;
 }

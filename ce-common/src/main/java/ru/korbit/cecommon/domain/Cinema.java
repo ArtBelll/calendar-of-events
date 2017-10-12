@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,32 +11,27 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "cinema")
+@Data
 public class Cinema {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    @Getter @Setter
     private long id;
 
     @Column(name = "cinema_name")
-    @Getter @Setter
     private String cinemaName;
 
     @Column(name = "place")
-    @Getter @Setter
     private String place;
 
     @Column(name = "address")
-    @Getter @Setter
     private String address;
 
     @Column(name = "latitude")
-    @Getter @Setter
     private Float latitude;
 
     @Column(name = "longitude")
-    @Getter @Setter
     private Float longitude;
 }
 
