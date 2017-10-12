@@ -8,21 +8,25 @@
 
 
     <context:component-scan base-package="ru.korbit.ceserver, ru.korbit.cecommon"/>
-    <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean id="ceserverDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://localhost:5432/test_ceserver" />
+        <property name="username" value="ceserver" />
+        <property name="password" value="myAwesomePassword" />
+    </bean>
 
-    <jee:jndi-lookup id="ceserverDataSource" jndi-name="java:comp/env/jdbc/ceserver"/>
-    <bean name="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+    <bean name="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="ceserverDataSource"/>
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
         <property name="packagesToScan" value="ru.korbit.cecommon.domain"/>
     </bean>
 
     <bean name="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
