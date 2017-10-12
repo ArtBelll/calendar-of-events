@@ -14,7 +14,17 @@
 
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <!--<mapping class="ru.steamwallet.swcommon.domain.Seller"/>-->
+        <mapping class="ru.korbit.cecommon.domain.Event"/>
+        <mapping class="ru.korbit.cecommon.domain.City"/>
+        <mapping class="ru.korbit.cecommon.domain.Cinema"/>
+        <mapping class="ru.korbit.cecommon.domain.CinemaEvent"/>
+        <mapping class="ru.korbit.cecommon.domain.City"/>
+        <mapping class="ru.korbit.cecommon.domain.EventSchedule"/>
+        <mapping class="ru.korbit.cecommon.domain.EventType"/>
+        <mapping class="ru.korbit.cecommon.domain.Hall"/>
+        <mapping class="ru.korbit.cecommon.domain.Showtime"/>
+        <mapping class="ru.korbit.cecommon.domain.SimpleEvent"/>
+
 
     </session-factory>
 </hibernate-configuration>
