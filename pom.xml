@@ -23,6 +23,7 @@
         <postgresql.version>9.4.1208</postgresql.version>
         <hikari.version>2.7.2</hikari.version>
         <hibernate.version>5.2.11.Final</hibernate.version>
+        <junit.version>4.12</junit.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
