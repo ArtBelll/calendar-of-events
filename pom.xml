@@ -10,6 +10,7 @@
     <modules>
         <module>ce-server</module>
         <module>ce-common</module>
+        <module>ce-rambler-kassa</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -25,6 +26,7 @@
         <hibernate.version>5.2.11.Final</hibernate.version>
         <junit.version>4.12</junit.version>
         <jackson.version>2.9.1</jackson.version>
+        <redisson.version>3.5.4</redisson.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
