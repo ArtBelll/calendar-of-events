@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +30,10 @@ public class EventSchedule {
     private List<DayOfWeek> daysOfWeek;
 
     @Column(name = "srart_time")
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
     @Column(name = "finish_time")
-    private LocalDateTime finishTime;
+    private LocalTime finishTime;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

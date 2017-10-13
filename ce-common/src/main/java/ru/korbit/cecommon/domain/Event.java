@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -33,10 +33,10 @@ public abstract class Event {
     private URL thumbImageURL;
 
     @Column(name = "start_date")
-    private LocalDateTime startDay;
+    private LocalDate startDay;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDay;
+    private LocalDate finishDay;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
