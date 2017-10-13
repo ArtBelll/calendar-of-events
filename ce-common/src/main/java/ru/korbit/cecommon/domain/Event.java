@@ -1,11 +1,10 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,6 +31,12 @@ public abstract class Event {
 
     @Column(name = "thumb_image_url")
     private URL thumbImageURL;
+
+    @Column(name = "start_date")
+    private LocalDateTime startDay;
+
+    @Column(name = "finish_date")
+    private LocalDateTime finishDay;
 
     @ManyToOne
     @JoinColumn(name = "city_id")

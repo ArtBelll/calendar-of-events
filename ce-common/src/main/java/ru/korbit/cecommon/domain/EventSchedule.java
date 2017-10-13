@@ -1,11 +1,10 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +30,10 @@ public class EventSchedule {
     private List<DayOfWeek> daysOfWeek;
 
     @Column(name = "srart_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "finish_time")
-    private Date finishTime;
+    private LocalDateTime finishTime;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

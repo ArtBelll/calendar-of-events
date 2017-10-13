@@ -1,10 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -14,6 +13,9 @@ import java.util.List;
 @Table(name = "cinema_events")
 @Data
 public class CinemaEvent extends Event {
+
+    @Column(name = "duration")
+    private Duration duration;
 
     @ManyToMany(mappedBy = "events")
     private List<EventType> eventTypes;

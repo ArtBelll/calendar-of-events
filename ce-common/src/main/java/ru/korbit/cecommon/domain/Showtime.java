@@ -1,11 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by Artur Belogur on 10.10.17.
@@ -21,7 +19,7 @@ public class Showtime {
     private long id;
 
     @Column(name = "start_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "price")
     private int price;
