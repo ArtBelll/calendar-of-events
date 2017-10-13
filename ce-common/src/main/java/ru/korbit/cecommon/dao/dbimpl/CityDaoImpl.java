@@ -12,6 +12,13 @@ import java.util.stream.Stream;
  */
 @Repository(value = "cityDao")
 public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
+
+    @Override
+    public long addCity(City city) {
+        super.save(city);
+        return city.getId();
+    }
+
     @Override
     public Optional<City> getCity(Long id) {
         return getSession().byId(City.class).loadOptional(id);

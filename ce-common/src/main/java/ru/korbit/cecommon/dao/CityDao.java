@@ -11,6 +11,8 @@ import java.util.stream.Stream;
  */
 public interface CityDao {
 
+    long addCity(@NonNull City city);
+
     Optional<City> getCity(@NonNull Long id);
 
     Stream<City> getAllCity();

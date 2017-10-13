@@ -3,7 +3,7 @@ package ru.korbit.cecommon.dao;
 import lombok.NonNull;
 import ru.korbit.cecommon.domain.Event;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -16,7 +16,7 @@ public interface EventDao {
 
     long addEvent(@NonNull Event event);
 
-    Stream<Event> getEventsByDateRange(@NonNull Date startDate, @NonNull Date finishDate);
+    Stream<Event> getEventsByDateRange(@NonNull LocalDate startDate, @NonNull LocalDate finishDate);
 
-    Stream<Event> searchEvents(String title, String place);
+    Stream<Event> searchEvents(@NonNull String title, @NonNull String place);
 }
