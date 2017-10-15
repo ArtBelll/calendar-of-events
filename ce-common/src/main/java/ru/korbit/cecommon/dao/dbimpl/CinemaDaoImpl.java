@@ -15,4 +15,9 @@ public class CinemaDaoImpl extends SessionFactoryHolder implements CinemaDao {
         super.save(cinema);
         return cinema.getId();
     }
+
+    @Override
+    public  void delete(Cinema cinema) {
+        super.delete(cinema);
+    }
 }

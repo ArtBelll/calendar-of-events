@@ -9,4 +9,6 @@ import ru.korbit.cecommon.domain.Cinema;
 public interface CinemaDao {
 
     long addCinema(@NonNull Cinema cinema);
+
+    void delete(@NonNull Cinema id);
 }
