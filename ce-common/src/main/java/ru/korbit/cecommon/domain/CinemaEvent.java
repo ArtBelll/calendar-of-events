@@ -25,4 +25,7 @@ public class CinemaEvent extends Event {
             joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "cinema_id", referencedColumnName = "id"))
     private List<Cinema> cinemas;
+
+    @OneToMany(mappedBy = "cinemaEvent")
+    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList;
 }

@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "cities")
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class City {
 
     @Id
@@ -18,6 +23,7 @@ public class City {
     @Column(name = "id")
     private long id;
 
+    @NonNull
     @Column(name = "name")
     private String name;
 

@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "halls")
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Hall {
 
     @Id
@@ -18,9 +23,14 @@ public class Hall {
     @Column(name = "id")
     private long id;
 
-    @ManyToMany
-    @JoinTable(name = "hall_showtime",
-            joinColumns = @JoinColumn(name = "hall_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "showtime_id", referencedColumnName = "id"))
-    private List<Cinema> cinemas;
+    @NonNull
+    @Column(name = "name")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "cinema_id")
+    private Cinema cinema;
+
+    @OneToMany(mappedBy = "hall")
+    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList;
 }
