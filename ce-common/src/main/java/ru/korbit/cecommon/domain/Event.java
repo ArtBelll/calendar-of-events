@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Artur Belogur on 10.10.17.
  */
 @Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public abstract class Event {
     private List<URL> links;
 
     @ManyToMany(mappedBy = "events")
-    @NonNull private List<EventType> eventTypes;
+    private List<EventType> eventTypes;
 
     @OneToMany(mappedBy = "event")
     private List<EventSchedule> eventSchedules;

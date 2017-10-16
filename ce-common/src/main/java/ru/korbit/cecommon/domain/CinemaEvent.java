@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -17,6 +14,7 @@ import java.util.List;
 @Table(name = "cinema_events")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class CinemaEvent extends Event {
 
     @Column(name = "duration")
@@ -34,9 +32,8 @@ public class CinemaEvent extends Event {
     public CinemaEvent(Duration duration,
                        String title,
                        String description,
-                       URL imageURL,
-                       List<EventType> eventTypes) {
-        super(title, description, imageURL, eventTypes);
+                       URL imageURL) {
+        super(title, description, imageURL);
         this.duration = duration;
     }
 }

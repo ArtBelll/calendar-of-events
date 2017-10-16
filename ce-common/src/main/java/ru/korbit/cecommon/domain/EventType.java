@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,8 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "event_types")
-@Inheritance(strategy =InheritanceType.TABLE_PER_CLASS)
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class EventType {
 
     @Id
@@ -20,7 +24,7 @@ public class EventType {
     private long id;
 
     @Column(name = "name")
-    private String name;
+    @NonNull private String name;
 
     @ManyToMany
     @JoinTable(name = "event_event_types",

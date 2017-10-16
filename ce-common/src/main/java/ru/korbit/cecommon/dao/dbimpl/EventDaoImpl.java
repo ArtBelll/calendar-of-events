@@ -45,7 +45,7 @@ public class EventDaoImpl extends SessionFactoryHolder implements ru.korbit.ceco
                         "WHERE LOWER(e.title) LIKE :title " +
                             "AND (LOWER(se.place) LIKE :place " +
                                 "OR LOWER(cin.place) LIKE :place " +
-                                "OR LOWER(cin.cinemaName) LIKE :place)", Event.class)
+                                "OR LOWER(cin.name) LIKE :place)", Event.class)
                 .setParameter("title", StringUtils.getSqlPatternInAnyPosition(title))
                 .setParameter("place", StringUtils.getSqlPatternInAnyPosition(place))
                 .stream();
