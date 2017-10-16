@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -13,6 +16,8 @@ import java.util.List;
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public abstract class Event {
 
     @Id
@@ -21,13 +26,13 @@ public abstract class Event {
     private long id;
 
     @Column(name = "title")
-    private String title;
+    @NonNull private String title;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @NonNull private String description;
 
     @Column(name = "image_url")
-    private URL imageURL;
+    @NonNull private URL imageURL;
 
     @Column(name = "thumb_image_url")
     private URL thumbImageURL;
@@ -47,7 +52,7 @@ public abstract class Event {
     private List<URL> links;
 
     @ManyToMany(mappedBy = "events")
-    private List<EventType> eventTypes;
+    @NonNull private List<EventType> eventTypes;
 
     @OneToMany(mappedBy = "event")
     private List<EventSchedule> eventSchedules;

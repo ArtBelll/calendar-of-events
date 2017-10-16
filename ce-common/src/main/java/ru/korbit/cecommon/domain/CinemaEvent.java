@@ -1,8 +1,12 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 
@@ -12,13 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "cinema_events")
 @Data
+@NoArgsConstructor
 public class CinemaEvent extends Event {
 
     @Column(name = "duration")
-    private Duration duration;
-
-    @ManyToMany(mappedBy = "events")
-    private List<EventType> eventTypes;
+    @NonNull private Duration duration;
 
     @ManyToMany
     @JoinTable(name = "cinema_cinema_event",
@@ -28,4 +30,13 @@ public class CinemaEvent extends Event {
 
     @OneToMany(mappedBy = "cinemaEvent")
     private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList;
+
+    public CinemaEvent(Duration duration,
+                       String title,
+                       String description,
+                       URL imageURL,
+                       List<EventType> eventTypes) {
+        super(title, description, imageURL, eventTypes);
+        this.duration = duration;
+    }
 }
