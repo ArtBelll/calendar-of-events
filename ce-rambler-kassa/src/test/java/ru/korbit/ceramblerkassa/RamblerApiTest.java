@@ -22,11 +22,12 @@ public class RamblerApiTest {
     private final Integer KALININGRAD_ID = 1700;
     private final LocalDate NEXT_WEEK = LocalDate.now().plusWeeks(1);
 
-    private RamblerKassaApi ramblerKassa = new RamblerKassa();
+    private RamblerKassaApi ramblerKassa;
 
     @Before
     public void setUpHost() {
         Environment.host = Environment.PROXY;
+        ramblerKassa = new RamblerKassa();
     }
 
     @Test
