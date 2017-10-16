@@ -31,6 +31,10 @@ public class Main {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("rambler-kassa-service.xml");
         Main main = ctx.getBean(Main.class);
 
+        if (args.length > 0 && args[1].equals("dev")) {
+            Environment.host = Environment.PROXY;
+        }
+
         val service = main.redisson.getRemoteService(Constants.QUEUE_NAME);
         service.register(RamblerKassaService.class, main.ramblerKassa, 2);
     }
