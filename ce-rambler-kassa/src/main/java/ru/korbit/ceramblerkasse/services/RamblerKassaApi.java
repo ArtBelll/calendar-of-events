@@ -1,4 +1,4 @@
-package ru.korbit.ceramblerkasse;
+package ru.korbit.ceramblerkasse.services;
 
 import lombok.NonNull;
 import ru.korbit.ceramblerkasse.responses.RamblerCinema;
@@ -16,11 +16,11 @@ public interface RamblerKassaApi {
 
     List<RamblerCity> getCities();
 
-    List<RamblerCinema> getCinemasAtCity(@NonNull int cityRamblerId);
+    List<RamblerCinema> getCinemasAtCity(@NonNull Integer cityRamblerId);
 
-    List<RamblerEvent> getEventsLessDateAtCity(@NonNull Long cityRamblerId, @NonNull LocalDate maxDate);
+    List<RamblerEvent> getEventsLessDateAtCity(@NonNull Integer cityRamblerId, @NonNull LocalDate maxDate);
 
-    List<RamblerShowtime> getShowtimesEventLessDateAtCity(@NonNull Long cityRamblerId,
+    List<RamblerShowtime> getShowtimesEventLessDateAtCity(@NonNull Integer cityRamblerId,
                                                           @NonNull LocalDate maxDate,
-                                                          @NonNull int showtimeRamblerId);
+                                                          @NonNull Integer eventRamblerId);
 }
