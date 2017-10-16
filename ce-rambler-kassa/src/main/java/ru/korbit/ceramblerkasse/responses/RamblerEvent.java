@@ -1,29 +1,39 @@
 package ru.korbit.ceramblerkasse.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
-import ru.korbit.cecommon.domain.EventType;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
 import java.net.URL;
-import java.util.Collections;
 
 /**
  * Created by Artur Belogur on 15.10.17.
  */
 @Data
 public class RamblerEvent {
-    private long eventRamblerId;
+
+    @JsonProperty("ObjectID")
+    private Integer eventRamblerId;
+
+    @JsonProperty("Name")
     private String title;
+
+    @JsonProperty("Description")
     private String description;
+
+    @JsonProperty("Duration")
     private String duration;
+
+    @JsonProperty("Thumbnail")
     private URL images;
-    private EventType type;
+
+    @JsonProperty("ClassType")
+    private String type;
 
     public CinemaEvent toDBEvent() {
         val duration = TimeUtility.durationFromString(this.duration);
-        val eventTypes = Collections.singletonList(type);
-        return new CinemaEvent(duration, title, description, images, eventTypes);
+        return new CinemaEvent(duration, title, description, images);
     }
 }

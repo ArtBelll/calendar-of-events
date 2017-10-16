@@ -1,5 +1,6 @@
 package ru.korbit.ceramblerkasse.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.korbit.cecommon.domain.City;
 
@@ -8,7 +9,11 @@ import ru.korbit.cecommon.domain.City;
  */
 @Data
 public class RamblerCity {
-    private int cityRamblerId;
+
+    @JsonProperty("CityID")
+    private Integer cityRamblerId;
+
+    @JsonProperty("Name")
     private String name;
 
     public City toDBCity() {
