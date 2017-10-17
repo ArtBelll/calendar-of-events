@@ -10,9 +10,9 @@ import java.util.Optional;
  */
 public interface CinemaEventHallShowtimeDao {
 
-    void addCinemaEventHallShowtime(@NonNull CinemaEventHallShowtime cinemaEventHallShowtime);
+    long addCinemaEventHallShowtime(@NonNull CinemaEventHallShowtime cinemaEventHallShowtime);
 
     Optional<CinemaEventHallShowtime> getCinemaEventHallShowtime(@NonNull Long id);
 
-    Optional<CinemaEventHallShowtime> getCinemaEventHallShowtimeByRamblerId(@NonNull Integer id);
+    Optional<CinemaEventHallShowtime> getCinemaEventHallShowtimeByRamblerId(@NonNull Long id);
 }

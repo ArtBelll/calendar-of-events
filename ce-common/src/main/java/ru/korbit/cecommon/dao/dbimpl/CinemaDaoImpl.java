@@ -27,7 +27,7 @@ public class CinemaDaoImpl extends SessionFactoryHolder implements CinemaDao {
     @Override
     public Optional<Cinema> getCinemaByName(String name) {
         return getSession()
-                .createQuery("SELECT c FROM City c WHERE c.name = :name", Cinema.class)
+                .createQuery("SELECT c FROM Cinema c WHERE c.name = :name", Cinema.class)
                 .setParameter("name", name)
                 .uniqueResultOptional();
     }

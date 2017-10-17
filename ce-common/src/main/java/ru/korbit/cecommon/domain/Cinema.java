@@ -42,6 +42,10 @@ public class Cinema {
     @Column(name = "longitude")
     private Float longitude;
 
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+
     @OneToMany(mappedBy = "cinema")
     private List<Hall> halls;
 }

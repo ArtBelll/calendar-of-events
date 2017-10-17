@@ -14,8 +14,9 @@ public class CinemaEventHallShowtimeDaoImpl extends SessionFactoryHolder
         implements CinemaEventHallShowtimeDao {
 
     @Override
-    public void addCinemaEventHallShowtime(CinemaEventHallShowtime cinemaEventHallShowtime) {
+    public long addCinemaEventHallShowtime(CinemaEventHallShowtime cinemaEventHallShowtime) {
         super.save(cinemaEventHallShowtime);
+        return cinemaEventHallShowtime.getId();
     }
 
     @Override
@@ -24,7 +25,7 @@ public class CinemaEventHallShowtimeDaoImpl extends SessionFactoryHolder
     }
 
     @Override
-    public Optional<CinemaEventHallShowtime> getCinemaEventHallShowtimeByRamblerId(Integer id) {
+    public Optional<CinemaEventHallShowtime> getCinemaEventHallShowtimeByRamblerId(Long id) {
         return getSession()
                 .createQuery("SELECT es FROM CinemaEventHallShowtime es WHERE es.id = :id",
                         CinemaEventHallShowtime.class)
