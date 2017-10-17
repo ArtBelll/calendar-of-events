@@ -27,6 +27,10 @@ public class Hall {
     @Column(name = "name")
     private String name;
 
+    @NonNull
+    @Column(name = "rambler_id")
+    private int ramblerId;
+
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private Cinema cinema;
