@@ -25,6 +25,14 @@ public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
     }
 
     @Override
+    public Optional<City> getCityByName(String name) {
+        return getSession()
+                .createQuery("SELECT c FROM City c WHERE c.name = :name", City.class)
+                .setParameter("name", name)
+                .uniqueResultOptional();
+    }
+
+    @Override
     public Stream<City> getAllCity() {
         return getSession()
                 .createQuery("SELECT c FROM City c", City.class)

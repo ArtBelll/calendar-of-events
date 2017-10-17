@@ -15,5 +15,7 @@ public interface CityDao {
 
     Optional<City> getCity(@NonNull Long id);
 
+    Optional<City> getCityByName(@NonNull String name);
+
     Stream<City> getAllCity();
 }
