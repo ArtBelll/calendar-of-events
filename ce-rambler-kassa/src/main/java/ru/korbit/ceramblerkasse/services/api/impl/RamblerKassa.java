@@ -1,4 +1,4 @@
-package ru.korbit.ceramblerkasse.services.impl;
+package ru.korbit.ceramblerkasse.services.api.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,7 +12,7 @@ import ru.korbit.ceramblerkasse.responses.RamblerCinema;
 import ru.korbit.ceramblerkasse.responses.RamblerCity;
 import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.responses.RamblerShowtime;
-import ru.korbit.ceramblerkasse.services.RamblerKassaApi;
+import ru.korbit.ceramblerkasse.services.api.RamblerKassaApi;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 /**
  * Created by Artur Belogur on 16.10.17.
  */
-@Repository(value = "ramblerKassaApi")
 @Slf4j
+@Repository(value = "ramblerKassaApi")
 public class RamblerKassa implements RamblerKassaApi {
 
     private final static String OBJECT_ID_PARAM = "ObjectID";

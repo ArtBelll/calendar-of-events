@@ -1,4 +1,4 @@
-package ru.korbit.ceramblerkasse.services;
+package ru.korbit.ceramblerkasse.services.api;
 
 import lombok.NonNull;
 import ru.korbit.ceramblerkasse.responses.RamblerCinema;

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class CinemaEvent extends Event {
     private List<Cinema> cinemas;
 
     @OneToMany(mappedBy = "cinemaEvent")
-    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList;
+    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList = new ArrayList<>();
 
     public CinemaEvent(Duration duration,
                        String title,

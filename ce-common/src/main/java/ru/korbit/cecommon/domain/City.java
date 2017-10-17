@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -27,6 +28,7 @@ public class City {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "city")
     private List<Event> events;
 }

@@ -20,7 +20,6 @@
         <mapping class="ru.korbit.cecommon.domain.EventSchedule"/>
         <mapping class="ru.korbit.cecommon.domain.EventType"/>
         <mapping class="ru.korbit.cecommon.domain.Hall"/>
-        <mapping class="ru.korbit.cecommon.domain.Showtime"/>
         <mapping class="ru.korbit.cecommon.domain.SimpleEvent"/>
 
 
