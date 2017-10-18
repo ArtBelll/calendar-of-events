@@ -1,11 +1,9 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"halls"})
 public class Cinema {
 
     @Id
@@ -47,6 +46,6 @@ public class Cinema {
     private City city;
 
     @OneToMany(mappedBy = "cinema")
-    private List<Hall> halls;
+    private List<Hall> halls = new ArrayList<>();
 }
 

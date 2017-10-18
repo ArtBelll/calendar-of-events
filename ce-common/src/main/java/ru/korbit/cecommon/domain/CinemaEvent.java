@@ -16,6 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"cinemas", "showtimeList"})
 public class CinemaEvent extends Event {
 
     @Column(name = "duration")
@@ -28,7 +29,7 @@ public class CinemaEvent extends Event {
     private List<Cinema> cinemas;
 
     @OneToMany(mappedBy = "cinemaEvent")
-    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList = new ArrayList<>();
+    private List<Showtime> showtimeList = new ArrayList<>();
 
     public CinemaEvent(Duration duration,
                        String title,

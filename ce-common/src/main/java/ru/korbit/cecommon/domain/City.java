@@ -1,10 +1,7 @@
 package ru.korbit.cecommon.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"events", "cinemas"})
 public class City {
 
     @Id
@@ -34,6 +32,6 @@ public class City {
     private List<Event> events;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
     private List<Cinema> cinemas = new ArrayList<>();
 }

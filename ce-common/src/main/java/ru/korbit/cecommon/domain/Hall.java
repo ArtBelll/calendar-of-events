@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"showtimeList"})
 public class Hall {
 
     @Id
@@ -29,12 +27,12 @@ public class Hall {
 
     @NonNull
     @Column(name = "rambler_id")
-    private int ramblerId;
+    private String ramblerId;
 
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private Cinema cinema;
 
     @OneToMany(mappedBy = "hall")
-    private List<CinemaEventHallShowtime> cinemaEventHallShowtimeList;
+    private List<Showtime> showtimeList;
 }

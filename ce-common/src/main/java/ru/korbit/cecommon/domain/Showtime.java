@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,17 +9,13 @@ import java.time.LocalDateTime;
  * Created by Artur Belogur on 16.10.17.
  */
 @Entity
-@Table(name = "cinema_event_hall")
+@Table(name = "showtime")
 @IdClass(CinemaEventHall.class)
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class CinemaEventHallShowtime {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private long id;
+@ToString(exclude={"cinemaEvent", "hall"})
+public class Showtime {
 
     @Id
     @ManyToOne
@@ -39,6 +32,7 @@ public class CinemaEventHallShowtime {
     private String format;
 
     @NonNull
+    @Id
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
@@ -48,5 +42,5 @@ public class CinemaEventHallShowtime {
 
     @NonNull
     @Column(name = "rambler_id")
-    private long ramblerID;
+    private long ramblerId;
 }
