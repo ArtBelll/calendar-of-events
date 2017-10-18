@@ -14,5 +14,5 @@ public interface HallDao {
 
     Optional<Hall> getHall(@NonNull Long id);
 
-    Optional<Hall> getHallByRamblerId(@NonNull Integer id);
+    Optional<Hall> getHallByRamblerId(@NonNull String id);
 }

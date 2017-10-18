@@ -24,7 +24,7 @@ public class HallDaoImpl extends SessionFactoryHolder implements HallDao {
     }
 
     @Override
-    public Optional<Hall> getHallByRamblerId(Integer id) {
+    public Optional<Hall> getHallByRamblerId(String id) {
         return getSession()
                 .createQuery("SELECT h FROM Hall h WHERE h.ramblerId = :id", Hall.class)
                 .setParameter("id", id)
