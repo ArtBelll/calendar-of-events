@@ -3,7 +3,7 @@ package ru.korbit.ceramblerkasse.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.val;
-import ru.korbit.cecommon.domain.CinemaEventHallShowtime;
+import ru.korbit.cecommon.domain.Showtime;
 import ru.korbit.cecommon.domain.Hall;
 
 import java.time.LocalDateTime;
@@ -27,8 +27,11 @@ public class RamblerShowtime {
     @JsonProperty("MinPrice")
     private int price;
 
+    @JsonProperty("PlaceObjectID")
+    private Integer placeId;
+
     @JsonProperty("HallID")
-    private int hallRamblerId;
+    private String hallRamblerId;
 
     @JsonProperty("HallName")
     private String hallName;
@@ -37,9 +40,9 @@ public class RamblerShowtime {
         return new Hall(hallName, hallRamblerId);
     }
 
-    public CinemaEventHallShowtime toCinemaEventHallShowtime() {
+    public Showtime toDbShowtime() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         val startTime = LocalDateTime.parse(this.startTime, formatter);
-        return new CinemaEventHallShowtime(format, startTime, price, showtimeRamblerId);
+        return new Showtime(format, startTime, price, showtimeRamblerId);
     }
 }

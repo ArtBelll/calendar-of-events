@@ -9,8 +9,6 @@ import ru.korbit.cecommon.dao.dbimpl.SessionFactoryHolder;
 import ru.korbit.cecommon.domain.*;
 import ru.korbit.ceramblerkasse.services.filters.CheckerExistDb;
 
-import java.util.Optional;
-
 
 /**
  * Created by Artur Belogur on 16.10.17.
@@ -22,29 +20,28 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     private final CityDao cityDao;
     private final CinemaDao cinemaDao;
     private final HallDao hallDao;
-    private final CinemaEventHallShowtimeDao cinemaEventHallShowtimeDao;
+    private final ShowtimeDao showtimeDao;
     private final EventDao eventDao;
 
     @Autowired
     public CheckerExistDbImpl(CityDao cityDao, CinemaDao cinemaDao, HallDao hallDao,
-                              CinemaEventHallShowtimeDao cinemaEventHallShowtimeDao, EventDao eventDao) {
+                              ShowtimeDao showtimeDao, EventDao eventDao) {
         this.cityDao = cityDao;
         this.cinemaDao = cinemaDao;
         this.hallDao = hallDao;
-        this.cinemaEventHallShowtimeDao = cinemaEventHallShowtimeDao;
+        this.showtimeDao = showtimeDao;
         this.eventDao = eventDao;
     }
 
     @Override
     public City checkAndSave(City city) {
         val searchCity = cityDao.getCityByName(city.getName());
-        if(!searchCity.isPresent()) {
+        if (!searchCity.isPresent()) {
             cityDao.addCity(city);
             log.debug("Add entity = {}", city);
 
             return city;
-        }
-        else {
+        } else {
             return searchCity.get();
         }
     }
@@ -52,13 +49,12 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     @Override
     public Cinema checkAndSave(Cinema cinema) {
         val searchCinema = cinemaDao.getCinemaByName(cinema.getName());
-        if(!searchCinema.isPresent()) {
+        if (!searchCinema.isPresent()) {
             cinemaDao.addCinema(cinema);
             log.debug("Add entity to DB = {}", cinema);
 
             return cinema;
-        }
-        else {
+        } else {
             return searchCinema.get();
         }
     }
@@ -66,29 +62,28 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     @Override
     public Hall checkAndSave(Hall hall) {
         val searchHall = hallDao.getHallByRamblerId(hall.getRamblerId());
-        if(!searchHall.isPresent()) {
+        if (!searchHall.isPresent()) {
             hallDao.addHall(hall);
             log.debug("Add entity to DB = {}", hall);
 
             return hall;
-        }
-        else {
+        } else {
             return searchHall.get();
         }
     }
 
     @Override
-    public CinemaEventHallShowtime checkAndSave(CinemaEventHallShowtime showtime) {
-        val searchShowtime = cinemaEventHallShowtimeDao
-                .getCinemaEventHallShowtimeByRamblerId(showtime.getRamblerID());
+    public Showtime checkAndSave(Showtime showtime) {
+        val id = new CinemaEventHall(showtime.getCinemaEvent().getId(),
+                showtime.getHall().getId(), showtime.getStartTime());
+        val searchShowtime = showtimeDao.getShowtime(id);
 
-        if(!searchShowtime.isPresent()) {
-            cinemaEventHallShowtimeDao.addCinemaEventHallShowtime(showtime);
+        if (!searchShowtime.isPresent()) {
+            showtimeDao.addShowtime(showtime);
             log.debug("Add entity to DB = {}", showtime);
 
             return showtime;
-        }
-        else {
+        } else {
             return searchShowtime.get();
         }
     }
@@ -97,13 +92,12 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     public Event checkAndSave(Event event) {
         val searchEvent = eventDao.getEventByTitle(event.getTitle());
 
-        if(!searchEvent.isPresent()) {
+        if (!searchEvent.isPresent()) {
             eventDao.addEvent(event);
             log.debug("Add entity to DB = {}", event);
 
             return event;
-        }
-        else {
+        } else {
             return searchEvent.get();
         }
     }
@@ -111,5 +105,10 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     @Override
     public <T> T getObject(Long dbId, Class<T> tClass) {
         return getSession().get(tClass, dbId);
+    }
+
+    @Override
+    public void updateObject(Object object) {
+        getSession().update(object);
     }
 }

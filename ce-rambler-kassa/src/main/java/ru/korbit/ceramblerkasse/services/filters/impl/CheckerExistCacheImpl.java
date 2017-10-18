@@ -1,5 +1,7 @@
 package ru.korbit.ceramblerkasse.services.filters.impl;
 
+import lombok.val;
+import org.redisson.api.LocalCachedMapOptions;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,13 +25,16 @@ public class CheckerExistCacheImpl implements CheckerExistCache {
     }
 
     @Override
-    public Optional<Long> check(Long ramblerId, RedisRegion redisRegion) {
-//        return Optional.of((Long) redissonClient.getMap(redisRegion.getRegion()).get(ramblerId));
-        return Optional.empty();
+    public Optional<Long> check(Object ramblerId, RedisRegion redisRegion) {
+        return Optional.ofNullable((Long) redissonClient
+                .getLocalCachedMap(redisRegion.getRegion(), LocalCachedMapOptions.defaults())
+                .get(ramblerId));
     }
 
     @Override
-    public void save(Long ramblerId, Long dbId, RedisRegion redisRegion) {
-//        redissonClient.getMap(redisRegion.getRegion()).put(ramblerId, dbId);
+    public void save(Object ramblerId, Object dbId, RedisRegion redisRegion) {
+        redissonClient
+                .getLocalCachedMap(redisRegion.getRegion(), LocalCachedMapOptions.defaults())
+                .fastPut(ramblerId, dbId);
     }
 }

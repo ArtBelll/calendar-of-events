@@ -13,9 +13,11 @@ public interface CheckerExistDb {
 
     Hall checkAndSave(Hall hall);
 
-    CinemaEventHallShowtime checkAndSave(CinemaEventHallShowtime showtime);
+    Showtime checkAndSave(Showtime showtime);
 
     Event checkAndSave(Event event);
 
     <T> T getObject(Long dbId, Class<T> tClass);
+
+    void updateObject(Object object);
 }
