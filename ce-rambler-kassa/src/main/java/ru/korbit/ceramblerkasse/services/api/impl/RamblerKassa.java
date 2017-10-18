@@ -33,6 +33,8 @@ public class RamblerKassa implements RamblerKassaApi {
     private final static String MAX_DATE_PARAM = "MaxDate";
 
     private final static String CITIES_URL = "/cities";
+    private final static String PLACE_URL = String.format("/place/object?%s={%s}",
+            OBJECT_ID_PARAM, OBJECT_ID_PARAM) ;
     private final static String PLACE_LIST_URL = String.format("/place/list?%s={%s}", CITY_ID_PARAM, CITY_ID_PARAM);
     private final static String EVENTS_URL = String.format("/movie/list?%s={%s}&%s={%s}",
             CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM);
@@ -52,6 +54,13 @@ public class RamblerKassa implements RamblerKassaApi {
     public List<RamblerCity> getCities() {
         val jsonNodeRoot = restTemplate.getForObject(CITIES_URL, JsonNode.class);
         return resultList(jsonNodeRoot, RamblerCity.class);
+    }
+
+    @Override
+    public RamblerCinema getCinema(Integer cinemaRablerId) {
+        val params = new HashMap<String, Object>();
+        params.put(OBJECT_ID_PARAM, cinemaRablerId);
+        return restTemplate.getForObject(PLACE_URL, RamblerCinema.class, params);
     }
 
     @Override

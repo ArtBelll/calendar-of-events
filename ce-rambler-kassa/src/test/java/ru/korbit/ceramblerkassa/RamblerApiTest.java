@@ -57,4 +57,11 @@ public class RamblerApiTest {
                 NEXT_WEEK, events.get(0).getEventRamblerId());
         Assert.assertTrue(showtimes.size() > 0 && showtimes.get(0).getClass() == RamblerShowtime.class);
     }
+
+    @Test
+    public void getCinema() {
+        Integer id = 15793;
+        RamblerCinema ramblerCinema = ramblerKassa.getCinema(id);
+        Assert.assertTrue(ramblerCinema.getName().equals("Синема Парк Европа"));
+    }
 }
