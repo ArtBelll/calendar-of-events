@@ -4,15 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.korbit.cecommon.dao.CinemaDao;
-import ru.korbit.cecommon.dao.CinemaEventHallShowtimeDao;
-import ru.korbit.cecommon.dao.CityDao;
-import ru.korbit.cecommon.dao.HallDao;
+import ru.korbit.cecommon.dao.*;
 import ru.korbit.cecommon.dao.dbimpl.SessionFactoryHolder;
-import ru.korbit.cecommon.domain.Cinema;
-import ru.korbit.cecommon.domain.CinemaEventHallShowtime;
-import ru.korbit.cecommon.domain.City;
-import ru.korbit.cecommon.domain.Hall;
+import ru.korbit.cecommon.domain.*;
 import ru.korbit.ceramblerkasse.services.filters.CheckerExistDb;
 
 import java.util.Optional;
@@ -29,14 +23,16 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     private final CinemaDao cinemaDao;
     private final HallDao hallDao;
     private final CinemaEventHallShowtimeDao cinemaEventHallShowtimeDao;
+    private final EventDao eventDao;
 
     @Autowired
     public CheckerExistDbImpl(CityDao cityDao, CinemaDao cinemaDao, HallDao hallDao,
-                              CinemaEventHallShowtimeDao cinemaEventHallShowtimeDao) {
+                              CinemaEventHallShowtimeDao cinemaEventHallShowtimeDao, EventDao eventDao) {
         this.cityDao = cityDao;
         this.cinemaDao = cinemaDao;
         this.hallDao = hallDao;
         this.cinemaEventHallShowtimeDao = cinemaEventHallShowtimeDao;
+        this.eventDao = eventDao;
     }
 
     @Override
@@ -94,6 +90,21 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
         }
         else {
             return searchShowtime.get();
+        }
+    }
+
+    @Override
+    public Event checkAndSave(Event event) {
+        val searchEvent = eventDao.getEventByTitle(event.getTitle());
+
+        if(!searchEvent.isPresent()) {
+            eventDao.addEvent(event);
+            log.debug("Add entity to DB = {}", event);
+
+            return event;
+        }
+        else {
+            return searchEvent.get();
         }
     }
 

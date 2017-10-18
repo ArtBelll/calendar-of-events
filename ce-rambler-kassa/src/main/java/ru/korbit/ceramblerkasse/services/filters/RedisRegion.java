@@ -7,7 +7,8 @@ public enum RedisRegion {
     CITY("city"),
     CINEMA("cinema"),
     HALL("hall"),
-    SHOWTIME("showtime");
+    SHOWTIME("showtime"),
+    EVENT("event");
 
     private final String region;
 

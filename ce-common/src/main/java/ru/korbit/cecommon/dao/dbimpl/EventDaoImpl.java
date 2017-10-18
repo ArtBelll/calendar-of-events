@@ -26,6 +26,14 @@ public class EventDaoImpl extends SessionFactoryHolder implements ru.korbit.ceco
     }
 
     @Override
+    public Optional<Event> getEventByTitle(String title) {
+        return getSession()
+                .createQuery("SELECT e FROM Event e WHERE e.title = :title", Event.class)
+                .setParameter("title", title)
+                .uniqueResultOptional();
+    }
+
+    @Override
     public Stream<Event> getEventsByDateRange(LocalDate startDate, LocalDate finishDate) {
         return getSession()
                 .createQuery("SELECT e FROM Event e " +
