@@ -18,7 +18,9 @@ public interface EventDao {
 
     Optional<Event> getEventByTitle(@NonNull String title);
 
-    Stream<Event> getEventsByDateRange(@NonNull LocalDate startDate, @NonNull LocalDate finishDate);
+    Stream<Event> getEventsByDateRangeAtCity(@NonNull LocalDate startDate,
+                                             @NonNull LocalDate finishDate,
+                                             @NonNull Long cityId);
 
     Stream<Event> searchEvents(@NonNull String title, @NonNull String place);
 }

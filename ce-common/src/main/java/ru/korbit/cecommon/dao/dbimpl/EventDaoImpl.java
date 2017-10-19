@@ -34,10 +34,13 @@ public class EventDaoImpl extends SessionFactoryHolder implements ru.korbit.ceco
     }
 
     @Override
-    public Stream<Event> getEventsByDateRange(LocalDate startDate, LocalDate finishDate) {
+    public Stream<Event> getEventsByDateRangeAtCity(LocalDate startDate, LocalDate finishDate, Long cityId) {
         return getSession()
-                .createQuery("SELECT e FROM Event e " +
-                        "WHERE e.startDay < :finishDay AND e.finishDay > :startDay", Event.class)
+                .createQuery("SELECT e FROM City c " +
+                        "JOIN c.events e " +
+                        "WHERE c.id = :cityId AND e.startDay <= :finishDay AND e.finishDay >= :startDay " +
+                        "ORDER BY e.startDay", Event.class)
+                .setParameter("cityId", cityId)
                 .setParameter("startDay", startDate)
                 .setParameter("finishDay", finishDate)
                 .stream();

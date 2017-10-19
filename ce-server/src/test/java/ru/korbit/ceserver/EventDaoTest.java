@@ -53,7 +53,7 @@ public class EventDaoTest {
         val requestFinishDate = LocalDate.parse("2017-10-08");
 
         eventDao.addEvent(getSimpleEvent(TITLE, PLACE));
-        val events = eventDao.getEventsByDateRange(requestStartDate, requestFinishDate);
+        val events = eventDao.getEventsByDateRangeAtCity(requestStartDate, requestFinishDate, 1L);
         events.forEach(event -> {
             Assert.assertTrue(event.getStartDay().isBefore(requestFinishDate)
                     && event.getFinishDay().isAfter(requestStartDate));
@@ -81,6 +81,7 @@ public class EventDaoTest {
 
     private SimpleEvent getSimpleEvent(String title, String place) {
         SimpleEvent simpleEvent = new SimpleEvent();
+
 
         simpleEvent.setTitle(title);
         simpleEvent.setPlace(place);

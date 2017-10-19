@@ -45,7 +45,7 @@ public abstract class Event {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    private City city;
+    @NonNull private City city;
 
     @ElementCollection
     @Column(name = "links")

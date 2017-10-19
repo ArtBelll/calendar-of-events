@@ -85,6 +85,7 @@ public class RamblerKasseLoader implements RamblerKassaService {
     private void loadEvents(RamblerCity ramblerCity, City currentCity) {
         ramblerKassa.getEventsLessDateAtCity(ramblerCity.getCityRamblerId(), TimeUtility.getMaxDate())
                 .forEach(ramblerEvent -> {
+                    ramblerEvent.setCity(currentCity);
                     val currentEvent = getCurrentEvent(ramblerEvent);
 
                     loadShowtimes(ramblerCity, currentEvent, ramblerEvent);

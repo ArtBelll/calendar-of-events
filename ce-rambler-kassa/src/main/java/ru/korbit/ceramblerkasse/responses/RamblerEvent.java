@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
+import ru.korbit.cecommon.domain.City;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
 import java.net.URL;
@@ -32,8 +33,10 @@ public class RamblerEvent {
     @JsonProperty("ClassType")
     private String type;
 
+    private City city;
+
     public CinemaEvent toDBEvent() {
         val duration = TimeUtility.durationFromString(this.duration);
-        return new CinemaEvent(duration, title, description, images);
+        return new CinemaEvent(duration, title, description, images, city);
     }
 }
