@@ -164,7 +164,12 @@ public class RamblerKasseLoader implements RamblerKassaService {
         if (eventDbId.isPresent()) {
             currentEvent = checkerExistInDb.getObject(eventDbId.get(), Event.class);
         } else {
-            currentEvent = checkerExistInDb.checkAndSave(ramblerEvent.toDBEvent());
+            val currentEventType = getCurrentEventType(ramblerEvent.toDBEventType());
+            val eventDb = ramblerEvent.toDBEvent();
+            currentEventType.getEvents().add(eventDb);
+            eventDb.getEventTypes().add(currentEventType);
+
+            currentEvent = checkerExistInDb.checkAndSave(eventDb);
             checkerExistInCache.save(ramblerEvent.getEventRamblerId(),
                     currentEvent.getId(), RedisRegion.EVENT);
         }
@@ -185,5 +190,19 @@ public class RamblerKasseLoader implements RamblerKassaService {
         }
 
         return currentHall;
+    }
+
+    private EventType getCurrentEventType(EventType eventType) {
+        final EventType currentEventType;
+
+        val eventTypeDbId = checkerExistInCache.check(eventType.getName(), RedisRegion.EVENT_TYPE);
+        if (eventTypeDbId.isPresent()) {
+            currentEventType = checkerExistInDb.getObject(eventTypeDbId.get(), EventType.class);
+        } else {
+            currentEventType = checkerExistInDb.checkAndSave(eventType);
+            checkerExistInCache.save(eventType.getName(), currentEventType.getId(), RedisRegion.EVENT_TYPE);
+        }
+
+        return currentEventType;
     }
 }

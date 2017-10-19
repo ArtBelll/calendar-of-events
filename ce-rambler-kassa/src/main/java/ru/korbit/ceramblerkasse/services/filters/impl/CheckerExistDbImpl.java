@@ -24,15 +24,17 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     private final HallDao hallDao;
     private final ShowtimeDao showtimeDao;
     private final EventDao eventDao;
+    private final EventTypeDao eventTypeDao;
 
     @Autowired
     public CheckerExistDbImpl(CityDao cityDao, CinemaDao cinemaDao, HallDao hallDao,
-                              ShowtimeDao showtimeDao, EventDao eventDao) {
+                              ShowtimeDao showtimeDao, EventDao eventDao, EventTypeDao eventTypeDao) {
         this.cityDao = cityDao;
         this.cinemaDao = cinemaDao;
         this.hallDao = hallDao;
         this.showtimeDao = showtimeDao;
         this.eventDao = eventDao;
+        this.eventTypeDao = eventTypeDao;
     }
 
     @Override
@@ -101,6 +103,20 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
             return event;
         } else {
             return searchEvent.get();
+        }
+    }
+
+    @Override
+    public EventType checkAndSave(EventType eventType) {
+        val searchEventType = eventTypeDao.getEventTypeByName(eventType.getName());
+
+        if (!searchEventType.isPresent()) {
+            eventTypeDao.addEventType(eventType);
+            log.debug("Add entity to DB = {}", eventType);
+
+            return eventType;
+        } else {
+            return searchEventType.get();
         }
     }
 

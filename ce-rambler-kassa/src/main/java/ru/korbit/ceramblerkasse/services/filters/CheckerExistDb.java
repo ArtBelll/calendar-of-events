@@ -19,6 +19,8 @@ public interface CheckerExistDb {
 
     Event checkAndSave(Event event);
 
+    EventType checkAndSave(EventType event);
+
     <T> T getObject(Serializable dbId, Class<T> tClass);
 
     void updateObject(Object object);

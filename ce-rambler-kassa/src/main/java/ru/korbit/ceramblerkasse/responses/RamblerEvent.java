@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.City;
+import ru.korbit.cecommon.domain.EventType;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
 import java.net.URL;
@@ -38,5 +39,9 @@ public class RamblerEvent {
     public CinemaEvent toDBEvent() {
         val duration = TimeUtility.durationFromString(this.duration);
         return new CinemaEvent(duration, title, description, images, city);
+    }
+
+    public EventType toDBEventType() {
+        return new EventType(type);
     }
 }
