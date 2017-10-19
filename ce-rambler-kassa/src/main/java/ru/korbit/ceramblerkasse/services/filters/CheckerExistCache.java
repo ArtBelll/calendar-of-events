@@ -1,5 +1,6 @@
 package ru.korbit.ceramblerkasse.services.filters;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Optional;
  */
 public interface CheckerExistCache {
 
-    Optional<Long> check(Object ramblerId, RedisRegion redisRegion);
+    Optional<Serializable> check(Object ramblerId, RedisRegion redisRegion);
 
-    void save(Object ramblerId, Object dbId, RedisRegion redisRegion);
+    void save(Object ramblerId, Serializable dbId, RedisRegion redisRegion);
 }

@@ -9,6 +9,8 @@ import ru.korbit.cecommon.dao.dbimpl.SessionFactoryHolder;
 import ru.korbit.cecommon.domain.*;
 import ru.korbit.ceramblerkasse.services.filters.CheckerExistDb;
 
+import java.io.Serializable;
+
 
 /**
  * Created by Artur Belogur on 16.10.17.
@@ -103,7 +105,7 @@ public class CheckerExistDbImpl extends SessionFactoryHolder implements CheckerE
     }
 
     @Override
-    public <T> T getObject(Long dbId, Class<T> tClass) {
+    public <T> T getObject(Serializable dbId, Class<T> tClass) {
         return getSession().get(tClass, dbId);
     }
 

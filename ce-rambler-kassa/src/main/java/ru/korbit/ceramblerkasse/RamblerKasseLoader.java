@@ -108,6 +108,18 @@ public class RamblerKasseLoader implements RamblerKassaService {
                     currentShowtime.setHall(currentHall);
 
                     checkExistShowtime(currentShowtime);
+
+                    boolean isUpdateDate = false;
+                    if(currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
+                        currentEvent.setStartDay(currentShowtime.getStartTime().toLocalDate());
+                        isUpdateDate = true;
+                    }
+                    if(currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
+                        currentEvent.setFinishDay(currentShowtime.getStartTime().toLocalDate());
+                        isUpdateDate = true;
+                    }
+
+                    if(isUpdateDate) checkerExistInDb.updateObject(currentEvent);
                 });
     }
 

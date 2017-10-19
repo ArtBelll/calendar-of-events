@@ -2,6 +2,8 @@ package ru.korbit.ceramblerkasse.services.filters;
 
 import ru.korbit.cecommon.domain.*;
 
+import java.io.Serializable;
+
 /**
  * Created by Artur Belogur on 17.10.17.
  */
@@ -17,7 +19,7 @@ public interface CheckerExistDb {
 
     Event checkAndSave(Event event);
 
-    <T> T getObject(Long dbId, Class<T> tClass);
+    <T> T getObject(Serializable dbId, Class<T> tClass);
 
     void updateObject(Object object);
 }

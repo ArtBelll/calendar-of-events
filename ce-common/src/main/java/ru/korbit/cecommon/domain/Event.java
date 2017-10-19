@@ -38,10 +38,10 @@ public abstract class Event {
     private URL thumbImageURL;
 
     @Column(name = "start_date")
-    private LocalDate startDay;
+    private LocalDate startDay = LocalDate.parse("9999-12-31");
 
     @Column(name = "finish_date")
-    private LocalDate finishDay;
+    private LocalDate finishDay = LocalDate.ofEpochDay(0);
 
     @ManyToOne
     @JoinColumn(name = "city_id")
