@@ -3,6 +3,7 @@ package ru.korbit.cecommon.dao.dbimpl;
 import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.domain.City;
+import ru.korbit.cecommon.domain.EventType;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -36,6 +37,17 @@ public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
     public Stream<City> getAllCity() {
         return getSession()
                 .createQuery("SELECT c FROM City c", City.class)
+                .stream();
+    }
+
+    @Override
+    public Stream<EventType> getEventTypesAtCity(Long id) {
+        return getSession()
+                .createQuery("SELECT et FROM City c " +
+                        "JOIN c.events e " +
+                        "JOIN e.eventTypes et " +
+                        "WHERE c.id = :cityId", EventType.class)
+                .setParameter("cityId", id)
                 .stream();
     }
 }

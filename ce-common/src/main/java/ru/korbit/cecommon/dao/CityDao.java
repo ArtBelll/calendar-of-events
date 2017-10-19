@@ -2,6 +2,7 @@ package ru.korbit.cecommon.dao;
 
 import lombok.NonNull;
 import ru.korbit.cecommon.domain.City;
+import ru.korbit.cecommon.domain.EventType;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -18,4 +19,6 @@ public interface CityDao {
     Optional<City> getCityByName(@NonNull String name);
 
     Stream<City> getAllCity();
+
+    Stream<EventType> getEventTypesAtCity(@NonNull Long id);
 }

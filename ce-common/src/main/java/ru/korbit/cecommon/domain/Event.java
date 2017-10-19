@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public abstract class Event {
     private List<URL> links;
 
     @ManyToMany(mappedBy = "events")
-    private List<EventType> eventTypes;
+    private List<EventType> eventTypes = new ArrayList<>();
 
     @OneToMany(mappedBy = "event")
     private List<EventSchedule> eventSchedules;
