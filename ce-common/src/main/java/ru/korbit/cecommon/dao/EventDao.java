@@ -24,5 +24,5 @@ public interface EventDao {
                                              @NonNull Long cityId,
                                              @NonNull List<Long> ignoreTypes);
 
-    Stream<Event> searchEvents(@NonNull String title, @NonNull String place);
+    Stream<Event> searchEvents(@NonNull String title, @NonNull String place, @NonNull LocalDate startDate);
 }

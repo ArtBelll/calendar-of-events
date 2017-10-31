@@ -1,5 +1,6 @@
 package ru.korbit.ceserver.controllers.v1;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @Transactional
 @RequestMapping(value = "cities")
+@Slf4j
 public class CityController extends BaseController {
 
     private final CityDao cityDao;

@@ -70,9 +70,9 @@ public class EventDaoTest {
         eventDao.addEvent(getCinemaEvent(TITLE, "p1"));
         eventDao.addEvent(getCinemaEvent("4", "p2"));
 
-        val eventsByPlace = eventDao.searchEvents("", PLACE).count();
-        val eventsByTitle = eventDao.searchEvents(TITLE, "").count();
-        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE).count();
+        val eventsByPlace = eventDao.searchEvents("", PLACE, LocalDate.now()).count();
+        val eventsByTitle = eventDao.searchEvents(TITLE, "", LocalDate.now()).count();
+        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, LocalDate.now()).count();
 
         Assert.assertTrue(eventsByPlace == 4);
         Assert.assertTrue(eventsByTitle == 2);

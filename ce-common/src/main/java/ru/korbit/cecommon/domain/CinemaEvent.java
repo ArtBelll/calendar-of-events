@@ -16,17 +16,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"cinemas", "showtimeList"})
+@ToString(exclude = {"showtimeList"})
 public class CinemaEvent extends Event {
 
     @Column(name = "duration")
     @NonNull private Duration duration;
-
-    @ManyToMany
-    @JoinTable(name = "cinema_cinema_event",
-            joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "cinema_id", referencedColumnName = "id"))
-    private List<Cinema> cinemas;
 
     @OneToMany(mappedBy = "cinemaEvent")
     private List<Showtime> showtimeList = new ArrayList<>();

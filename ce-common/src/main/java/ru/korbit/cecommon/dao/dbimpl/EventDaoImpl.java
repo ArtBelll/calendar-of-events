@@ -53,18 +53,20 @@ public class EventDaoImpl extends SessionFactoryHolder implements ru.korbit.ceco
     }
 
     @Override
-    public Stream<Event> searchEvents(String title, String place) {
+    public Stream<Event> searchEvents(String title, String place, LocalDate startDate) {
         return getSession()
-                .createQuery("SELECT e FROM Event e " +
+                .createQuery("SELECT DISTINCT e FROM Event e " +
                         "LEFT JOIN SimpleEvent se ON e.id = se.id " +
                         "LEFT JOIN CinemaEvent ce ON e.id = ce.id " +
-                        "LEFT JOIN ce.cinemas cin " +
-                        "WHERE LOWER(e.title) LIKE :title " +
+                        "JOIN e.city c " +
+                        "LEFT JOIN c.cinemas cin " +
+                        "WHERE e.finishDay >= :startDate AND LOWER(e.title) LIKE :title " +
                             "AND (LOWER(se.place) LIKE :place " +
                                 "OR LOWER(cin.place) LIKE :place " +
-                                "OR LOWER(cin.name) LIKE :place)", Event.class)
+                                "OR LOWER(cin.name) LIKE :place)" , Event.class)
                 .setParameter("title", StringUtils.getSqlPatternInAnyPosition(title))
                 .setParameter("place", StringUtils.getSqlPatternInAnyPosition(place))
+                .setParameter("startDate", startDate)
                 .stream();
     }
 }
