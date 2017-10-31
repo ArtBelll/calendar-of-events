@@ -4,6 +4,7 @@ import lombok.NonNull;
 import ru.korbit.cecommon.domain.Event;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,7 +21,8 @@ public interface EventDao {
 
     Stream<Event> getEventsByDateRangeAtCity(@NonNull LocalDate startDate,
                                              @NonNull LocalDate finishDate,
-                                             @NonNull Long cityId);
+                                             @NonNull Long cityId,
+                                             @NonNull List<Long> ignoreTypes);
 
     Stream<Event> searchEvents(@NonNull String title, @NonNull String place);
 }

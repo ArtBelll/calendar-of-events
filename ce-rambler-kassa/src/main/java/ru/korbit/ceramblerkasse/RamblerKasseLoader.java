@@ -172,6 +172,9 @@ public class RamblerKasseLoader implements RamblerKassaService {
             currentEvent = checkerExistInDb.checkAndSave(eventDb);
             checkerExistInCache.save(ramblerEvent.getEventRamblerId(),
                     currentEvent.getId(), RedisRegion.EVENT);
+
+            currentEventType.getEvents().add(eventDb);
+            checkerExistInDb.updateObject(currentEventType);
         }
 
         return currentEvent;

@@ -32,8 +32,9 @@ public class EventsController extends BaseController {
         this.eventDao = eventDao;
     }
 
-    @GetMapping(value = "exist-for-days")
+    @PostMapping(value = "exist-for-days")
     public ResponseEntity<?> getDaysWithEvents(@PathVariable Long cityId,
+                                               @RequestBody List<Long> ignoreTypes,
                                                @RequestParam("start_date") Long beginRange,
                                                @RequestParam("finish_date") Long endDateRange) {
 
@@ -44,7 +45,8 @@ public class EventsController extends BaseController {
         val start = DateTimeUtils.epochSecondToLocalDate(beginRange);
         val finish = DateTimeUtils.epochSecondToLocalDate(endDateRange);
 
-        val activeDaysLong = getActiveDateRanges(eventDao.getEventsByDateRangeAtCity(start, finish, cityId), finish)
+        val activeDaysLong =
+                getActiveDateRanges(eventDao.getEventsByDateRangeAtCity(start, finish, cityId, ignoreTypes), finish)
                 .stream()
                 .flatMap(rangeDate -> DateTimeUtils.getListOfDayInSecondsBetween(rangeDate.getStart(), rangeDate.getFinish()))
                 .collect(Collectors.toList());
