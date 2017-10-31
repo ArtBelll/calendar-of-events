@@ -46,7 +46,8 @@ public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
                 .createQuery("SELECT et FROM City c " +
                         "JOIN c.events e " +
                         "JOIN e.eventTypes et " +
-                        "WHERE c.id = :cityId", EventType.class)
+                        "WHERE c.id = :cityId " +
+                        "GROUP BY et.id", EventType.class)
                 .setParameter("cityId", id)
                 .stream();
     }
