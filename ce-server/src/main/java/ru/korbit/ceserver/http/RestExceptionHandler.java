@@ -41,7 +41,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return headers;
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler({Throwable.class})
     protected ResponseEntity<Object> unhandledError(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 

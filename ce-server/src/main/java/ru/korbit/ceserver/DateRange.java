@@ -11,11 +11,11 @@ import java.time.LocalDate;
  */
 @Data
 @RequiredArgsConstructor
-public class RangeDate {
+public class DateRange {
     @NonNull private LocalDate start;
     @NonNull private LocalDate finish;
 
-    public static RangeDate empty() {
-        return new RangeDate(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0));
+    public static DateRange empty() {
+        return new DateRange(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0));
     }
 }

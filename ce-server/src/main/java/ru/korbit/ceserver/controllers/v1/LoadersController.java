@@ -36,7 +36,13 @@ public class LoadersController {
 
         log.info("Start load Ramdler.Kassa data");
 
-        ramblerKassaService.load().get();
+        try {
+            ramblerKassaService.load().get();
+        } catch (Throwable e) {
+            redissonClient.getKeys().flushall();
+            throw new RuntimeException();
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

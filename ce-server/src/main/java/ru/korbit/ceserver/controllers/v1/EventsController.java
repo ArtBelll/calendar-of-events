@@ -7,16 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.korbit.cecommon.dao.EventDao;
+import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.utility.DateTimeUtils;
-import ru.korbit.ceserver.RangeDate;
+import ru.korbit.ceserver.DateRange;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -34,52 +32,48 @@ public class EventsController extends BaseController {
         this.eventDao = eventDao;
     }
 
-    @PostMapping(value = "exist-for-days")
+    @GetMapping(value = "exist-for-days")
     public ResponseEntity<?> getDaysWithEvents(@PathVariable Long cityId,
-                                               @RequestParam("start_date") Long startDate,
-                                               @RequestParam("finish_date") Long finishDate) {
+                                               @RequestParam("start_date") Long beginRange,
+                                               @RequestParam("finish_date") Long endDateRange) {
 
-        if (startDate == null || finishDate == null || startDate > finishDate) {
+        if (beginRange == null || endDateRange == null || beginRange > endDateRange) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        val start = Instant.ofEpochSecond(startDate).atZone(ZoneId.systemDefault()).toLocalDate();
-        val finish = Instant.ofEpochSecond(finishDate).atZone(ZoneId.systemDefault()).toLocalDate();
+        val start = DateTimeUtils.epochSecondToLocalDate(beginRange);
+        val finish = DateTimeUtils.epochSecondToLocalDate(endDateRange);
 
-        val activeDays = new ArrayList<RangeDate>();
-
-        eventDao.getEventsByDateRangeAtCity(start, finish, cityId)
-                .forEach(event -> {
-                    val endRange = event.getFinishDay().isBefore(finish) ? event.getFinishDay() : finish;
-
-                    if (activeDays.isEmpty()) {
-                        activeDays.add(new RangeDate(event.getStartDay(), endRange));
-                        return;
-                    }
-                    val index = activeDays.size() - 1;
-                    val lastRange = activeDays.get(index);
-
-                    if (DateTimeUtils.isBeforeOrEqual(event.getStartDay(), endRange)) {
-                        if (lastRange.getFinish().isBefore(event.getFinishDay())) {
-                            lastRange.setFinish(endRange);
-                        }
-                    } else {
-                        activeDays.add(new RangeDate(event.getStartDay(), endRange));
-                    }
-                });
-
-        val activeDaysLong = activeDays
+        val activeDaysLong = getActiveDateRanges(eventDao.getEventsByDateRangeAtCity(start, finish, cityId), finish)
                 .stream()
-                .flatMap(rangeDate -> getListOfDay(rangeDate.getStart(), rangeDate.getFinish()))
+                .flatMap(rangeDate -> DateTimeUtils.getListOfDayInSecondsBetween(rangeDate.getStart(), rangeDate.getFinish()))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(getResponseBody(activeDaysLong), HttpStatus.OK);
     }
 
-    private Stream<Long> getListOfDay(LocalDate start, LocalDate finish) {
-        val days = ChronoUnit.DAYS.between(start, finish);
-        return LongStream.range(0, days)
-                .boxed()
-                .map(i -> start.plusDays(i).toEpochDay() * 24 * 60 * 60);
+    private List<DateRange> getActiveDateRanges(Stream<Event> events, LocalDate endRange) {
+        val activeDaysInDataRanges = new ArrayList<DateRange>();
+        events.forEach(event -> {
+                    val finish = event.getFinishDay().isBefore(endRange) ? event.getFinishDay() : endRange;
+
+                    if (activeDaysInDataRanges.isEmpty()) {
+                        activeDaysInDataRanges.add(new DateRange(event.getStartDay(), finish));
+                        return;
+                    }
+                    val index = activeDaysInDataRanges.size() - 1;
+                    val lastRange = activeDaysInDataRanges.get(index);
+
+                    if (DateTimeUtils.isBeforeOrEqual(event.getStartDay(), finish)) {
+                        if (lastRange.getFinish().isBefore(event.getFinishDay())) {
+                            lastRange.setFinish(finish);
+                        }
+                    } else {
+                        activeDaysInDataRanges.add(new DateRange(event.getStartDay(), finish));
+                    }
+                });
+
+        return activeDaysInDataRanges;
+
     }
 }
