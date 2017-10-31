@@ -14,7 +14,7 @@ public abstract class TimeUtility {
 
     public static Duration durationFromString(String duration) {
         val index = duration.indexOf(" ");
-        val minutes = Integer.parseInt(duration.subSequence(0, index).toString());
+        val minutes = index == -1 ? 0 : Integer.parseInt(duration.subSequence(0, index).toString());
         return Duration.ofMinutes(minutes);
     }
 

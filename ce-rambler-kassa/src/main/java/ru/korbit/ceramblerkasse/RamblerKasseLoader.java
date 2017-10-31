@@ -66,7 +66,8 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         val cinemaDb = ramblerCinema.toBDCinema();
                         cinemaDb.setCity(currentCity);
                         checkerExistInDb.checkAndSave(cinemaDb);
-                        checkerExistInCache.save(cityRamblerId, cinemaDb.getId(), RedisRegion.CITY);
+                        checkerExistInCache.save(ramblerCinema.getCinemaRamblerId(), cinemaDb.getId(),
+                                RedisRegion.CINEMA);
                     }
                 });
     }
@@ -166,7 +167,6 @@ public class RamblerKasseLoader implements RamblerKassaService {
         } else {
             val currentEventType = getCurrentEventType(ramblerEvent.toDBEventType());
             val eventDb = ramblerEvent.toDBEvent();
-            currentEventType.getEvents().add(eventDb);
             eventDb.getEventTypes().add(currentEventType);
 
             currentEvent = checkerExistInDb.checkAndSave(eventDb);

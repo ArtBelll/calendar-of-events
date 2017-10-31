@@ -8,6 +8,7 @@ import ru.korbit.cecommon.domain.City;
 import ru.korbit.cecommon.domain.EventType;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -37,6 +38,14 @@ public class RamblerEvent {
     private City city;
 
     public CinemaEvent toDBEvent() {
+        // TODO: load default images for movie
+        if (images == null) {
+            try {
+                images = new URL("https://cdn.pixabay.com/photo/2017/01/20/11/04/icon-1994569_960_720.png");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
         val duration = TimeUtility.durationFromString(this.duration);
         return new CinemaEvent(duration, title, description, images, city);
     }
