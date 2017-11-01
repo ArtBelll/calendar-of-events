@@ -110,7 +110,6 @@ public class EventDaoTest {
         List<Cinema> cinemas = new ArrayList<>();
         cinemas.add(cinema);
         cinemaDao.addCinema(cinema);
-        cinemaEvent.setCinemas(cinemas);
 
         cinemaEvent.setStartDay(LocalDate.parse("2017-10-02"));
         cinemaEvent.setFinishDay(LocalDate.parse("2017-10-04"));

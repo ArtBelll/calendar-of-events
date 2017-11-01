@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository(value = "eventTypeDao")
 public class EventTypeDaoImpl extends SessionFactoryHolder<EventType> implements EventTypeDao {
 
+    EventTypeDaoImpl() {
+        super(EventType.class);
+    }
+
     @Override
     public long addEventType(EventType eventType) {
         super.save(eventType);

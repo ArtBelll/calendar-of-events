@@ -1,9 +1,11 @@
-package ru.korbit.ceramblerkasse.services.filters;
+package ru.korbit.ceramblerkasse.services.store.impl;
+
+import ru.korbit.ceramblerkasse.services.store.Region;
 
 /**
  * Created by Artur Belogur on 17.10.17.
  */
-public enum RedisRegion {
+public enum RedisRegion implements Region {
     CITY("city"),
     CINEMA("cinema"),
     HALL("hall"),

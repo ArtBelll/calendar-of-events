@@ -14,6 +14,10 @@ import java.util.Optional;
 public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
         implements ShowtimeDao {
 
+    ShowtimeDaoImpl() {
+        super(Showtime.class);
+    }
+
     @Override
     public void addShowtime(Showtime showtime) {
         super.save(showtime);

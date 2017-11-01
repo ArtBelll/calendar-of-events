@@ -1,11 +1,11 @@
-package ru.korbit.ceramblerkasse.services.filters.impl;
+package ru.korbit.ceramblerkasse.services.store.impl;
 
 import org.redisson.api.LocalCachedMapOptions;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.korbit.ceramblerkasse.services.filters.CheckerExistCache;
-import ru.korbit.ceramblerkasse.services.filters.RedisRegion;
+import ru.korbit.ceramblerkasse.services.store.CacheStore;
+import ru.korbit.ceramblerkasse.services.store.Region;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -15,24 +15,24 @@ import java.util.Optional;
  */
 //TODO
 @Component
-public class CheckerExistCacheImpl implements CheckerExistCache {
+public class CacheStoreImpl implements CacheStore {
 
     private final RedissonClient redissonClient;
 
     @Autowired
-    public CheckerExistCacheImpl(RedissonClient redissonClient) {
+    public CacheStoreImpl(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
     }
 
     @Override
-    public Optional<Serializable> check(Object ramblerId, RedisRegion redisRegion) {
+    public Optional<Serializable> check(Object ramblerId, Region redisRegion) {
         return Optional.ofNullable((Serializable) redissonClient
                 .getLocalCachedMap(redisRegion.getRegion(), LocalCachedMapOptions.defaults())
                 .get(ramblerId));
     }
 
     @Override
-    public void save(Object ramblerId, Serializable dbId, RedisRegion redisRegion) {
+    public void save(Object ramblerId, Serializable dbId, Region redisRegion) {
         redissonClient
                 .getLocalCachedMap(redisRegion.getRegion(), LocalCachedMapOptions.defaults())
                 .fastPut(ramblerId, dbId);

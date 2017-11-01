@@ -13,6 +13,10 @@ import java.util.Optional;
 @Repository(value = "cinemaDao")
 public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements CinemaDao {
 
+    CinemaDaoImpl() {
+        super(Cinema.class);
+    }
+
     @Override
     public long addCinema(Cinema cinema) {
         super.save(cinema);

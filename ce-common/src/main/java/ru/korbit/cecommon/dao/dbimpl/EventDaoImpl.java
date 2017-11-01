@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 @Repository(value = "eventDao")
 public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korbit.cecommon.dao.EventDao {
 
+    EventDaoImpl() {
+        super(Event.class);
+    }
+
     @Override
     public Optional<Event> getEventById(Long id) {
         return super.get(id);

@@ -18,23 +18,29 @@ public abstract class SessionFactoryHolder<T> {
     @Autowired
     protected SessionFactory sessionFactory;
 
+    protected SessionFactoryHolder() {}
+
+    protected SessionFactoryHolder(Class<T> tClass) {
+        this.tClass = tClass;
+    }
+
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 
-    public void save(T obj) {
+    protected void save(T obj) {
         getSession().save(obj);
     }
 
-    public Optional<T> get(Serializable id) {
+    protected Optional<T> get(Serializable id) {
         return getSession().byId(tClass).loadOptional(id);
     }
 
-    public void update(T obj) {
+    protected void update(T obj) {
         getSession().update(obj);
     }
 
-    public void delete(T obj) {
+    protected void delete(T obj) {
         getSession().delete(obj);
     }
 }

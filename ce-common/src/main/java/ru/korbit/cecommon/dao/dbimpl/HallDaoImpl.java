@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository(value = "hallDao")
 public class HallDaoImpl extends SessionFactoryHolder<Hall> implements HallDao {
 
+    HallDaoImpl() {
+        super(Hall.class);
+    }
+
     @Override
     public long addHall(Hall hall) {
         super.save(hall);
