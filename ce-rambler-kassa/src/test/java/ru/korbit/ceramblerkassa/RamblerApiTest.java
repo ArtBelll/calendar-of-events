@@ -59,6 +59,12 @@ public class RamblerApiTest {
     }
 
     @Test
+    public void getShowtimesCityLessDate() {
+        List<RamblerShowtime> showtimes = ramblerKassa.getShowtimesCityLessDate(KALININGRAD_ID, NEXT_WEEK);
+        Assert.assertTrue(showtimes.size() > 0 && showtimes.get(0).getClass() == RamblerShowtime.class);
+    }
+
+    @Test
     public void getCinema() {
         Integer id = 15793;
         RamblerCinema ramblerCinema = ramblerKassa.getCinema(id);

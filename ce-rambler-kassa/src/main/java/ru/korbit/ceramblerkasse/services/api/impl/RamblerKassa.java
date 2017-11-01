@@ -40,6 +40,8 @@ public class RamblerKassa implements RamblerKassaApi {
             CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM);
     private final static String MOVIE_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}&%s={%s}",
             CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM, OBJECT_ID_PARAM, OBJECT_ID_PARAM);
+    private final static String CITY_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}",
+            CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM);
 
     private final ObjectMapper mapper;
 
@@ -93,6 +95,16 @@ public class RamblerKassa implements RamblerKassaApi {
         params.put(MAX_DATE_PARAM, maxDate);
         params.put(OBJECT_ID_PARAM, eventRamblerId);
         val jsonNodeRoot = restTemplate.getForObject(MOVIE_SCHEDULE_URL, JsonNode.class, params);
+
+        return resultList(jsonNodeRoot, RamblerShowtime.class);
+    }
+
+    @Override
+    public List<RamblerShowtime> getShowtimesCityLessDate(Integer cityRamblerId, LocalDate maxDate) {
+        val params = new HashMap<String, Object>();
+        params.put(CITY_ID_PARAM, cityRamblerId);
+        params.put(MAX_DATE_PARAM, maxDate);
+        val jsonNodeRoot = restTemplate.getForObject(CITY_SCHEDULE_URL, JsonNode.class, params);
 
         return resultList(jsonNodeRoot, RamblerShowtime.class);
     }

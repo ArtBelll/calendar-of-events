@@ -25,4 +25,7 @@ public interface RamblerKassaApi {
     List<RamblerShowtime> getShowtimesEventLessDateAtCity(@NonNull Integer cityRamblerId,
                                                           @NonNull LocalDate maxDate,
                                                           @NonNull Integer eventRamblerId);
+
+    List<RamblerShowtime> getShowtimesCityLessDate(@NonNull Integer cityRamblerId,
+                                                   @NonNull LocalDate maxDate);
 }
