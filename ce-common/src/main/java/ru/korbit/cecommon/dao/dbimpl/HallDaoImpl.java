@@ -10,7 +10,7 @@ import java.util.Optional;
  * Created by Artur Belogur on 17.10.17.
  */
 @Repository(value = "hallDao")
-public class HallDaoImpl extends SessionFactoryHolder implements HallDao {
+public class HallDaoImpl extends SessionFactoryHolder<Hall> implements HallDao {
 
     @Override
     public long addHall(Hall hall) {
@@ -20,7 +20,7 @@ public class HallDaoImpl extends SessionFactoryHolder implements HallDao {
 
     @Override
     public Optional<Hall> getHall(Long id) {
-        return getSession().byId(Hall.class).loadOptional(id);
+        return super.get(id);
     }
 
     @Override

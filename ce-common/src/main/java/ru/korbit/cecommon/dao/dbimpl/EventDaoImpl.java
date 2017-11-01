@@ -13,11 +13,11 @@ import java.util.stream.Stream;
  * Created by Artur Belogur on 11.10.17.
  */
 @Repository(value = "eventDao")
-public class EventDaoImpl extends SessionFactoryHolder implements ru.korbit.cecommon.dao.EventDao {
+public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korbit.cecommon.dao.EventDao {
 
     @Override
     public Optional<Event> getEventById(Long id) {
-        return getSession().byId(Event.class).loadOptional(id);
+        return super.get(id);
     }
 
     @Override

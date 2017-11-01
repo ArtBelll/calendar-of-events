@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * Created by Artur Belogur on 11.10.17.
  */
 @Repository(value = "cityDao")
-public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
+public class CityDaoImpl extends SessionFactoryHolder<City> implements CityDao {
 
     @Override
     public long addCity(City city) {
@@ -22,7 +22,7 @@ public class CityDaoImpl extends SessionFactoryHolder implements CityDao {
 
     @Override
     public Optional<City> getCity(Long id) {
-        return getSession().byId(City.class).loadOptional(id);
+        return super.get(id);
     }
 
     @Override

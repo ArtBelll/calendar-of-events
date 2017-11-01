@@ -10,7 +10,7 @@ import java.util.Optional;
  * Created by Artur Belogur on 19.10.17.
  */
 @Repository(value = "eventTypeDao")
-public class EventTypeDaoImpl extends SessionFactoryHolder implements EventTypeDao {
+public class EventTypeDaoImpl extends SessionFactoryHolder<EventType> implements EventTypeDao {
 
     @Override
     public long addEventType(EventType eventType) {

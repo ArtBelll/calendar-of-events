@@ -11,7 +11,7 @@ import java.util.Optional;
  * Created by Artur Belogur on 13.10.17.
  */
 @Repository(value = "cinemaDao")
-public class CinemaDaoImpl extends SessionFactoryHolder implements CinemaDao {
+public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements CinemaDao {
 
     @Override
     public long addCinema(Cinema cinema) {
@@ -21,7 +21,7 @@ public class CinemaDaoImpl extends SessionFactoryHolder implements CinemaDao {
 
     @Override
     public Optional<Cinema> getCinema(Long id) {
-        return getSession().byId(Cinema.class).loadOptional(id);
+        return super.get(id);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Optional;
  * Created by Artur Belogur on 17.10.17.
  */
 @Repository(value = "cinemaEventHallShowtimeDao")
-public class ShowtimeDaoImpl extends SessionFactoryHolder
+public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
         implements ShowtimeDao {
 
     @Override
@@ -21,7 +21,7 @@ public class ShowtimeDaoImpl extends SessionFactoryHolder
 
     @Override
     public Optional<Showtime> getShowtime(CinemaEventHall id) {
-        return getSession().byId(Showtime.class).loadOptional(id);
+        return super.get(id);
     }
 
     @Override
