@@ -49,16 +49,6 @@ public class RamblerApiTest {
     }
 
     @Test
-    public void getShowtimesEventLessDateAtCity() {
-        List<RamblerEvent> events = ramblerKassa.getEventsLessDateAtCity(KALININGRAD_ID, NEXT_WEEK);
-        Assert.assertTrue(events.size() > 0 && events.get(0).getClass() == RamblerEvent.class);
-
-        List<RamblerShowtime> showtimes = ramblerKassa.getShowtimesEventLessDateAtCity(KALININGRAD_ID,
-                NEXT_WEEK, events.get(0).getEventRamblerId());
-        Assert.assertTrue(showtimes.size() > 0 && showtimes.get(0).getClass() == RamblerShowtime.class);
-    }
-
-    @Test
     public void getShowtimesCityLessDate() {
         List<RamblerShowtime> showtimes = ramblerKassa.getShowtimesCityLessDate(KALININGRAD_ID, NEXT_WEEK);
         Assert.assertTrue(showtimes.size() > 0 && showtimes.get(0).getClass() == RamblerShowtime.class);

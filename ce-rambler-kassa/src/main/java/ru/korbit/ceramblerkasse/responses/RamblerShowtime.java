@@ -18,6 +18,9 @@ public class RamblerShowtime {
     @JsonProperty("SessionID")
     private long showtimeRamblerId;
 
+    @JsonProperty("CreationObjectID")
+    private Integer eventId;
+
     @JsonProperty("Format")
     private String format;
 

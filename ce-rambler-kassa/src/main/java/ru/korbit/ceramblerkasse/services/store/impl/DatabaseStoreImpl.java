@@ -63,7 +63,6 @@ public class DatabaseStoreImpl extends SessionFactoryHolder<Object> implements D
     public Showtime getOrSave(Showtime showtime) {
         val id = new CinemaEventHall(showtime.getCinemaEvent().getId(),
                 showtime.getHall().getId(), showtime.getStartTime());
-        val test = getSession().byId(Showtime.class).loadOptional(id);
         return showtimeDao.getShowtime(id)
                 .orElseGet(() -> save(showtime, Showtime.class));
     }

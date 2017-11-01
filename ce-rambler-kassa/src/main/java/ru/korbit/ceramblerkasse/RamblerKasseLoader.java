@@ -10,9 +10,9 @@ import ru.korbit.cecommon.services.RamblerKassaService;
 import ru.korbit.ceramblerkasse.responses.RamblerCity;
 import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.services.api.impl.RamblerKassa;
-import ru.korbit.ceramblerkasse.services.filters.RedisRegion;
-import ru.korbit.ceramblerkasse.services.filters.impl.CheckerExistCacheImpl;
-import ru.korbit.ceramblerkasse.services.filters.impl.CheckerExistDbImpl;
+import ru.korbit.ceramblerkasse.services.store.impl.RedisRegion;
+import ru.korbit.ceramblerkasse.services.store.impl.CacheStoreImpl;
+import ru.korbit.ceramblerkasse.services.store.impl.DatabaseStoreImpl;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
 import java.util.List;
@@ -28,16 +28,16 @@ public class RamblerKasseLoader implements RamblerKassaService {
 
     private RamblerKassa ramblerKassa;
 
-    private CheckerExistCacheImpl checkerExistInCache;
-    private CheckerExistDbImpl checkerExistInDb;
+    private CacheStoreImpl cacheStore;
+    private DatabaseStoreImpl databaseStore;
 
     @Autowired
     public RamblerKasseLoader(RamblerKassa ramblerKassa,
-                              CheckerExistCacheImpl checkerExistInCache,
-                              CheckerExistDbImpl checkerExistInDb) {
+                              CacheStoreImpl cacheStore,
+                              DatabaseStoreImpl databaseStore) {
         this.ramblerKassa = ramblerKassa;
-        this.checkerExistInCache = checkerExistInCache;
-        this.checkerExistInDb = checkerExistInDb;
+        this.cacheStore = cacheStore;
+        this.databaseStore = databaseStore;
     }
 
     @Override
@@ -54,32 +54,34 @@ public class RamblerKasseLoader implements RamblerKassaService {
                     checkExistCinemasAtCity(ramblerCity.getCityRamblerId(), currentCity);
 
                     loadEvents(ramblerCity, currentCity);
+
+                    loadShowtimes(ramblerCity);
                 });
     }
 
     private void checkExistCinemasAtCity(Integer cityRamblerId, City currentCity) {
         ramblerKassa.getCinemasAtCity(cityRamblerId)
                 .forEach(ramblerCinema -> {
-                    val cinemaDbId = checkerExistInCache
+                    val cinemaDbId = cacheStore
                             .check(ramblerCinema.getCinemaRamblerId(), RedisRegion.CINEMA);
                     if (!cinemaDbId.isPresent()) {
                         val cinemaDb = ramblerCinema.toBDCinema();
                         cinemaDb.setCity(currentCity);
-                        checkerExistInDb.checkAndSave(cinemaDb);
-                        checkerExistInCache.save(ramblerCinema.getCinemaRamblerId(), cinemaDb.getId(),
+                        val currentCinema = databaseStore.getOrSave(cinemaDb);
+                        cacheStore.save(ramblerCinema.getCinemaRamblerId(), currentCinema.getId(),
                                 RedisRegion.CINEMA);
                     }
                 });
     }
 
     private void checkExistShowtime(Showtime showtime) {
-        val showtimeDbId = checkerExistInCache.check(showtime.getRamblerId(), RedisRegion.SHOWTIME);
+        val showtimeDbId = cacheStore.check(showtime.getRamblerId(), RedisRegion.SHOWTIME);
         if (!showtimeDbId.isPresent()) {
-            checkerExistInDb.checkAndSave(showtime);
+            databaseStore.getOrSave(showtime);
 
             val dbId = new CinemaEventHall(showtime.getCinemaEvent().getId(),
                     showtime.getHall().getId(), showtime.getStartTime());
-            checkerExistInCache.save(showtime.getRamblerId(), dbId, RedisRegion.SHOWTIME);
+            cacheStore.save(showtime.getRamblerId(), dbId, RedisRegion.SHOWTIME);
         }
     }
 
@@ -87,22 +89,21 @@ public class RamblerKasseLoader implements RamblerKassaService {
         ramblerKassa.getEventsLessDateAtCity(ramblerCity.getCityRamblerId(), TimeUtility.getMaxDate())
                 .forEach(ramblerEvent -> {
                     ramblerEvent.setCity(currentCity);
-                    val currentEvent = getCurrentEvent(ramblerEvent);
-
-                    loadShowtimes(ramblerCity, currentEvent, ramblerEvent);
+                    checkExistEvent(ramblerEvent);
                 });
     }
 
-    private void loadShowtimes(RamblerCity ramblerCity, Event currentEvent, RamblerEvent ramblerEvent) {
-        ramblerKassa.getShowtimesEventLessDateAtCity(ramblerCity.getCityRamblerId(),
-                TimeUtility.getMaxDate(), ramblerEvent.getEventRamblerId())
+    private void loadShowtimes(RamblerCity ramblerCity) {
+        ramblerKassa.getShowtimesCityLessDate(ramblerCity.getCityRamblerId(), TimeUtility.getMaxDate())
                 .forEach(ramblerShowtime -> {
+
+                    val currentEvent = getCurrentEvent(ramblerShowtime.getEventId());
                     val currentCinema = getCurrentCinema(ramblerShowtime.getPlaceId());
                     val currentHall = getCurrentHall(ramblerShowtime.toDBHall());
 
                     if (!currentCinema.getHalls().contains(currentHall)) {
                         currentHall.setCinema(currentCinema);
-                        checkerExistInDb.updateObject(currentCinema);
+                        databaseStore.update(currentCinema);
                     }
 
                     val currentShowtime = ramblerShowtime.toDbShowtime();
@@ -112,30 +113,29 @@ public class RamblerKasseLoader implements RamblerKassaService {
                     checkExistShowtime(currentShowtime);
 
                     boolean isUpdateDate = false;
-                    if(currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
+                    if (currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
                         currentEvent.setStartDay(currentShowtime.getStartTime().toLocalDate());
                         isUpdateDate = true;
                     }
-                    if(currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
+                    if (currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
                         currentEvent.setFinishDay(currentShowtime.getStartTime().toLocalDate());
                         isUpdateDate = true;
                     }
 
-                    if(isUpdateDate) checkerExistInDb.updateObject(currentEvent);
+                    if (isUpdateDate) databaseStore.update(currentEvent);
                 });
     }
 
     private City getCurrentCity(RamblerCity ramblerCity) {
         final City currentCity;
 
-        val cityDbId = checkerExistInCache.check(ramblerCity.getCityRamblerId(),
-                RedisRegion.CITY);
+        val cityDbId = cacheStore.check(ramblerCity.getCityRamblerId(), RedisRegion.CITY);
         if (cityDbId.isPresent()) {
-            currentCity = checkerExistInDb.getObject(cityDbId.get(), City.class);
+            currentCity = databaseStore.get(cityDbId.get(), City.class);
         } else {
-            currentCity = checkerExistInDb.checkAndSave(ramblerCity.toDBCity());
-            checkerExistInCache.save(ramblerCity.getCityRamblerId(),
-                     currentCity.getId(), RedisRegion.CITY);
+            currentCity = databaseStore.getOrSave(ramblerCity.toDBCity());
+            cacheStore.save(ramblerCity.getCityRamblerId(),
+                    currentCity.getId(), RedisRegion.CITY);
         }
 
         return currentCity;
@@ -144,51 +144,56 @@ public class RamblerKasseLoader implements RamblerKassaService {
     private Cinema getCurrentCinema(Integer ramblerCinemaId) {
         final Cinema currentCinema;
 
-        val cinemaDbId = checkerExistInCache.check(ramblerCinemaId, RedisRegion.CINEMA);
+        val cinemaDbId = cacheStore.check(ramblerCinemaId, RedisRegion.CINEMA);
         if (cinemaDbId.isPresent()) {
-            currentCinema = checkerExistInDb.getObject(cinemaDbId.get(), Cinema.class);
-        }
-        else {
+            currentCinema = databaseStore.get(cinemaDbId.get(), Cinema.class);
+        } else {
             val ramblerCinema = ramblerKassa.getCinema(ramblerCinemaId);
-            currentCinema = checkerExistInDb.checkAndSave(ramblerCinema.toBDCinema());
-            checkerExistInCache.save(ramblerCinemaId, currentCinema.getId(), RedisRegion.CINEMA);
+            currentCinema = databaseStore.getOrSave(ramblerCinema.toBDCinema());
+            cacheStore.save(ramblerCinemaId, currentCinema.getId(), RedisRegion.CINEMA);
         }
 
         return currentCinema;
     }
 
-    private Event getCurrentEvent(RamblerEvent ramblerEvent) {
+    private Event checkExistEvent(RamblerEvent ramblerEvent) {
         final Event currentEvent;
 
-        val eventDbId = checkerExistInCache
+        val eventDbId = cacheStore
                 .check(ramblerEvent.getEventRamblerId(), RedisRegion.EVENT);
         if (eventDbId.isPresent()) {
-            currentEvent = checkerExistInDb.getObject(eventDbId.get(), Event.class);
+            currentEvent = databaseStore.get(eventDbId.get(), Event.class);
         } else {
             val currentEventType = getCurrentEventType(ramblerEvent.toDBEventType());
             val eventDb = ramblerEvent.toDBEvent();
             eventDb.getEventTypes().add(currentEventType);
 
-            currentEvent = checkerExistInDb.checkAndSave(eventDb);
-            checkerExistInCache.save(ramblerEvent.getEventRamblerId(),
+            currentEvent = databaseStore.getOrSave(eventDb);
+            cacheStore.save(ramblerEvent.getEventRamblerId(),
                     currentEvent.getId(), RedisRegion.EVENT);
 
             currentEventType.getEvents().add(eventDb);
-            checkerExistInDb.updateObject(currentEventType);
+            databaseStore.update(currentEventType);
         }
 
         return currentEvent;
     }
 
+    private Event getCurrentEvent(Integer ramblerEventId) {
+        return cacheStore.check(ramblerEventId, RedisRegion.EVENT)
+                .map(eventDbId -> databaseStore.get(eventDbId, Event.class))
+                .orElse(null);
+    }
+
     private Hall getCurrentHall(Hall hall) {
         final Hall currentHall;
 
-        val hallDbId = checkerExistInCache.check(hall.getRamblerId(), RedisRegion.HALL);
+        val hallDbId = cacheStore.check(hall.getRamblerId(), RedisRegion.HALL);
         if (hallDbId.isPresent()) {
-            currentHall = checkerExistInDb.getObject(hallDbId.get(), Hall.class);
+            currentHall = databaseStore.get(hallDbId.get(), Hall.class);
         } else {
-            currentHall = checkerExistInDb.checkAndSave(hall);
-            checkerExistInCache.save(hall.getRamblerId(),
+            currentHall = databaseStore.getOrSave(hall);
+            cacheStore.save(hall.getRamblerId(),
                     currentHall.getId(), RedisRegion.HALL);
         }
 
@@ -198,12 +203,12 @@ public class RamblerKasseLoader implements RamblerKassaService {
     private EventType getCurrentEventType(EventType eventType) {
         final EventType currentEventType;
 
-        val eventTypeDbId = checkerExistInCache.check(eventType.getName(), RedisRegion.EVENT_TYPE);
+        val eventTypeDbId = cacheStore.check(eventType.getName(), RedisRegion.EVENT_TYPE);
         if (eventTypeDbId.isPresent()) {
-            currentEventType = checkerExistInDb.getObject(eventTypeDbId.get(), EventType.class);
+            currentEventType = databaseStore.get(eventTypeDbId.get(), EventType.class);
         } else {
-            currentEventType = checkerExistInDb.checkAndSave(eventType);
-            checkerExistInCache.save(eventType.getName(), currentEventType.getId(), RedisRegion.EVENT_TYPE);
+            currentEventType = databaseStore.getOrSave(eventType);
+            cacheStore.save(eventType.getName(), currentEventType.getId(), RedisRegion.EVENT_TYPE);
         }
 
         return currentEventType;

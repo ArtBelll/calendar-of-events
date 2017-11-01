@@ -31,6 +31,7 @@ public class RamblerKassa implements RamblerKassaApi {
     private final static String OBJECT_ID_PARAM = "ObjectID";
     private final static String CITY_ID_PARAM = "CityID";
     private final static String MAX_DATE_PARAM = "MaxDate";
+    private final static String DATE_TO = "DateTo";
 
     private final static String CITIES_URL = "/cities";
     private final static String PLACE_URL = String.format("/place/object?%s={%s}",
@@ -41,7 +42,7 @@ public class RamblerKassa implements RamblerKassaApi {
     private final static String MOVIE_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}&%s={%s}",
             CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM, OBJECT_ID_PARAM, OBJECT_ID_PARAM);
     private final static String CITY_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}",
-            CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM);
+            CITY_ID_PARAM, CITY_ID_PARAM, DATE_TO, DATE_TO);
 
     private final ObjectMapper mapper;
 
@@ -59,9 +60,9 @@ public class RamblerKassa implements RamblerKassaApi {
     }
 
     @Override
-    public RamblerCinema getCinema(Integer cinemaRablerId) {
+    public RamblerCinema getCinema(Integer cinemaRamblerId) {
         val params = new HashMap<String, Object>();
-        params.put(OBJECT_ID_PARAM, cinemaRablerId);
+        params.put(OBJECT_ID_PARAM, cinemaRamblerId);
         return restTemplate.getForObject(PLACE_URL, RamblerCinema.class, params);
     }
 
@@ -87,23 +88,10 @@ public class RamblerKassa implements RamblerKassaApi {
     }
 
     @Override
-    public List<RamblerShowtime> getShowtimesEventLessDateAtCity(Integer cityRamblerId,
-                                                                 LocalDate maxDate,
-                                                                 Integer eventRamblerId) {
-        val params = new HashMap<String, Object>();
-        params.put(CITY_ID_PARAM, cityRamblerId);
-        params.put(MAX_DATE_PARAM, maxDate);
-        params.put(OBJECT_ID_PARAM, eventRamblerId);
-        val jsonNodeRoot = restTemplate.getForObject(MOVIE_SCHEDULE_URL, JsonNode.class, params);
-
-        return resultList(jsonNodeRoot, RamblerShowtime.class);
-    }
-
-    @Override
     public List<RamblerShowtime> getShowtimesCityLessDate(Integer cityRamblerId, LocalDate maxDate) {
         val params = new HashMap<String, Object>();
         params.put(CITY_ID_PARAM, cityRamblerId);
-        params.put(MAX_DATE_PARAM, maxDate);
+        params.put(DATE_TO, maxDate);
         val jsonNodeRoot = restTemplate.getForObject(CITY_SCHEDULE_URL, JsonNode.class, params);
 
         return resultList(jsonNodeRoot, RamblerShowtime.class);
