@@ -1,5 +1,7 @@
 package ru.korbit.ceserver.controllers.v1;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.MultimapBuilder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import java.util.stream.Stream;
  * Created by Artur Belogur on 18.10.17.
  */
 @RestController
-@RequestMapping(value = "cities/{cityId}/events/")
+@RequestMapping(value = "cities/{cityId}/events")
 @Transactional
 @Slf4j
 public class EventsController extends BaseController {
@@ -41,7 +43,7 @@ public class EventsController extends BaseController {
                                                @RequestParam("start_date") Long beginRange,
                                                @RequestParam("finish_date") Long endDateRange) {
 
-        if (beginRange == null || endDateRange == null || beginRange > endDateRange) {
+        if (beginRange > endDateRange) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -64,6 +66,31 @@ public class EventsController extends BaseController {
         val events = eventDao.searchEvents(title, place, LocalDate.now())
                 .map(event -> new RGeneralEvent(event, ""))
                 .collect(Collectors.toList());
+        return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getEvents(@PathVariable Long cityId,
+                                       @RequestParam("start_date") Long beginRange,
+                                       @RequestParam("finish_date") Long endDateRange) {
+
+        if (beginRange > endDateRange) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        val start = DateTimeUtils.epochSecondToLocalDate(beginRange);
+        val finish = DateTimeUtils.epochSecondToLocalDate(endDateRange);
+
+        ListMultimap<String, RGeneralEvent> events = MultimapBuilder.hashKeys().arrayListValues().build();
+
+        eventDao.getEventsByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
+                .forEach(event -> {
+                    val generalEvent = new RGeneralEvent(event, "");
+                    event.getEventTypes().forEach(eventType -> {
+                        events.put(eventType.getName(), generalEvent);
+                    });
+                });
+
         return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
     }
 

@@ -18,7 +18,17 @@
 
     <context:component-scan base-package="ru.korbit.ceserver, ru.korbit.cecommon"/>
     <mvc:default-servlet-handler/>
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                        <property name="modulesToInstall" value="com.fasterxml.jackson.datatype.guava.GuavaModule"/>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
@@ -36,10 +46,10 @@
     </bean>
 
     <bean id="redisConfig" class="org.redisson.config.Config" factory-method="fromJSON">
-        <constructor-arg name="url" value="classpath:redisson.json" />
+        <constructor-arg name="url" value="classpath:redisson.json"/>
     </bean>
     <bean id="redissonClient" class="org.redisson.Redisson" factory-method="create">
-        <constructor-arg name="config" ref="redisConfig" />
+        <constructor-arg name="config" ref="redisConfig"/>
     </bean>
 
 </beans>

@@ -34,6 +34,8 @@
         <!-- Logging -->
         <slf4j.version>1.7.12</slf4j.version>
         <log4j.version>2.4.1</log4j.version>
+
+        <guava.version>23.3-jre</guava.version>
     </properties>
 
 </project>
