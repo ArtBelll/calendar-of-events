@@ -14,11 +14,23 @@
     </modules>
     <packaging>pom</packaging>
 
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <ed.group>${project.groupId}</ed.group>
         <ed.version>${project.version}</ed.version>
 
         <spring.version>4.3.11.RELEASE</spring.version>
+        <sprint.boot.version>2.0.0.M5</sprint.boot.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <lombok.version>1.16.16</lombok.version>
         <postgresql.version>9.4.1208</postgresql.version>

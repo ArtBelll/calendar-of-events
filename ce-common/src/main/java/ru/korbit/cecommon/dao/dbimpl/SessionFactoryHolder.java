@@ -1,12 +1,13 @@
 package ru.korbit.cecommon.dao.dbimpl;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityManagerFactory;
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Created by Artur Belogur on 11.10.17.
@@ -16,7 +17,9 @@ public abstract class SessionFactoryHolder<T> {
     private Class<T> tClass;
 
     @Autowired
-    protected SessionFactory sessionFactory;
+    protected EntityManagerFactory entityManagerFactory;
+
+    private SessionFactory sessionFactory;
 
     protected SessionFactoryHolder() {}
 
@@ -25,7 +28,15 @@ public abstract class SessionFactoryHolder<T> {
     }
 
     protected Session getSession() {
-        return sessionFactory.getCurrentSession();
+        if (sessionFactory == null) {
+            sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+        }
+        try {
+            return sessionFactory.getCurrentSession();
+        }
+        catch (HibernateException e) {
+            return sessionFactory.openSession();
+        }
     }
 
     protected void save(T obj) {
