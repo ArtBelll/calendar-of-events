@@ -106,7 +106,7 @@ public class EventsController extends BaseController {
                     val index = activeDaysInDataRanges.size() - 1;
                     val lastRange = activeDaysInDataRanges.get(index);
 
-                    if (DateTimeUtils.isBeforeOrEqual(event.getStartDay(), finish)) {
+                    if (DateTimeUtils.isBeforeOrEqual(event.getStartDay(), lastRange.getFinish())) {
                         if (lastRange.getFinish().isBefore(event.getFinishDay())) {
                             lastRange.setFinish(finish);
                         }
