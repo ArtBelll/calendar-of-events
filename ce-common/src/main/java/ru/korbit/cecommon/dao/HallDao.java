@@ -8,11 +8,7 @@ import java.util.Optional;
 /**
  * Created by Artur Belogur on 17.10.17.
  */
-public interface HallDao {
+public interface HallDao extends GenericDao<Hall> {
 
-    long addHall(@NonNull Hall hall);
-
-    Optional<Hall> getHall(@NonNull Long id);
-
-    Optional<Hall> getHallByRamblerId(@NonNull String id);
+    Optional<Hall> getByRamblerId(@NonNull String id);
 }

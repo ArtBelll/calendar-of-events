@@ -8,11 +8,9 @@ import java.util.Optional;
 /**
  * Created by Artur Belogur on 13.10.17.
  */
-public interface CinemaDao {
+public interface CinemaDao extends GenericDao<Cinema> {
 
-    long addCinema(@NonNull Cinema cinema);
+    Cinema save(@NonNull Cinema cinema);
 
-    Optional<Cinema> getCinema(@NonNull Long id);
-
-    Optional<Cinema> getCinemaByName(@NonNull String name);
+    Optional<Cinema> getByName(@NonNull String name);
 }

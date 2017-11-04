@@ -11,18 +11,17 @@ import java.util.stream.Stream;
 /**
  * Created by Artur Belogur on 11.10.17.
  */
-public interface EventDao {
+public interface EventDao extends GenericDao<Event> {
 
-    Optional<Event> getEventById(@NonNull Long id);
+    Optional<Event> getByTitle(@NonNull String title);
 
-    long addEvent(@NonNull Event event);
+    Stream<Event> getByDateRangeAtCity(@NonNull LocalDate startDate,
+                                       @NonNull LocalDate finishDate,
+                                       @NonNull Long cityId,
+                                       @NonNull List<Long> ignoreTypes);
 
-    Optional<Event> getEventByTitle(@NonNull String title);
-
-    Stream<Event> getEventsByDateRangeAtCity(@NonNull LocalDate startDate,
-                                             @NonNull LocalDate finishDate,
-                                             @NonNull Long cityId,
-                                             @NonNull List<Long> ignoreTypes);
-
-    Stream<Event> searchEvents(@NonNull String title, @NonNull String place, @NonNull LocalDate startDate);
+    Stream<Event> searchEvents(@NonNull String title,
+                               @NonNull String place,
+                               @NonNull LocalDate startDate,
+                               @NonNull Long cityId);
 }

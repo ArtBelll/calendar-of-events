@@ -14,26 +14,7 @@ import java.util.Optional;
 public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
         implements ShowtimeDao {
 
-    ShowtimeDaoImpl() {
+    public ShowtimeDaoImpl() {
         super(Showtime.class);
-    }
-
-    @Override
-    public void addShowtime(Showtime showtime) {
-        super.save(showtime);
-    }
-
-    @Override
-    public Optional<Showtime> getShowtime(CinemaEventHall id) {
-        return super.get(id);
-    }
-
-    @Override
-    public Optional<Showtime> getShowtimeByRamblerId(Long ramblerId) {
-        return getSession()
-                .createQuery("SELECT es FROM Showtime es WHERE es.ramblerId = :ramblerId",
-                        Showtime.class)
-                .setParameter("ramblerId", ramblerId)
-                .uniqueResultOptional();
     }
 }

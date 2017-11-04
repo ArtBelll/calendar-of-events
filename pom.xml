@@ -29,7 +29,7 @@
         <ed.group>${project.groupId}</ed.group>
         <ed.version>${project.version}</ed.version>
 
-        <spring.version>4.3.11.RELEASE</spring.version>
+        <spring.version>5.0.0.RELEASE</spring.version>
         <sprint.boot.version>2.0.0.M5</sprint.boot.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <lombok.version>1.16.16</lombok.version>

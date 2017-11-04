@@ -18,18 +18,7 @@ public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements Cinem
     }
 
     @Override
-    public long addCinema(Cinema cinema) {
-        super.save(cinema);
-        return cinema.getId();
-    }
-
-    @Override
-    public Optional<Cinema> getCinema(Long id) {
-        return super.get(id);
-    }
-
-    @Override
-    public Optional<Cinema> getCinemaByName(String name) {
+    public Optional<Cinema> getByName(String name) {
         return getSession()
                 .createQuery("SELECT c FROM Cinema c WHERE c.name = :name", Cinema.class)
                 .setParameter("name", name)

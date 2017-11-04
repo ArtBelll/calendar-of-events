@@ -51,7 +51,7 @@ public class EventsController extends BaseController {
         val finish = DateTimeUtils.epochSecondToLocalDate(endDateRange);
 
         val activeDaysLong =
-                getActiveDateRanges(eventDao.getEventsByDateRangeAtCity(start, finish, cityId, ignoreTypes), finish)
+                getActiveDateRanges(eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes), finish)
                 .stream()
                 .flatMap(rangeDate -> DateTimeUtils.getListOfDayInSecondsBetween(rangeDate.getStart(), rangeDate.getFinish()))
                 .collect(Collectors.toList());
@@ -61,9 +61,10 @@ public class EventsController extends BaseController {
     }
 
     @GetMapping(value = "search")
-    public ResponseEntity<?> searchEvents(@RequestParam(value = "title", defaultValue = "") String title,
+    public ResponseEntity<?> searchEvents(@PathVariable("cityId") Long cityId,
+                                          @RequestParam(value = "title", defaultValue = "") String title,
                                           @RequestParam(value = "place", defaultValue = "") String place) {
-        val events = eventDao.searchEvents(title, place, LocalDate.now())
+        val events = eventDao.searchEvents(title, place, LocalDate.now(), cityId)
                 .map(event -> new RGeneralEvent(event, ""))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
@@ -83,7 +84,7 @@ public class EventsController extends BaseController {
 
         ListMultimap<String, RGeneralEvent> events = MultimapBuilder.hashKeys().arrayListValues().build();
 
-        eventDao.getEventsByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
+        eventDao.getByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
                 .forEach(event -> {
                     val generalEvent = new RGeneralEvent(event, "");
                     event.getEventTypes().forEach(eventType -> {

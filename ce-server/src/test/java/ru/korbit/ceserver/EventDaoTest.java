@@ -9,11 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.korbit.cecommon.dao.CinemaDao;
+import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.dao.EventDao;
-import ru.korbit.cecommon.domain.Cinema;
-import ru.korbit.cecommon.domain.CinemaEvent;
-import ru.korbit.cecommon.domain.EventSchedule;
-import ru.korbit.cecommon.domain.SimpleEvent;
+import ru.korbit.cecommon.domain.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,13 +36,16 @@ public class EventDaoTest {
     @Autowired
     CinemaDao cinemaDao;
 
+    @Autowired
+    CityDao cityDao;
+
     @Test
     public void addGetTest() {
         val simpleEvent = getSimpleEvent(TITLE, PLACE);
-        val id = eventDao.addEvent(simpleEvent);
-        val event = eventDao.getEventById(id);
-        Assert.assertTrue(event.isPresent());
-        Assert.assertTrue(Objects.equals(event.get().getTitle(), TITLE));
+        val eventIn = eventDao.save(simpleEvent);
+        val eventOut = eventDao.get(eventIn.getId());
+        Assert.assertTrue(eventOut.isPresent());
+        Assert.assertTrue(Objects.equals(eventOut.get().getTitle(), TITLE));
     }
 
     @Test
@@ -52,8 +53,8 @@ public class EventDaoTest {
         val requestStartDate = LocalDate.parse("2017-10-01");
         val requestFinishDate = LocalDate.parse("2017-10-08");
 
-        eventDao.addEvent(getSimpleEvent(TITLE, PLACE));
-        val events = eventDao.getEventsByDateRangeAtCity(requestStartDate, requestFinishDate, 1L, new ArrayList<>());
+        eventDao.save(getSimpleEvent(TITLE, PLACE));
+        val events = eventDao.getByDateRangeAtCity(requestStartDate, requestFinishDate, 1L, new ArrayList<>());
         events.forEach(event -> {
             Assert.assertTrue(event.getStartDay().isBefore(requestFinishDate)
                     && event.getFinishDay().isAfter(requestStartDate));
@@ -62,17 +63,24 @@ public class EventDaoTest {
 
     @Test
     public void searchEvent() {
-        eventDao.addEvent(getSimpleEvent(TITLE, PLACE));
-        eventDao.addEvent(getSimpleEvent("1", PLACE));
-        eventDao.addEvent(getSimpleEvent("2", PLACE));
+        val city = cityDao.save(new City("TestCity"));
 
-        eventDao.addEvent(getCinemaEvent("3", PLACE));
-        eventDao.addEvent(getCinemaEvent(TITLE, "p1"));
-        eventDao.addEvent(getCinemaEvent("4", "p2"));
+        val events = new ArrayList<Event>();
 
-        val eventsByPlace = eventDao.searchEvents("", PLACE, LocalDate.now()).count();
-        val eventsByTitle = eventDao.searchEvents(TITLE, "", LocalDate.now()).count();
-        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, LocalDate.now()).count();
+        events.add(eventDao.save(getSimpleEvent(TITLE, PLACE)));
+        events.add(eventDao.save(getSimpleEvent("1", PLACE)));
+        events.add(eventDao.save(getSimpleEvent("2", PLACE)));
+
+        events.add(eventDao.save(getCinemaEvent("3", PLACE)));
+        events.add(eventDao.save(getCinemaEvent(TITLE, "p1")));
+        events.add(eventDao.save(getCinemaEvent("4", "p2")));
+
+        city.setEvents(events);
+        cityDao.update(city);
+
+        val eventsByPlace = eventDao.searchEvents("", PLACE, LocalDate.now(), city.getId()).count();
+        val eventsByTitle = eventDao.searchEvents(TITLE, "", LocalDate.now(), city.getId()).count();
+        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, LocalDate.now(), city.getId()).count();
 
         Assert.assertTrue(eventsByPlace == 4);
         Assert.assertTrue(eventsByTitle == 2);
@@ -109,7 +117,7 @@ public class EventDaoTest {
         cinema.setPlace(place);
         List<Cinema> cinemas = new ArrayList<>();
         cinemas.add(cinema);
-        cinemaDao.addCinema(cinema);
+        cinemaDao.save(cinema);
 
         cinemaEvent.setStartDay(LocalDate.parse("2017-10-02"));
         cinemaEvent.setFinishDay(LocalDate.parse("2017-10-04"));

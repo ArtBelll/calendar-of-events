@@ -10,10 +10,6 @@ import ru.korbit.cecommon.domain.*;
 import ru.korbit.ceramblerkasse.services.store.DatabaseStore;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 
 /**
@@ -43,19 +39,19 @@ public class DatabaseStoreImpl extends SessionFactoryHolder<Object> implements D
 
     @Override
     public City getOrSave(City city) {
-        return cityDao.getCityByName(city.getName())
+        return cityDao.getByName(city.getName())
                 .orElseGet(() -> save(city, City.class));
     }
 
     @Override
     public Cinema getOrSave(Cinema cinema) {
-        return cinemaDao.getCinemaByName(cinema.getName())
+        return cinemaDao.getByName(cinema.getName())
                 .orElseGet(() -> save(cinema, Cinema.class));
     }
 
     @Override
     public Hall getOrSave(Hall hall) {
-        return hallDao.getHallByRamblerId(hall.getRamblerId())
+        return hallDao.getByRamblerId(hall.getRamblerId())
                 .orElseGet(() -> save(hall, Hall.class));
     }
 
@@ -63,19 +59,19 @@ public class DatabaseStoreImpl extends SessionFactoryHolder<Object> implements D
     public Showtime getOrSave(Showtime showtime) {
         val id = new CinemaEventHall(showtime.getCinemaEvent().getId(),
                 showtime.getHall().getId(), showtime.getStartTime());
-        return showtimeDao.getShowtime(id)
+        return showtimeDao.get(id)
                 .orElseGet(() -> save(showtime, Showtime.class));
     }
 
     @Override
     public Event getOrSave(Event event) {
-        return eventDao.getEventByTitle(event.getTitle())
+        return eventDao.getByTitle(event.getTitle())
                 .orElseGet(() -> save(event, Event.class));
     }
 
     @Override
     public EventType getOrSave(EventType eventType) {
-        return eventTypeDao.getEventTypeByName(eventType.getName())
+        return eventTypeDao.getByName(eventType.getName())
                 .orElseGet(() -> save(eventType, EventType.class));
     }
 

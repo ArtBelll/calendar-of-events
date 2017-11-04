@@ -22,6 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@Transactional
 public class RamblerKasseLoader implements RamblerKassaService {
 
     private Integer KALININGRAD_ID = 1700;
@@ -41,7 +42,6 @@ public class RamblerKasseLoader implements RamblerKassaService {
     }
 
     @Override
-    @Transactional
     //TODO for all city
     public void load() {
         List<RamblerCity> cities = ramblerKassa.getCities();

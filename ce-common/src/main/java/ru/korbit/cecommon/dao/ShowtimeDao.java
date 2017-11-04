@@ -9,11 +9,6 @@ import java.util.Optional;
 /**
  * Created by Artur Belogur on 17.10.17.
  */
-public interface ShowtimeDao {
+public interface ShowtimeDao extends GenericDao<Showtime> {
 
-    void addShowtime(@NonNull Showtime showtime);
-
-    Optional<Showtime> getShowtime(@NonNull CinemaEventHall id);
-
-    Optional<Showtime> getShowtimeByRamblerId(@NonNull Long ramblerId);
 }

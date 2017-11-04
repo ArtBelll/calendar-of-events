@@ -4,13 +4,14 @@ import lombok.NonNull;
 import ru.korbit.cecommon.domain.EventType;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Created by Artur Belogur on 19.10.17.
  */
-public interface EventTypeDao {
+public interface EventTypeDao extends GenericDao<EventType> {
 
-    long addEventType(@NonNull EventType eventType);
+    Optional<EventType> getByName(@NonNull String name);
 
-    Optional<EventType> getEventTypeByName(@NonNull String name);
+    Stream<EventType> getAtCity(@NonNull Long id);
 }

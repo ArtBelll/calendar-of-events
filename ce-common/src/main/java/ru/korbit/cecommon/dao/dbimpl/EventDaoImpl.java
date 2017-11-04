@@ -20,18 +20,7 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
     }
 
     @Override
-    public Optional<Event> getEventById(Long id) {
-        return super.get(id);
-    }
-
-    @Override
-    public long addEvent(Event event) {
-        super.save(event);
-        return event.getId();
-    }
-
-    @Override
-    public Optional<Event> getEventByTitle(String title) {
+    public Optional<Event> getByTitle(String title) {
         return getSession()
                 .createQuery("SELECT e FROM Event e WHERE e.title = :title", Event.class)
                 .setParameter("title", title)
@@ -39,8 +28,8 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
     }
 
     @Override
-    public Stream<Event> getEventsByDateRangeAtCity(LocalDate startDate, LocalDate finishDate,
-                                                    Long cityId, List<Long> ignoreTypes) {
+    public Stream<Event> getByDateRangeAtCity(LocalDate startDate, LocalDate finishDate,
+                                              Long cityId, List<Long> ignoreTypes) {
         ignoreTypes.add(-1L);
         return getSession()
                 .createQuery("SELECT e FROM City c " +
@@ -57,17 +46,18 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
     }
 
     @Override
-    public Stream<Event> searchEvents(String title, String place, LocalDate startDate) {
+    public Stream<Event> searchEvents(String title, String place, LocalDate startDate, Long cityId) {
         return getSession()
                 .createQuery("SELECT DISTINCT e FROM Event e " +
                         "LEFT JOIN SimpleEvent se ON e.id = se.id " +
                         "LEFT JOIN CinemaEvent ce ON e.id = ce.id " +
                         "JOIN e.city c " +
                         "LEFT JOIN c.cinemas cin " +
-                        "WHERE e.finishDay >= :startDate AND LOWER(e.title) LIKE :title " +
+                        "WHERE c.id = :cityId AND e.finishDay >= :startDate AND LOWER(e.title) LIKE :title " +
                             "AND (LOWER(se.place) LIKE :place " +
                                 "OR LOWER(cin.place) LIKE :place " +
                                 "OR LOWER(cin.name) LIKE :place)" , Event.class)
+                .setParameter("cityId", cityId)
                 .setParameter("title", StringUtils.getSqlPatternInAnyPosition(title))
                 .setParameter("place", StringUtils.getSqlPatternInAnyPosition(place))
                 .setParameter("startDate", startDate)

@@ -34,10 +34,10 @@ public class CityDaoTest {
 
         val c = new City();
         c.setName(name);
-        val id = cityDao.addCity(c);
-        val city = cityDao.getCity(id);
-        Assert.assertTrue(city.isPresent());
-        Assert.assertTrue(Objects.equals(city.get().getName(), name));
+        val cityIn = cityDao.save(c);
+        val cityOut = cityDao.get(cityIn.getId());
+        Assert.assertTrue(cityOut.isPresent());
+        Assert.assertTrue(Objects.equals(cityOut.get().getName(), name));
     }
 
     @Test
@@ -51,9 +51,9 @@ public class CityDaoTest {
                     city.setName(Integer.toString(i));
                     return city;
                 });
-        cities.forEach(city -> cityDao.addCity(city));
+        cities.forEach(city -> cityDao.save(city));
 
-        val newCities = cityDao.getAllCity().collect(Collectors.toList());
+        val newCities = cityDao.getAll().collect(Collectors.toList());
         Assert.assertTrue(newCities.size() == numberOfCities);
     }
 }

@@ -39,9 +39,7 @@ public class RamblerKassa implements RamblerKassaApi {
     private final static String PLACE_LIST_URL = String.format("/place/list?%s={%s}", CITY_ID_PARAM, CITY_ID_PARAM);
     private final static String EVENTS_URL = String.format("/movie/list?%s={%s}&%s={%s}",
             CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM);
-    private final static String MOVIE_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}&%s={%s}",
-            CITY_ID_PARAM, CITY_ID_PARAM, MAX_DATE_PARAM, MAX_DATE_PARAM, OBJECT_ID_PARAM, OBJECT_ID_PARAM);
-    private final static String CITY_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}",
+     private final static String CITY_SCHEDULE_URL = String.format("/movie/schedule?%s={%s}&%s={%s}",
             CITY_ID_PARAM, CITY_ID_PARAM, DATE_TO, DATE_TO);
 
     private final ObjectMapper mapper;

@@ -10,15 +10,9 @@ import java.util.stream.Stream;
 /**
  * Created by Artur Belogur on 11.10.17.
  */
-public interface CityDao {
+public interface CityDao extends GenericDao<City> {
 
-    long addCity(@NonNull City city);
+    Optional<City> getByName(@NonNull String name);
 
-    Optional<City> getCity(@NonNull Long id);
-
-    Optional<City> getCityByName(@NonNull String name);
-
-    Stream<City> getAllCity();
-
-    Stream<EventType> getEventTypesAtCity(@NonNull Long id);
+    Stream<City> getAll();
 }

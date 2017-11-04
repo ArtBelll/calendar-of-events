@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.korbit.cecommon.dao.CityDao;
+import ru.korbit.cecommon.dao.EventTypeDao;
 
 import java.util.stream.Collectors;
 
@@ -23,20 +24,22 @@ import java.util.stream.Collectors;
 public class CityController extends BaseController {
 
     private final CityDao cityDao;
+    private final EventTypeDao eventTypeDao;
 
-    public CityController(CityDao cityDao) {
+    public CityController(CityDao cityDao, EventTypeDao eventTypeDao) {
         this.cityDao = cityDao;
+        this.eventTypeDao = eventTypeDao;
     }
 
     @GetMapping
     public ResponseEntity<?> getCities() {
-        val cities = cityDao.getAllCity().collect(Collectors.toList());
+        val cities = cityDao.getAll().collect(Collectors.toList());
         return new ResponseEntity<>(getResponseBody(cities), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{cityId}/types")
     public ResponseEntity<?> getTypesInCity(@PathVariable("cityId") Long cityId) {
-        val types = cityDao.getEventTypesAtCity(cityId).collect(Collectors.toList());
+        val types = eventTypeDao.getAtCity(cityId).collect(Collectors.toList());
         return new ResponseEntity<>(getResponseBody(types), HttpStatus.OK);
     }
 }
