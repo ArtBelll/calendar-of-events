@@ -19,7 +19,7 @@ public abstract class BaseController {
         return body;
     }
 
-    protected Map<String, Object> getResponseBody(String type, Object object) {
+    protected Map<String, Object> getResponseBody(int type, Object object) {
         val body = new HashMap<String, Object>();
         body.put(TYPE_KEY, type);
         body.put(DATA_KEY, object);
