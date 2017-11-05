@@ -27,11 +27,9 @@ public class City {
     @Column(name = "name")
     private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
     private List<Cinema> cinemas = new ArrayList<>();
 }

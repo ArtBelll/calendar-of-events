@@ -26,7 +26,6 @@ public class EventType {
     @Column(name = "name")
     @NonNull private String name;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "event_event_types",
             joinColumns = @JoinColumn(name = "event_type_id", referencedColumnName = "id"),
