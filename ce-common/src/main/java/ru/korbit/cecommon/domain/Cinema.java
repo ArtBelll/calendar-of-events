@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class Cinema {
     @Column(name = "longitude")
     private Float longitude;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;

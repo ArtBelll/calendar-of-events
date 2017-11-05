@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Hall {
     @Column(name = "rambler_id")
     private String ramblerId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private Cinema cinema;
