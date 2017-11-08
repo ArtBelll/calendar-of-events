@@ -39,8 +39,7 @@ public class LoadersController {
         try {
             ramblerKassaService.load().get();
         } catch (Throwable e) {
-            redissonClient.getKeys().flushall();
-            throw new RuntimeException();
+            throw new RuntimeException("Load field");
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

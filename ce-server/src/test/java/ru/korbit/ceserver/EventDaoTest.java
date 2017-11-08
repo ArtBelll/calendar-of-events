@@ -69,6 +69,7 @@ public class EventDaoTest {
         cinema.setPlace(PLACE);
         cinema.setName(PLACE);
         List<Cinema> cinemas = new ArrayList<>();
+        cinema.setCity(city);
         cinemas.add(cinema);
         cinemaDao.save(cinema);
         city.setCinemas(cinemas);
@@ -93,10 +94,10 @@ public class EventDaoTest {
         val eventsByPlace = eventDao.searchEvents("", PLACE, LocalDate.now(), city.getId()).collect(Collectors.toList());
         val eventsByTitle = eventDao.searchEvents(TITLE, "", LocalDate.now(), city.getId()).collect(Collectors.toList());
         val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, LocalDate.now(), city.getId()).collect(Collectors.toList());
-//
-//        Assert.assertTrue(eventsByPlace.size() == 4);
-//        Assert.assertTrue(eventsByTitle.size() == 2);
-//        Assert.assertTrue(eventsByTitleAndPlace.size() == 1);
+
+        Assert.assertTrue(eventsByPlace.size() == 6);
+        Assert.assertTrue(eventsByTitle.size() == 2);
+        Assert.assertTrue(eventsByTitleAndPlace.size() == 2);
     }
 
     private SimpleEvent getSimpleEvent(String title, String place) {
