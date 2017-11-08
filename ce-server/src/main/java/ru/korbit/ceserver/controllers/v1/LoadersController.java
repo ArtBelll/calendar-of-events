@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.services.RamblerKassaAsyncService;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -34,13 +36,16 @@ public class LoadersController {
         val remoteService = redissonClient.getRemoteService(Constants.QUEUE_NAME);
         val ramblerKassaService = remoteService.get(RamblerKassaAsyncService.class);
 
-        log.info("Start load Ramdler.Kassa data");
+        val startTime = LocalDateTime.now();
+        log.info("Start load Rambler.Kassa data manually");
 
         try {
             ramblerKassaService.load().get();
         } catch (Throwable e) {
             throw new RuntimeException("Load field");
         }
+
+        log.info("Load success. Load time = {}", Duration.between(startTime, LocalDateTime.now()));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

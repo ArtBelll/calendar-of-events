@@ -1,4 +1,4 @@
-package ru.korbit.ceserver;
+package ru.korbit.cecommon.packet;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -14,8 +14,4 @@ import java.time.LocalDate;
 public class DateRange {
     @NonNull private LocalDate start;
     @NonNull private LocalDate finish;
-
-    public static DateRange empty() {
-        return new DateRange(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0));
-    }
 }

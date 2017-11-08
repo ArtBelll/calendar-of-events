@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.korbit.cecommon.exeptions.BadRequest;
 import ru.korbit.cecommon.exeptions.NotExist;
 
 /**
@@ -40,6 +41,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+
+    @ExceptionHandler({BadRequest.class})
+    protected ResponseEntity<?> badRequest(Exception ex, WebRequest request) {
+        HttpHeaders headers = jsonHeaders();
+
+        ErrorResponse error = new ErrorResponse(
+                new Error(400, ex.getMessage()),
+                "ERR"
+        );
+
+        return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler({NotExist.class})

@@ -34,12 +34,14 @@ public class CityController extends BaseController {
     @GetMapping
     public ResponseEntity<?> getCities() {
         val cities = cityDao.getAll().collect(Collectors.toList());
+        log.info("Return all cities, number = {}", cities.size());
         return new ResponseEntity<>(getResponseBody(cities), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{cityId}/types")
     public ResponseEntity<?> getTypesInCity(@PathVariable("cityId") Long cityId) {
         val types = eventTypeDao.getAtCity(cityId).collect(Collectors.toList());
+        log.info("Return all types at city, number = {}", types.size());
         return new ResponseEntity<>(getResponseBody(types), HttpStatus.OK);
     }
 }

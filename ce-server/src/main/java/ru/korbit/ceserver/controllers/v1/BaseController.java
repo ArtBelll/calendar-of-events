@@ -13,13 +13,13 @@ public abstract class BaseController {
     private final String DATA_KEY = "data";
     private final String TYPE_KEY = "type";
 
-    protected Map<String, Object> getResponseBody(Object object) {
+    Map<String, Object> getResponseBody(Object object) {
         val body = new HashMap<String, Object>();
         body.put(DATA_KEY, object);
         return body;
     }
 
-    protected Map<String, Object> getResponseBody(int type, Object object) {
+    Map<String, Object> getResponseBody(int type, Object object) {
         val body = new HashMap<String, Object>();
         body.put(TYPE_KEY, type);
         body.put(DATA_KEY, object);
