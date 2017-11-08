@@ -1,11 +1,11 @@
-package ru.korbit.ceramblerkasse.services.store.impl;
+package ru.korbit.ceramblerkasse;
 
-import ru.korbit.ceramblerkasse.services.store.Region;
+import ru.korbit.cecommon.store.CacheRegion;
 
 /**
- * Created by Artur Belogur on 17.10.17.
+ * Created by Artur Belogur on 08.11.17.
  */
-public enum RedisRegion implements Region {
+public enum RamblerCacheRegion implements CacheRegion {
     CITY("rambler-city"),
     CINEMA("rambler-cinema"),
     HALL("rambler-hall"),
@@ -15,7 +15,7 @@ public enum RedisRegion implements Region {
 
     private final String region;
 
-    RedisRegion(String region) {
+    RamblerCacheRegion(String region) {
         this.region = region;
     }
 

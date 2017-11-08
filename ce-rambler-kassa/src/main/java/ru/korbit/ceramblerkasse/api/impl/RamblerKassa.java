@@ -1,4 +1,4 @@
-package ru.korbit.ceramblerkasse.services.api.impl;
+package ru.korbit.ceramblerkasse.api.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,11 +8,11 @@ import lombok.val;
 import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.packet.BaseUrlRestTemplate;
 import ru.korbit.ceramblerkasse.Environment;
+import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
 import ru.korbit.ceramblerkasse.responses.RamblerCinema;
 import ru.korbit.ceramblerkasse.responses.RamblerCity;
 import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.responses.RamblerShowtime;
-import ru.korbit.ceramblerkasse.services.api.RamblerKassaApi;
 
 import java.io.IOException;
 import java.time.LocalDate;

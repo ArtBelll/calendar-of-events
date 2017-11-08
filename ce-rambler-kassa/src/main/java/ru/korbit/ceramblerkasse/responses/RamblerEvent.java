@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
-import ru.korbit.cecommon.domain.City;
-import ru.korbit.cecommon.domain.EventType;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
 import java.net.MalformedURLException;
@@ -35,8 +33,6 @@ public class RamblerEvent {
     @JsonProperty("ClassType")
     private String type;
 
-    private City city;
-
     public CinemaEvent toDBEvent() {
         // TODO: load default images for movie
         if (images == null) {
@@ -47,10 +43,6 @@ public class RamblerEvent {
             }
         }
         val duration = TimeUtility.durationFromString(this.duration);
-        return new CinemaEvent(duration, title, description, images, city);
-    }
-
-    public EventType toDBEventType() {
-        return new EventType(type);
+        return new CinemaEvent(duration, title, description, images);
     }
 }
