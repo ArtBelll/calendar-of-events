@@ -28,9 +28,8 @@ public class CinemaEvent extends Event {
     public CinemaEvent(Duration duration,
                        String title,
                        String description,
-                       URL imageURL,
-                       City city) {
-        super(title, description, imageURL, city);
+                       URL imageURL) {
+        super(title, description, imageURL);
         this.duration = duration;
     }
 }

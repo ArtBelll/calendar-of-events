@@ -1,7 +1,7 @@
 package ru.korbit.cecommon.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,12 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ToString(exclude = {"events", "cinemas"})
-public class City {
+public class City implements GetIdable {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @NonNull
     @Column(name = "name")

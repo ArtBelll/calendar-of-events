@@ -2,8 +2,10 @@ package ru.korbit.cecommon.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ToString(exclude={"cinemaEvent", "hall"})
-public class Showtime {
+public class Showtime implements GetIdable {
 
     @JsonIgnore
     @Id
@@ -46,5 +48,10 @@ public class Showtime {
     @JsonIgnore
     @NonNull
     @Column(name = "rambler_id")
-    private long ramblerId;
+    private Long ramblerId;
+
+    @Override
+    public Serializable getId() {
+        return new CinemaEventHall(cinemaEvent.getId(), hall.getId(), startTime);
+    }
 }

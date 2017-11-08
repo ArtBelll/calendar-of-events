@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -19,12 +20,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public abstract class Event {
+public abstract class Event implements GetIdable {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "title")
     @NonNull private String title;
@@ -46,7 +47,7 @@ public abstract class Event {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    @NonNull private City city;
+    private City city;
 
     @ElementCollection
     @Column(name = "links")

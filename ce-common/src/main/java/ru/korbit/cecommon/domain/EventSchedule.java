@@ -19,7 +19,7 @@ public class EventSchedule {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @ElementCollection
     @Column(name = "specific_days")

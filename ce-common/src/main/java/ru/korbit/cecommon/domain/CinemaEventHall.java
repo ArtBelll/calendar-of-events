@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class CinemaEventHall implements Serializable {
-    @NonNull private long cinemaEvent;
-    @NonNull private long hall;
+    @NonNull private Long cinemaEvent;
+    @NonNull private Long hall;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
