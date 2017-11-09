@@ -11,6 +11,7 @@
         <module>ce-server</module>
         <module>ce-common</module>
         <module>ce-rambler-kassa</module>
+        <module>ce-loader</module>
     </modules>
     <packaging>pom</packaging>
 
