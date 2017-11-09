@@ -8,6 +8,7 @@ import ru.korbit.cecommon.domain.*;
 import ru.korbit.cecommon.packet.GetIdable;
 import ru.korbit.cecommon.store.impl.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +42,8 @@ public class StoresHelpersHolder {
     private <T> T putIfAbsent(Object cacheId,
                               T objectDb,
                               CommonStoreHelper<T> storeHelper,
-                              CacheRegion cacheRegion) {
+                              CacheRegion cacheRegion,
+                              Long millisToExpire) {
 
         Optional<T> currentObject = Optional.empty();
 
@@ -57,7 +59,8 @@ public class StoresHelpersHolder {
                 log.info("Add entity: {}", currentObject.orElse(null));
             }
             currentObject.ifPresent(currentObjectDb ->
-                    storeHelper.addToCache(cacheId, ((GetIdable) currentObjectDb).getId(), cacheRegion));
+                    storeHelper.addToCache(cacheId,
+                            ((GetIdable) currentObjectDb).getId(), cacheRegion, millisToExpire));
         }
 
         return currentObject.orElseThrow(RuntimeException::new);
@@ -65,8 +68,19 @@ public class StoresHelpersHolder {
 
     @SuppressWarnings("unchecked")
     public <T> T putIfAbsent(Object cacheId, T object, CacheRegion cacheRegion) {
+        return putIfAbsent(cacheId, object, cacheRegion, 0L);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T putIfAbsent(Object cacheId, T object, CacheRegion cacheRegion, Long millisToExpire) {
         return putIfAbsent(cacheId, object,
-                (CommonStoreHelper<T>) holder.get(object.getClass()), cacheRegion);
+                (CommonStoreHelper<T>) holder.get(object.getClass()), cacheRegion, millisToExpire);
+    }
+
+    public <T extends Serializable> void updateExpire(Object cacheId, T object,
+                                                      CacheRegion cacheRegion, Long millisToExpire, Class<T> tClass) {
+        val storeHelper =  holder.get(tClass);
+        storeHelper.addToCache(cacheId, object, cacheRegion, millisToExpire);
     }
 
     @SuppressWarnings("unchecked")

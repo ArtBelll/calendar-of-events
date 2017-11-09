@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.korbit.cecommon.domain.*;
 import ru.korbit.cecommon.services.RamblerKassaService;
 import ru.korbit.cecommon.store.StoresHelpersHolder;
+import ru.korbit.cecommon.store.cacheregions.RamblerCacheRegion;
+import ru.korbit.cecommon.utility.DateTimeUtils;
 import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
@@ -114,15 +116,26 @@ public class RamblerKasseLoader implements RamblerKassaService {
                     val currentShowtime = storesHelpersHolder.putIfAbsent(
                             ramblerShowtime.getShowtimeRamblerId(),
                             showtimeDb,
-                            RamblerCacheRegion.SHOWTIME
+                            RamblerCacheRegion.SHOWTIME,
+                            DateTimeUtils.getExpireMillis(showtimeDb.getStartTime())
                     );
 
+                    boolean isUpdateTime = false;
                     if (currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
                         currentEvent.setStartDay(currentShowtime.getStartTime().toLocalDate());
+                        isUpdateTime = true;
                     }
                     if (currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
                         currentEvent.setFinishDay(currentShowtime.getStartTime().toLocalDate());
+                        isUpdateTime = true;
                     }
+
+                    if (isUpdateTime) storesHelpersHolder.updateExpire(
+                            ramblerShowtime.getEventId(),
+                            currentEvent.getId(),
+                            RamblerCacheRegion.EVENT,
+                            DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1).atStartOfDay()),
+                            Long.class);
                 });
     }
 }

@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.store.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.LocalCachedMapOptions;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import ru.korbit.cecommon.store.CommonStoreHelper;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Artur Belogur on 07.11.17.
  */
+@Slf4j
 public abstract class BaseStoreHelper<T> extends SessionFactoryHolder<T> implements CommonStoreHelper<T> {
 
     @Autowired
@@ -23,16 +26,16 @@ public abstract class BaseStoreHelper<T> extends SessionFactoryHolder<T> impleme
     }
 
     @Override
-    public void addToCache(Object cacheId, Serializable dbId, CacheRegion cacheRegion) {
+    public void addToCache(Object cacheId, Serializable dbId, CacheRegion cacheRegion, Long millis) {
         redissonClient
-                .getLocalCachedMap(cacheRegion.getRegion(), LocalCachedMapOptions.defaults())
-                .fastPut(cacheId, dbId);
+                .getMapCache(cacheRegion.getRegion(), LocalCachedMapOptions.defaults())
+                .fastPut(cacheId, dbId, millis, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public Optional<Serializable> getFromCache(Object cacheId, CacheRegion cacheRegion) {
         return Optional.ofNullable((Serializable) redissonClient
-                .getLocalCachedMap(cacheRegion.getRegion(), LocalCachedMapOptions.defaults())
+                .getMapCache(cacheRegion.getRegion(), LocalCachedMapOptions.defaults())
                 .get(cacheId));
     }
 

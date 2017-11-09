@@ -10,7 +10,10 @@ import java.util.Optional;
  */
 public interface CacheStoreHelper {
 
-    void addToCache(@NonNull Object cacheId, @NonNull Serializable dbId, @NonNull CacheRegion cacheRegion);
+    void addToCache(@NonNull Object cacheId,
+                    @NonNull Serializable dbId,
+                    @NonNull CacheRegion cacheRegion,
+                    @NonNull Long millisToExpire);
 
     Optional<Serializable> getFromCache(@NonNull Object cacheId, @NonNull CacheRegion cacheRegion);
 }

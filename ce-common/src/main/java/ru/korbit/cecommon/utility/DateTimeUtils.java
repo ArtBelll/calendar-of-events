@@ -4,9 +4,7 @@ import lombok.val;
 import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.packet.DateRange;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +64,9 @@ public final class DateTimeUtils {
         });
 
         return activeDaysInDataRanges;
+    }
 
+    public static Long getExpireMillis(LocalDateTime time) {
+        return Duration.between(LocalDateTime.now(), time).toMillis();
     }
 }

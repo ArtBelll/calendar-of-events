@@ -6,4 +6,6 @@ package ru.korbit.cecommon.store;
 public interface CacheRegion {
 
     String getRegion();
+
+    String getPrefix();
 }
