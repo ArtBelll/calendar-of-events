@@ -17,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 /**
@@ -28,7 +29,8 @@ import java.io.IOException;
 public class Application {
 
     public static void main(final String[] args) {
-        SpringApplication.run(Application.class, args);
+        val app = SpringApplication.run(Application.class, args);
+        app.getBean(Schedule.class).run();
     }
 
     @Value(value = "classpath:redisson.json")
@@ -56,5 +58,11 @@ public class Application {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(sessionFactory);
         return txManager;
+    }
+
+    @PostConstruct
+    public void clearExecutor() throws Exception {
+        redissonClient().getKeys().deleteByPattern("*" + LoaderConstants.EXECUTOR_NAME + "*");
+        log.info("Remove keys with pattern *{}*", LoaderConstants.EXECUTOR_NAME);
     }
 }

@@ -22,6 +22,7 @@ import ru.korbit.ceramblerkasse.utility.TimeUtility;
 public class RamblerKasseLoader implements RamblerKassaService {
 
     private Integer KALININGRAD_ID = 1700;
+    private Integer MOSCOW_ID = 2;
 
     private final RamblerKassaApi ramblerKassa;
 
@@ -120,22 +121,18 @@ public class RamblerKasseLoader implements RamblerKassaService {
                             DateTimeUtils.getExpireMillis(showtimeDb.getStartTime())
                     );
 
-                    boolean isUpdateTime = false;
                     if (currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
                         currentEvent.setStartDay(currentShowtime.getStartTime().toLocalDate());
-                        isUpdateTime = true;
                     }
                     if (currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
                         currentEvent.setFinishDay(currentShowtime.getStartTime().toLocalDate());
-                        isUpdateTime = true;
+                        storesHelpersHolder.updateExpire(
+                                ramblerShowtime.getEventId(),
+                                currentEvent.getId(),
+                                RamblerCacheRegion.EVENT,
+                                DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1).atStartOfDay()),
+                                Event.class);
                     }
-
-                    if (isUpdateTime) storesHelpersHolder.updateExpire(
-                            ramblerShowtime.getEventId(),
-                            currentEvent.getId(),
-                            RamblerCacheRegion.EVENT,
-                            DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1).atStartOfDay()),
-                            Long.class);
                 });
     }
 }

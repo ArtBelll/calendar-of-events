@@ -77,15 +77,15 @@ public class StoresHelpersHolder {
                 (CommonStoreHelper<T>) holder.get(object.getClass()), cacheRegion, millisToExpire);
     }
 
-    public <T extends Serializable> void updateExpire(Object cacheId, T object,
-                                                      CacheRegion cacheRegion, Long millisToExpire, Class<T> tClass) {
-        val storeHelper =  holder.get(tClass);
+    public <T> void updateExpire(Object cacheId, Serializable object,
+                                 CacheRegion cacheRegion, Long millisToExpire, Class<T> tClass) {
+        val storeHelper = holder.get(tClass);
         storeHelper.addToCache(cacheId, object, cacheRegion, millisToExpire);
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getUsingCache(Object cacheId, CacheRegion cacheRegion, Class<T> tClass) {
-        val storeHelper =  holder.get(tClass);
+        val storeHelper = holder.get(tClass);
         return (T) storeHelper.getFromCache(cacheId, cacheRegion)
                 .map(dbId -> storeHelper.getFromDb(dbId).orElse(null))
                 .orElseThrow(() -> {
