@@ -13,8 +13,8 @@ import ru.korbit.cecommon.dao.EventDao;
 import ru.korbit.cecommon.exeptions.BadRequest;
 import ru.korbit.cecommon.exeptions.NotExist;
 import ru.korbit.cecommon.utility.DateTimeUtils;
-import ru.korbit.ceserver.responses.RGeneralEvent;
-import ru.korbit.ceserver.responses.ResponseEventFactory;
+import ru.korbit.ceserver.dto.RGeneralEvent;
+import ru.korbit.ceserver.dto.ResponseEventFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,13 +48,13 @@ public class EventsController extends BaseController {
 
         if (beginRange > endRange) {
             log.info("Bad request: begin range = {}, end range = {}",
-                    DateTimeUtils.epochSecondToLocalDate(beginRange),
-                    DateTimeUtils.epochSecondToLocalDate(endRange));
+                    DateTimeUtils.epochSecondsToLocalDate(beginRange),
+                    DateTimeUtils.epochSecondsToLocalDate(endRange));
             throw new BadRequest("Bad date range: begin = " + beginRange + " end = " + endRange);
         }
 
-        val start = DateTimeUtils.epochSecondToLocalDate(beginRange);
-        val finish = DateTimeUtils.epochSecondToLocalDate(endRange);
+        val start = DateTimeUtils.epochSecondsToLocalDate(beginRange);
+        val finish = DateTimeUtils.epochSecondsToLocalDate(endRange);
 
         val events = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes);
         val activeDaysLong = DateTimeUtils
@@ -85,13 +85,13 @@ public class EventsController extends BaseController {
 
         if (beginRange > endRange) {
             log.info("Bad request: begin range = {}, end range = {}",
-                    DateTimeUtils.epochSecondToLocalDate(beginRange),
-                    DateTimeUtils.epochSecondToLocalDate(endRange));
+                    DateTimeUtils.epochSecondsToLocalDate(beginRange),
+                    DateTimeUtils.epochSecondsToLocalDate(endRange));
             throw new BadRequest("Bad date range: begin = " + beginRange + " end = " + endRange);
         }
 
-        val start = DateTimeUtils.epochSecondToLocalDate(beginRange);
-        val finish = DateTimeUtils.epochSecondToLocalDate(endRange);
+        val start = DateTimeUtils.epochSecondsToLocalDate(beginRange);
+        val finish = DateTimeUtils.epochSecondsToLocalDate(endRange);
 
         ListMultimap<String, RGeneralEvent> events = MultimapBuilder.hashKeys().arrayListValues().build();
 

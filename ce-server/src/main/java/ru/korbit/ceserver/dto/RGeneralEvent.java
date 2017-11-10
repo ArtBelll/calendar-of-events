@@ -1,4 +1,4 @@
-package ru.korbit.ceserver.responses;
+package ru.korbit.ceserver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

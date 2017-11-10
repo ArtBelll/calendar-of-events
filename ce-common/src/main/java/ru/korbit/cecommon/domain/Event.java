@@ -50,7 +50,7 @@ public abstract class Event implements GetIdable {
 
     @ElementCollection
     @Column(name = "links")
-    private List<URL> links;
+    private List<URL> links = new ArrayList<>();
 
     @ManyToMany(mappedBy = "events")
     private List<EventType> eventTypes = new ArrayList<>();

@@ -31,7 +31,6 @@ public class Hall implements GetIdable {
     @Column(name = "rambler_id")
     private String ramblerId;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     private Cinema cinema;
