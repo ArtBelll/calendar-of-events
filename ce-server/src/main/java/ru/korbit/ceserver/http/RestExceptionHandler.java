@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -77,6 +78,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+                                                                          HttpHeaders headers,
+                                                                          HttpStatus status,
+                                                                          WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                new Error(status.value(), ex.getMessage()),
+                "ERR"
+        );
+
+        log.error(ex.getMessage(), ex);
+
+        return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler({Throwable.class})
