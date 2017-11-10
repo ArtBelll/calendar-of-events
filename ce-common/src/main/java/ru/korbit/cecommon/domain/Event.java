@@ -45,9 +45,8 @@ public abstract class Event implements GetIdable {
     @Column(name = "finish_date")
     private LocalDate finishDay = LocalDate.ofEpochDay(0);
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private City city;
+    @ManyToMany(mappedBy = "events")
+    private List<City> cities = new ArrayList<>();
 
     @ElementCollection
     @Column(name = "links")

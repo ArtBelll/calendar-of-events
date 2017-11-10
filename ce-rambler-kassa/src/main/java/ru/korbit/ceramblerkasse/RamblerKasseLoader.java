@@ -39,7 +39,8 @@ public class RamblerKasseLoader implements RamblerKassaService {
     //TODO for all city
     public void load() {
         ramblerKassa.getCities().stream()
-                .filter(city -> city.getCityRamblerId().equals(KALININGRAD_ID))
+                .filter(city -> city.getCityRamblerId().equals(KALININGRAD_ID)
+                        || city.getCityRamblerId().equals(MOSCOW_ID))
                 .forEach(ramblerCity -> {
                     val currentCity = storesHelpersHolder.putIfAbsent(
                             ramblerCity.getCityRamblerId(),
@@ -83,7 +84,11 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         currentEvent.getEventTypes().add(eventType);
                         storesHelpersHolder.updateDb(currentEvent);
                     }
-                    currentEvent.setCity(currentCity);
+                    if (!currentEvent.getCities().contains(currentCity)) {
+                        currentCity.getEvents().add(currentEvent);
+                        currentEvent.getCities().add(currentCity);
+                        storesHelpersHolder.updateDb(currentEvent);
+                    }
                 });
     }
 

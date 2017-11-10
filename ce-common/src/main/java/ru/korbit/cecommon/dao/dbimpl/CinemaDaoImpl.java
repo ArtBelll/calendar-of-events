@@ -27,13 +27,15 @@ public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements Cinem
     }
 
     @Override
-    public Stream<Cinema> getByEventOnDay(Long eventId, LocalDateTime dateFrom) {
+    public Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, LocalDateTime dateFrom) {
         return getSession()
-                .createQuery("SELECT DISTINCT c FROM Cinema c " +
-                        "JOIN c.halls h " +
+                .createQuery("SELECT DISTINCT cin FROM Cinema cin " +
+                        "JOIN cin.city c ON c.id = :cityId " +
+                        "JOIN cin.halls h " +
                         "JOIN h.showtimeList sh ON sh.startTime > :dateFrom AND sh.startTime < :dateTo " +
                         "JOIN sh.cinemaEvent e " +
                         "WHERE e.id = :eventId", Cinema.class)
+                .setParameter("cityId", cityId)
                 .setParameter("eventId", eventId)
                 .setParameter("dateFrom", dateFrom)
                 .setParameter("dateTo", dateFrom.toLocalDate().plusDays(1).atStartOfDay())

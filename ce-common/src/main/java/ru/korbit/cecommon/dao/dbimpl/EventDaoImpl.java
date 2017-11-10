@@ -51,10 +51,9 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
                 .createQuery("SELECT DISTINCT e FROM Event e " +
                         "LEFT JOIN SimpleEvent se ON e.id = se.id " +
                         "LEFT JOIN CinemaEvent ce ON e.id = ce.id " +
-                        "JOIN e.city c " +
+                        "JOIN e.cities c ON c.id = :cityId " +
                         "LEFT JOIN c.cinemas cin " +
-                        "WHERE c.id = :cityId " +
-                            "AND e.finishDay >= :startDate " +
+                        "WHERE e.finishDay >= :startDate " +
                             "AND LOWER(e.title) LIKE :title " +
                             "AND (LOWER(se.place) LIKE :place " +
                                 "OR LOWER(cin.place) LIKE :place " +

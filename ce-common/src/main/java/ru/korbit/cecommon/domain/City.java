@@ -27,9 +27,12 @@ public class City implements GetIdable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
-    private List<Event> events;
+    @ManyToMany
+    @JoinTable(name = "city_event",
+            joinColumns = @JoinColumn(name = "city_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
+    private List<Event> events = new ArrayList<>();
 
-    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "city")
     private List<Cinema> cinemas = new ArrayList<>();
 }
