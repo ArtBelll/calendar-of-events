@@ -87,7 +87,7 @@ public class EventDaoTest {
         city.setEvents(events);
         cityDao.update(city);
         events.forEach(event -> {
-            event.setCity(city);
+            event.getCities().add(city);
             eventDao.update(event);
         });
 

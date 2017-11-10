@@ -31,9 +31,9 @@ public class ResponseEventFactory {
         this.showtimeDao = showtimeDao;
     }
 
-    public REvent getResponseEvent(Event event) {
+    public REvent getResponseEvent(Event event, Long cityId) {
         if (event instanceof CinemaEvent) {
-            return getRCinemaEvent((CinemaEvent) event);
+            return getRCinemaEvent((CinemaEvent) event, cityId);
         }
         if (event instanceof SimpleEvent) {
             return new RSimpleEvent();
@@ -41,9 +41,9 @@ public class ResponseEventFactory {
         throw new RuntimeException("Not exist response for event = " + event.toString());
     }
 
-    private RCinemaEvent getRCinemaEvent(CinemaEvent cinemaEvent) {
+    private RCinemaEvent getRCinemaEvent(CinemaEvent cinemaEvent, Long cityId) {
         val now = LocalDateTime.now();
-        List<Cinema> cinemas = cinemaDao.getByEventOnDay(cinemaEvent.getId(), now)
+        List<Cinema> cinemas = cinemaDao.getByEventOnDay(cityId, cinemaEvent.getId(), now)
                 .peek(cinema -> {
                     Hibernate.initialize(cinema.getHalls());
                     cinema.getHalls().forEach(hall -> {

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @Transactional
 @Slf4j
+@RequestMapping(value = "cities/{cityId}/events")
 public class EventsController extends BaseController {
 
     private final EventDao eventDao;
@@ -39,7 +40,7 @@ public class EventsController extends BaseController {
         this.responseEventFactory = responseEventFactory;
     }
 
-    @PostMapping(value = "cities/{cityId}/events/exist-for-days")
+    @PostMapping(value = "exist-for-days")
     public ResponseEntity<?> getDaysWithEvents(@PathVariable Long cityId,
                                                @RequestBody List<Long> ignoreTypes,
                                                @RequestParam("start_date") Long beginRange,
@@ -66,7 +67,7 @@ public class EventsController extends BaseController {
         return new ResponseEntity<>(getResponseBody(activeDaysLong), HttpStatus.OK);
     }
 
-    @GetMapping(value = "cities/{cityId}/events/search")
+    @GetMapping(value = "search")
     public ResponseEntity<?> searchEvents(@PathVariable("cityId") Long cityId,
                                           @RequestParam(value = "title", defaultValue = "") String title,
                                           @RequestParam(value = "place", defaultValue = "") String place) {
@@ -77,7 +78,7 @@ public class EventsController extends BaseController {
         return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
     }
 
-    @GetMapping(value = "cities/{cityId}/events")
+    @GetMapping
     public ResponseEntity<?> getEvents(@PathVariable Long cityId,
                                        @RequestParam("start_date") Long beginRange,
                                        @RequestParam("finish_date") Long endRange) {
@@ -106,10 +107,11 @@ public class EventsController extends BaseController {
         return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
     }
 
-    @GetMapping(value = "events/{eventId}")
-    public ResponseEntity<?> getEvent(@PathVariable("eventId") Long eventId) {
+    @GetMapping(value = "{eventId}")
+    public ResponseEntity<?> getEvent(@PathVariable("cityId") Long cityId,
+                                      @PathVariable("eventId") Long eventId) {
         return eventDao.get(eventId)
-                .map(responseEventFactory::getResponseEvent)
+                .map(event -> responseEventFactory.getResponseEvent(event, cityId))
                 .map(event -> {
                     log.info("Get event by id = {}. Event = {}", eventId, event);
                     return new ResponseEntity<>(getResponseBody(event.getType(), event), HttpStatus.OK);
