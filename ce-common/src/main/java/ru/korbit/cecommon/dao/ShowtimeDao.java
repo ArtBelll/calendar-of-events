@@ -1,6 +1,5 @@
 package ru.korbit.cecommon.dao;
 
-import lombok.NonNull;
 import ru.korbit.cecommon.domain.Showtime;
 
 import java.time.LocalDateTime;
@@ -11,5 +10,5 @@ import java.util.stream.Stream;
  */
 public interface ShowtimeDao extends GenericDao<Showtime> {
 
-    Stream<Showtime> getByHallOnDay(@NonNull Long hallId, LocalDateTime dateFrom);
+    Stream<Showtime> getByHallOnDay(Long hallId, LocalDateTime dateFrom);
 }

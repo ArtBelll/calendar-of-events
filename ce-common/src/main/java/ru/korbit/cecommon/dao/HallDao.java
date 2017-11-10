@@ -1,6 +1,5 @@
 package ru.korbit.cecommon.dao;
 
-import lombok.NonNull;
 import ru.korbit.cecommon.domain.Hall;
 
 import java.util.Optional;
@@ -10,5 +9,5 @@ import java.util.Optional;
  */
 public interface HallDao extends GenericDao<Hall> {
 
-    Optional<Hall> getByRamblerId(@NonNull String id);
+    Optional<Hall> getByRamblerId(String id);
 }

@@ -1,6 +1,5 @@
 package ru.korbit.cecommon.dao;
 
-import lombok.NonNull;
 import ru.korbit.cecommon.domain.EventType;
 
 import java.util.Optional;
@@ -11,7 +10,7 @@ import java.util.stream.Stream;
  */
 public interface EventTypeDao extends GenericDao<EventType> {
 
-    Optional<EventType> getByName(@NonNull String name);
+    Optional<EventType> getByName(String name);
 
-    Stream<EventType> getAtCity(@NonNull Long id);
+    Stream<EventType> getAtCity(Long id);
 }

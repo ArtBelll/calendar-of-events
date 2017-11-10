@@ -1,6 +1,5 @@
 package ru.korbit.cecommon.dao;
 
-import lombok.NonNull;
 import ru.korbit.cecommon.domain.Event;
 
 import java.time.LocalDate;
@@ -13,15 +12,15 @@ import java.util.stream.Stream;
  */
 public interface EventDao extends GenericDao<Event> {
 
-    Optional<Event> getByTitle(@NonNull String title);
+    Optional<Event> getByTitle(String title);
 
-    Stream<Event> getByDateRangeAtCity(@NonNull LocalDate startDate,
-                                       @NonNull LocalDate finishDate,
-                                       @NonNull Long cityId,
-                                       @NonNull List<Long> ignoreTypes);
+    Stream<Event> getByDateRangeAtCity(LocalDate startDate,
+                                       LocalDate finishDate,
+                                       Long cityId,
+                                       List<Long> ignoreTypes);
 
-    Stream<Event> searchEvents(@NonNull String title,
-                               @NonNull String place,
-                               @NonNull LocalDate startDate,
-                               @NonNull Long cityId);
+    Stream<Event> searchEvents(String title,
+                               String place,
+                               LocalDate startDate,
+                               Long cityId);
 }

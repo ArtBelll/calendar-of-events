@@ -1,6 +1,5 @@
 package ru.korbit.cecommon.dao;
 
-import lombok.NonNull;
 import ru.korbit.cecommon.domain.Cinema;
 
 import java.time.LocalDateTime;
@@ -12,9 +11,9 @@ import java.util.stream.Stream;
  */
 public interface CinemaDao extends GenericDao<Cinema> {
 
-    Cinema save(@NonNull Cinema cinema);
+    Cinema save(Cinema cinema);
 
-    Optional<Cinema> getByName(@NonNull String name);
+    Optional<Cinema> getByName(String name);
 
-    Stream<Cinema> getByEventOnDay(@NonNull Long eventId, @NonNull LocalDateTime dateFrom);
+    Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, LocalDateTime dateFrom);
 }
