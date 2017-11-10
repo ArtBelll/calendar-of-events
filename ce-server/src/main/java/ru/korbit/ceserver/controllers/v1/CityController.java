@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.dao.EventTypeDao;
+import ru.korbit.ceserver.dto.RCity;
+import ru.korbit.ceserver.dto.REventType;
 
 import java.util.stream.Collectors;
 
@@ -33,14 +35,18 @@ public class CityController extends BaseController {
 
     @GetMapping
     public ResponseEntity<?> getCities() {
-        val cities = cityDao.getAll().collect(Collectors.toList());
+        val cities = cityDao.getAll()
+                .map(RCity::new)
+                .collect(Collectors.toList());
         log.info("Return all cities, number = {}", cities.size());
         return new ResponseEntity<>(getResponseBody(cities), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{cityId}/types")
     public ResponseEntity<?> getTypesInCity(@PathVariable("cityId") Long cityId) {
-        val types = eventTypeDao.getAtCity(cityId).collect(Collectors.toList());
+        val types = eventTypeDao.getAtCity(cityId)
+                .map(REventType::new)
+                .collect(Collectors.toList());
         log.info("Return all types at city, number = {}", types.size());
         return new ResponseEntity<>(getResponseBody(types), HttpStatus.OK);
     }
