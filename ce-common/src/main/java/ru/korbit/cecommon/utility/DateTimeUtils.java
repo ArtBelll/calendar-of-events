@@ -8,6 +8,7 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -15,11 +16,6 @@ import java.util.stream.Stream;
  * Created by Artur Belogur on 19.10.17.
  */
 public final class DateTimeUtils {
-
-    public static int HOURS_IN_DAY = 24;
-    public static int MINUTES_IN_HOURS = 60;
-    public static int SECONDS_IN_MINUTES = 60;
-    public static int MILLISECONDS_IN_SECONDS = 1000;
 
     private DateTimeUtils() {}
 
@@ -31,7 +27,7 @@ public final class DateTimeUtils {
         return d1.isBefore(d2) || d1.isEqual(d2);
     }
 
-    public static LocalDate epochSecondToLocalDate(Long secs) {
+    public static LocalDate epochSecondsToLocalDate(Long secs) {
         return Instant.ofEpochSecond(secs).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
@@ -39,7 +35,7 @@ public final class DateTimeUtils {
         val days = ChronoUnit.DAYS.between(start, finish);
         return LongStream.range(0, days + 1)
                 .boxed()
-                .map(i -> start.plusDays(i).toEpochDay() * HOURS_IN_DAY * MINUTES_IN_HOURS * SECONDS_IN_MINUTES);
+                .map(i -> TimeUnit.MILLISECONDS.convert(start.plusDays(i).toEpochDay(), TimeUnit.DAYS));
     }
 
     public static List<DateRange> getActiveDateRanges(Stream<Event> events, LocalDate endRange) {
