@@ -27,6 +27,7 @@
         </Root>
         <Logger name="ru.korbit" level="debug" additivity="false">
             <AppenderRef ref="AsyncConsole" />
+            <AppenderRef ref="AsyncFile" />
         </Logger>
     </Loggers>
 </Configuration>

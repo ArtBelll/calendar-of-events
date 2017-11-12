@@ -62,10 +62,10 @@ public class Schedule {
                     val event = eventDao.get(entryEvent.getValue());
                     if (event.isPresent()) {
                         eventDao.delete(event.get());
-                        log.debug("Expire: {}", event);
+                        log.info("Expire: {}", event);
                     }
                     else {
-                        log.error("Expire fail: event not exist {}", event);
+                        log.error("Expire fail: event not exist, id = {}", entryEvent.getValue());
                     }
                 });
 
@@ -74,9 +74,10 @@ public class Schedule {
                     val showtime = showtimeDao.get(entryEvent.getValue());
                     if (showtime.isPresent()) {
                         showtimeDao.delete(showtime.get());
+                        log.info("Expire: {}", showtime);
                     }
                     else {
-                        log.error("Expire fail: showtime not exist {}", showtime);
+                        log.error("Expire fail: showtime not exist {}", entryEvent.getValue());
                     }
                 });
     }
