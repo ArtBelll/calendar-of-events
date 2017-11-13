@@ -4,6 +4,7 @@ import lombok.*;
 import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class City implements GetIdable {
     @NonNull
     @Column(name = "name")
     private String name;
+
+    @NonNull
+    @Column(name = "time_zone")
+    private ZoneOffset zoneOffset;
 
     @ManyToMany
     @JoinTable(name = "city_event",
