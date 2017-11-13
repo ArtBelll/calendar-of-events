@@ -15,7 +15,7 @@ import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.responses.RamblerShowtime;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +76,7 @@ public class RamblerKassa implements RamblerKassaApi {
     }
 
     @Override
-    public List<RamblerEvent> getEventsLessDateAtCity(Integer cityRamblerId, LocalDate maxDate) {
+    public List<RamblerEvent> getEventsLessDateAtCity(Integer cityRamblerId, ZonedDateTime maxDate) {
         val params = new HashMap<String, Object>();
         params.put(CITY_ID_PARAM, cityRamblerId);
         params.put(MAX_DATE_PARAM, maxDate);
@@ -86,7 +86,7 @@ public class RamblerKassa implements RamblerKassaApi {
     }
 
     @Override
-    public List<RamblerShowtime> getShowtimesCityLessDate(Integer cityRamblerId, LocalDate maxDate) {
+    public List<RamblerShowtime> getShowtimesCityLessDate(Integer cityRamblerId, ZonedDateTime maxDate) {
         val params = new HashMap<String, Object>();
         params.put(CITY_ID_PARAM, cityRamblerId);
         params.put(DATE_TO, maxDate);

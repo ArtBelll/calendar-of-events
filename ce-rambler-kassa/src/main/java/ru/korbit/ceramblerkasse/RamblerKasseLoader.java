@@ -7,11 +7,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.korbit.cecommon.domain.*;
 import ru.korbit.cecommon.services.RamblerKassaService;
+import ru.korbit.cecommon.services.TimeZone;
 import ru.korbit.cecommon.store.StoresHelpersHolder;
 import ru.korbit.cecommon.store.cacheregions.RamblerCacheRegion;
 import ru.korbit.cecommon.utility.DateTimeUtils;
 import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
+
+import java.time.ZoneOffset;
 
 /**
  * Created by Artur Belogur on 13.10.17.
@@ -28,11 +31,15 @@ public class RamblerKasseLoader implements RamblerKassaService {
 
     private final StoresHelpersHolder storesHelpersHolder;
 
+    private final TimeZone timeZone;
+
     @Autowired
     public RamblerKasseLoader(RamblerKassaApi ramblerKassa,
-                              StoresHelpersHolder storesHelpersHolder) {
+                              StoresHelpersHolder storesHelpersHolder,
+                              TimeZone timeZone) {
         this.ramblerKassa = ramblerKassa;
         this.storesHelpersHolder = storesHelpersHolder;
+        this.timeZone = timeZone;
     }
 
     @Override
@@ -47,9 +54,14 @@ public class RamblerKasseLoader implements RamblerKassaService {
                             ramblerCity.toDBCity(),
                             RamblerCacheRegion.CITY);
 
+                    if (currentCity.getZoneOffset() == null) {
+                        currentCity.setZoneOffset(timeZone
+                                .getZoneOffsetByLatlng(ramblerCity.getLat(), ramblerCity.getLng()));
+                    }
+
                     loadCinemas(ramblerCity.getCityRamblerId(), currentCity);
                     loadEvents(ramblerCity.getCityRamblerId(), currentCity);
-                    loadShowtimes(ramblerCity.getCityRamblerId());
+                    loadShowtimes(ramblerCity.getCityRamblerId(), currentCity.getZoneOffset());
                 });
     }
 
@@ -65,7 +77,7 @@ public class RamblerKasseLoader implements RamblerKassaService {
     }
 
     private void loadEvents(Integer cityRamblerId, City currentCity) {
-        ramblerKassa.getEventsLessDateAtCity(cityRamblerId, TimeUtility.getMaxDate())
+        ramblerKassa.getEventsLessDateAtCity(cityRamblerId, TimeUtility.getMaxDate(currentCity.getZoneOffset()))
                 .forEach(ramblerEvent -> {
                     val eventType = storesHelpersHolder.putIfAbsent(
                             ramblerEvent.getType(),
@@ -92,8 +104,8 @@ public class RamblerKasseLoader implements RamblerKassaService {
                 });
     }
 
-    private void loadShowtimes(Integer cityRamblerId) {
-        ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate())
+    private void loadShowtimes(Integer cityRamblerId, ZoneOffset offset) {
+        ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate(offset))
                 .forEach(ramblerShowtime -> {
 
                     val currentEvent = storesHelpersHolder.getUsingCache(
@@ -116,7 +128,7 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         currentHall.setCinema(currentCinema);
                     }
 
-                    val showtimeDb = ramblerShowtime.toDbShowtime();
+                    val showtimeDb = ramblerShowtime.toDbShowtime(offset);
                     showtimeDb.setCinemaEvent((CinemaEvent) currentEvent);
                     showtimeDb.setHall(currentHall);
                     val currentShowtime = storesHelpersHolder.putIfAbsent(
@@ -126,16 +138,16 @@ public class RamblerKasseLoader implements RamblerKassaService {
                             DateTimeUtils.getExpireMillis(showtimeDb.getStartTime())
                     );
 
-                    if (currentShowtime.getStartTime().toLocalDate().isBefore(currentEvent.getStartDay())) {
-                        currentEvent.setStartDay(currentShowtime.getStartTime().toLocalDate());
+                    if (currentShowtime.getStartTime().isBefore(currentEvent.getStartDay())) {
+                        currentEvent.setStartDay(currentShowtime.getStartTime());
                     }
-                    if (currentShowtime.getStartTime().toLocalDate().isAfter(currentEvent.getFinishDay())) {
-                        currentEvent.setFinishDay(currentShowtime.getStartTime().toLocalDate());
+                    if (currentShowtime.getStartTime().isAfter(currentEvent.getFinishDay())) {
+                        currentEvent.setFinishDay(currentShowtime.getStartTime());
                         storesHelpersHolder.updateExpire(
                                 ramblerShowtime.getEventId(),
                                 currentEvent.getId(),
                                 RamblerCacheRegion.EVENT,
-                                DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1).atStartOfDay()),
+                                DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1)),
                                 Event.class);
                     }
                 });

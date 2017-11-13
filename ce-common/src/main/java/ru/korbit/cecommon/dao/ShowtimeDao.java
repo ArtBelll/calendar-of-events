@@ -2,7 +2,7 @@ package ru.korbit.cecommon.dao;
 
 import ru.korbit.cecommon.domain.Showtime;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
 /**
@@ -10,5 +10,5 @@ import java.util.stream.Stream;
  */
 public interface ShowtimeDao extends GenericDao<Showtime> {
 
-    Stream<Showtime> getByHallOnDay(Long hallId, LocalDateTime dateFrom);
+    Stream<Showtime> getByHallOnDay(Long hallId, ZonedDateTime dateFrom);
 }

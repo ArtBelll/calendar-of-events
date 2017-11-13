@@ -7,6 +7,8 @@ import ru.korbit.cecommon.domain.Showtime;
 import ru.korbit.cecommon.domain.Hall;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -43,9 +45,9 @@ public class RamblerShowtime {
         return new Hall(hallName, hallRamblerId);
     }
 
-    public Showtime toDbShowtime() {
+    public Showtime toDbShowtime(ZoneOffset offset) {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        val startTime = LocalDateTime.parse(this.startTime, formatter);
+        val startTime = ZonedDateTime.of(LocalDateTime.parse(this.startTime, formatter), offset);
         return new Showtime(format, startTime, price, showtimeRamblerId);
     }
 }

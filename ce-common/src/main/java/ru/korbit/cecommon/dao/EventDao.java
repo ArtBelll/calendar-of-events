@@ -2,7 +2,7 @@ package ru.korbit.cecommon.dao;
 
 import ru.korbit.cecommon.domain.Event;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -14,13 +14,13 @@ public interface EventDao extends GenericDao<Event> {
 
     Optional<Event> getByTitle(String title);
 
-    Stream<Event> getByDateRangeAtCity(LocalDate startDate,
-                                       LocalDate finishDate,
+    Stream<Event> getByDateRangeAtCity(ZonedDateTime startDate,
+                                       ZonedDateTime finishDate,
                                        Long cityId,
                                        List<Long> ignoreTypes);
 
     Stream<Event> searchEvents(String title,
                                String place,
-                               LocalDate startDate,
+                               ZonedDateTime startDate,
                                Long cityId);
 }

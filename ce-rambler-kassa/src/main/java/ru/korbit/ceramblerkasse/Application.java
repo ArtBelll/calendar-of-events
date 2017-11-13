@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
@@ -20,8 +19,6 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.services.RamblerKassaService;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 import java.io.IOException;
 
 /**

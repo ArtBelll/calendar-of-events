@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.dao.ShowtimeDao;
 import ru.korbit.cecommon.domain.Showtime;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.stream.Stream;
 
 /**
@@ -19,7 +19,7 @@ public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
     }
 
     @Override
-    public Stream<Showtime> getByHallOnDay(Long hallId, LocalDateTime dateFrom) {
+    public Stream<Showtime> getByHallOnDay(Long hallId, ZonedDateTime dateFrom) {
         return getSession()
                 .createQuery("SELECT DISTINCT sh FROM Hall h " +
                         "JOIN h.showtimeList sh " +
@@ -28,7 +28,7 @@ public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
                             "AND sh.startTime < :dateTo ", Showtime.class)
                 .setParameter("hallId", hallId)
                 .setParameter("dateFrom", dateFrom)
-                .setParameter("dateTo", dateFrom.toLocalDate().plusDays(1).atStartOfDay())
+                .setParameter("dateTo", dateFrom.plusDays(1))
                 .stream();
     }
 }

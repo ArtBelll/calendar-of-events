@@ -3,7 +3,8 @@ package ru.korbit.ceramblerkasse.utility;
 import lombok.val;
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 /**
  * Created by Artur Belogur on 16.10.17.
@@ -18,7 +19,7 @@ public abstract class TimeUtility {
         return Duration.ofMinutes(minutes);
     }
 
-    public static LocalDate getMaxDate() {
-        return LocalDate.now().plusWeeks(1);
+    public static ZonedDateTime getMaxDate(ZoneOffset offset) {
+        return ZonedDateTime.now(offset).plusWeeks(1);
     }
 }

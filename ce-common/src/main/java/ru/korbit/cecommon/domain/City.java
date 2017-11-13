@@ -28,7 +28,6 @@ public class City implements GetIdable {
     @Column(name = "name")
     private String name;
 
-    @NonNull
     @Column(name = "time_zone")
     private ZoneOffset zoneOffset;
 

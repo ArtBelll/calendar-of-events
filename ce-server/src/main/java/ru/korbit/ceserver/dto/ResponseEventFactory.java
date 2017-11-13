@@ -10,7 +10,8 @@ import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.domain.SimpleEvent;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,9 +31,9 @@ public class ResponseEventFactory {
         this.showtimeDao = showtimeDao;
     }
 
-    public REvent getResponseEvent(Event event, Long cityId) {
+    public REvent getResponseEvent(Event event, Long cityId, ZonedDateTime now) {
         if (event instanceof CinemaEvent) {
-            return getRCinemaEvent((CinemaEvent) event, cityId);
+            return getRCinemaEvent((CinemaEvent) event, cityId, now);
         }
         if (event instanceof SimpleEvent) {
             return new RSimpleEvent(event);
@@ -40,8 +41,7 @@ public class ResponseEventFactory {
         throw new RuntimeException("Not exist response for event = " + event.toString());
     }
 
-    private RCinemaEvent getRCinemaEvent(CinemaEvent cinemaEvent, Long cityId) {
-        val now = LocalDateTime.now();
+    private RCinemaEvent getRCinemaEvent(CinemaEvent cinemaEvent, Long cityId, ZonedDateTime now) {
         List<RCinema> cinemas = cinemaDao.getByEventOnDay(cityId, cinemaEvent.getId(), now)
                 .map(cinema -> {
                     Hibernate.initialize(cinema.getHalls());
@@ -50,6 +50,7 @@ public class ResponseEventFactory {
                             .map(hall -> {
                                 val showtimes = showtimeDao.getByHallOnDay(hall.getId(), now)
                                         .map(RShowtime::new)
+                                        .sorted(Comparator.comparingLong(RShowtime::getTime))
                                         .collect(Collectors.toList());
                                 return new RHall(hall, showtimes);
                             })

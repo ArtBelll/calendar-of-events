@@ -2,7 +2,7 @@ package ru.korbit.cecommon.dao;
 
 import ru.korbit.cecommon.domain.Cinema;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -15,5 +15,5 @@ public interface CinemaDao extends GenericDao<Cinema> {
 
     Optional<Cinema> getByName(String name);
 
-    Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, LocalDateTime dateFrom);
+    Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, ZonedDateTime dateFrom);
 }

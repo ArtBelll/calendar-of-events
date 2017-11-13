@@ -27,7 +27,7 @@ public class ShowtimeStoreHelper extends BaseStoreHelper<Showtime>
     @Override
     public Optional<Showtime> searchFromDb(Showtime showtime) {
         val id = new CinemaEventHall(showtime.getCinemaEvent().getId(),
-                showtime.getHall().getId(), showtime.getStartTime());
+                showtime.getHall().getId(), showtime.getRamblerId());
         return showtimeDao.get(id);
     }
 }

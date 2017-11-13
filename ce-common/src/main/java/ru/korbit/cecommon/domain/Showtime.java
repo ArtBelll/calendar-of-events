@@ -6,7 +6,7 @@ import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Created by Artur Belogur on 16.10.17.
@@ -37,9 +37,8 @@ public class Showtime implements GetIdable {
     private String format;
 
     @NonNull
-    @Id
     @Column(name = "start_time")
-    private LocalDateTime startTime;
+    private ZonedDateTime startTime;
 
     @NonNull
     @Column(name = "price")
@@ -47,11 +46,12 @@ public class Showtime implements GetIdable {
 
     @JsonIgnore
     @NonNull
+    @Id
     @Column(name = "rambler_id")
     private Long ramblerId;
 
     @Override
     public Serializable getId() {
-        return new CinemaEventHall(cinemaEvent.getId(), hall.getId(), startTime);
+        return new CinemaEventHall(cinemaEvent.getId(), hall.getId(), ramblerId);
     }
 }

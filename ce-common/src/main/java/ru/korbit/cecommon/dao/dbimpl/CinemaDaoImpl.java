@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.dao.CinemaDao;
 import ru.korbit.cecommon.domain.Cinema;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -27,7 +27,7 @@ public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements Cinem
     }
 
     @Override
-    public Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, LocalDateTime dateFrom) {
+    public Stream<Cinema> getByEventOnDay(Long cityId, Long eventId, ZonedDateTime dateFrom) {
         return getSession()
                 .createQuery("SELECT DISTINCT cin FROM Cinema cin " +
                         "JOIN cin.city c ON c.id = :cityId " +
@@ -38,7 +38,7 @@ public class CinemaDaoImpl extends SessionFactoryHolder<Cinema> implements Cinem
                 .setParameter("cityId", cityId)
                 .setParameter("eventId", eventId)
                 .setParameter("dateFrom", dateFrom)
-                .setParameter("dateTo", dateFrom.toLocalDate().plusDays(1).atStartOfDay())
+                .setParameter("dateTo", dateFrom.plusDays(1))
                 .stream();
     }
 }

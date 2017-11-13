@@ -13,8 +13,8 @@ import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.dao.EventDao;
 import ru.korbit.cecommon.domain.*;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,8 +51,8 @@ public class EventDaoTest {
 
     @Test
     public void getByDateRange() {
-        val requestStartDate = LocalDate.parse("2017-10-01");
-        val requestFinishDate = LocalDate.parse("2017-10-08");
+        val requestStartDate = ZonedDateTime.parse("2017-10-01");
+        val requestFinishDate = ZonedDateTime.parse("2017-10-08");
 
         eventDao.save(getSimpleEvent(TITLE, PLACE));
         val events = eventDao.getByDateRangeAtCity(requestStartDate, requestFinishDate, 1L, new ArrayList<>());
@@ -91,9 +91,9 @@ public class EventDaoTest {
             eventDao.update(event);
         });
 
-        val eventsByPlace = eventDao.searchEvents("", PLACE, LocalDate.now(), city.getId()).collect(Collectors.toList());
-        val eventsByTitle = eventDao.searchEvents(TITLE, "", LocalDate.now(), city.getId()).collect(Collectors.toList());
-        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, LocalDate.now(), city.getId()).collect(Collectors.toList());
+        val eventsByPlace = eventDao.searchEvents("", PLACE, ZonedDateTime.now(), city.getId()).collect(Collectors.toList());
+        val eventsByTitle = eventDao.searchEvents(TITLE, "", ZonedDateTime.now(), city.getId()).collect(Collectors.toList());
+        val eventsByTitleAndPlace = eventDao.searchEvents(TITLE, PLACE, ZonedDateTime.now(), city.getId()).collect(Collectors.toList());
 
         Assert.assertTrue(eventsByPlace.size() == 6);
         Assert.assertTrue(eventsByTitle.size() == 2);
@@ -107,8 +107,8 @@ public class EventDaoTest {
         simpleEvent.setTitle(title);
         simpleEvent.setPlace(place);
 
-        simpleEvent.setStartDay(LocalDate.now().minusDays(1));
-        simpleEvent.setFinishDay(LocalDate.now().plusDays(1));
+        simpleEvent.setStartDay(ZonedDateTime.now().minusDays(1));
+        simpleEvent.setFinishDay(ZonedDateTime.now().plusDays(1));
 
         List<EventSchedule> eventScheduleList = new ArrayList<>();
         EventSchedule eventSchedule = new EventSchedule();
@@ -126,8 +126,8 @@ public class EventDaoTest {
 
         cinemaEvent.setTitle(title);
 
-        cinemaEvent.setStartDay(LocalDate.now().minusDays(1));
-        cinemaEvent.setFinishDay(LocalDate.now().plusDays(1));
+        cinemaEvent.setStartDay(ZonedDateTime.now().minusDays(1));
+        cinemaEvent.setFinishDay(ZonedDateTime.now().plusDays(1));
 
         List<EventSchedule> eventScheduleList = new ArrayList<>();
         EventSchedule eventSchedule = new EventSchedule();

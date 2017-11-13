@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.utility.StringUtils;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,7 +28,7 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
     }
 
     @Override
-    public Stream<Event> getByDateRangeAtCity(LocalDate startDate, LocalDate finishDate,
+    public Stream<Event> getByDateRangeAtCity(ZonedDateTime startDate, ZonedDateTime finishDate,
                                               Long cityId, List<Long> ignoreTypes) {
         ignoreTypes.add(-1L);
         return getSession()
@@ -46,7 +46,7 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
     }
 
     @Override
-    public Stream<Event> searchEvents(String title, String place, LocalDate startDate, Long cityId) {
+    public Stream<Event> searchEvents(String title, String place, ZonedDateTime startDate, Long cityId) {
         return getSession()
                 .createQuery("SELECT DISTINCT e FROM Event e " +
                         "LEFT JOIN SimpleEvent se ON e.id = se.id " +

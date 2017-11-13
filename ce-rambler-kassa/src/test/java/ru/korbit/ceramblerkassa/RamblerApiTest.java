@@ -4,14 +4,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.korbit.ceramblerkasse.Environment;
-import ru.korbit.ceramblerkasse.api.impl.RamblerKassa;
 import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
+import ru.korbit.ceramblerkasse.api.impl.RamblerKassa;
 import ru.korbit.ceramblerkasse.responses.RamblerCinema;
 import ru.korbit.ceramblerkasse.responses.RamblerCity;
 import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.responses.RamblerShowtime;
+import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
-import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ import java.util.List;
 public class RamblerApiTest {
 
     private final Integer KALININGRAD_ID = 1700;
-    private final LocalDate NEXT_WEEK = LocalDate.now().plusWeeks(1);
+    private final ZonedDateTime NEXT_WEEK = TimeUtility.getMaxDate(ZoneOffset.ofHours(2));
 
     private RamblerKassaApi ramblerKassa;
 

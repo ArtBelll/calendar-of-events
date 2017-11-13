@@ -4,11 +4,12 @@ import lombok.val;
 import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.packet.DateRange;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -19,26 +20,22 @@ public final class DateTimeUtils {
 
     private DateTimeUtils() {}
 
-    public static boolean isAfterOrEqual(LocalDate d1, LocalDate d2) {
+    public static boolean isAfterOrEqual(ZonedDateTime d1, ZonedDateTime d2) {
         return d1.isAfter(d2) || d1.isEqual(d2);
     }
 
-    public static boolean isBeforeOrEqual(LocalDate d1, LocalDate d2) {
+    public static boolean isBeforeOrEqual(ZonedDateTime d1, ZonedDateTime d2) {
         return d1.isBefore(d2) || d1.isEqual(d2);
     }
 
-    public static LocalDate epochSecondsToLocalDate(Long secs) {
-        return Instant.ofEpochSecond(secs).atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    public static Stream<Long> getListOfDayInSecondsBetween(LocalDate start, LocalDate finish) {
+    public static Stream<Long> getListOfDayInSecondsBetween(ZonedDateTime start, ZonedDateTime finish) {
         val days = ChronoUnit.DAYS.between(start, finish);
         return LongStream.range(0, days + 1)
                 .boxed()
-                .map(i -> TimeUnit.MILLISECONDS.convert(start.plusDays(i).toEpochDay(), TimeUnit.DAYS));
+                .map(i -> start.plusDays(i).toEpochSecond());
     }
 
-    public static List<DateRange> getActiveDateRanges(Stream<Event> events, LocalDate endRange) {
+    public static List<DateRange> getActiveDateRanges(Stream<Event> events, ZonedDateTime endRange) {
         val activeDaysInDataRanges = new ArrayList<DateRange>();
         events.forEach(event -> {
             val finish = event.getFinishDay().isBefore(endRange) ? event.getFinishDay() : endRange;
@@ -62,7 +59,7 @@ public final class DateTimeUtils {
         return activeDaysInDataRanges;
     }
 
-    public static Long getExpireMillis(LocalDateTime time) {
-        return Duration.between(LocalDateTime.now(), time).toMillis();
+    public static Long getExpireMillis(ZonedDateTime endTime) {
+        return Math.abs(Duration.between(ZonedDateTime.now(ZoneId.systemDefault()), endTime).toMillis());
     }
 }

@@ -16,6 +16,12 @@ public class RamblerCity {
     @JsonProperty("Name")
     private String name;
 
+    @JsonProperty("Latitude")
+    private Float lat;
+
+    @JsonProperty("Longitude")
+    private Float lng;
+
     public City toDBCity() {
         return new City(name);
     }
