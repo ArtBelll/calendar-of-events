@@ -16,8 +16,13 @@ public class RShowtime {
     private String format;
 
     public RShowtime(Showtime showtime) {
-        this.time = showtime.getStartTime().toEpochSecond();
+        this.time = getLocalTimeInEpochSecond(showtime);
         this.price = showtime.getPrice();
         this.format = showtime.getFormat();
+    }
+
+    private Long getLocalTimeInEpochSecond(Showtime showtime) {
+        return showtime.getStartTime().toEpochSecond()
+                + showtime.getStartTime().getOffset().getTotalSeconds();
     }
 }

@@ -92,7 +92,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 "ERR"
         );
 
-        log.error(ex.getMessage(), ex);
+        log.warn(ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }

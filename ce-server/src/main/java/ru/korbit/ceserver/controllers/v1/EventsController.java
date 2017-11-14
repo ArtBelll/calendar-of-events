@@ -54,12 +54,7 @@ public class EventsController extends BaseController {
                                                @RequestParam("finish_date") Long endRange) {
         val cityZone = getCityZone(cityId);
 
-        if (beginRange > endRange) {
-            log.info("Bad request: begin range = {}, end range = {}",
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone),
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone));
-            throw new BadRequest("Bad date range: begin = " + beginRange + " end = " + endRange);
-        }
+        checkRequestDateRange(beginRange, endRange, cityZone);
 
         val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone);
         val finish = ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone);
@@ -94,12 +89,7 @@ public class EventsController extends BaseController {
                                        @RequestParam("finish_date") Long endRange) {
         val cityZone = getCityZone(cityId);
 
-        if (beginRange > endRange) {
-            log.info("Bad request: begin range = {}, end range = {}",
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone),
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone));
-            throw new BadRequest("Bad date range: begin = " + beginRange + " end = " + endRange);
-        }
+        checkRequestDateRange(beginRange, endRange, cityZone);
 
         val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone);
         val finish = ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone);
@@ -120,13 +110,18 @@ public class EventsController extends BaseController {
 
     @GetMapping(value = "{eventId}")
     public ResponseEntity<?> getEvent(@PathVariable("cityId") Long cityId,
-                                      @PathVariable("eventId") Long eventId) {
+                                      @PathVariable("eventId") Long eventId,
+                                      @RequestParam("date") Long dateTimestamp) {
         val city = cityDao.get(cityId)
                 .orElseThrow(() -> new BadRequest("City not exist"));
 
+        if (dateTimestamp == null) {
+            throw new BadRequest("Required Long parameter 'date' is not present");
+        }
+
+        val date =  ZonedDateTime.ofInstant(Instant.ofEpochSecond(dateTimestamp), city.getZoneOffset());
         return eventDao.get(eventId)
-                .map(event -> responseEventFactory.getResponseEvent(event, city,
-                        ZonedDateTime.now(city.getZoneOffset())))
+                .map(event -> responseEventFactory.getResponseEvent(event, city, date))
                 .map(event -> {
                     log.info("Get event by id = {}. Event = {}", eventId, event);
                     return new ResponseEntity<>(getResponseBody(event.getType(), event), HttpStatus.OK);
