@@ -1,0 +1,19 @@
+{
+  "apps": [{
+    "name": "ce-loader-debug",
+    "cwd": "/usr/bin",
+    "args": [
+      "-Xdebug",
+      "-Xrunjdwp:server=y,transport=dt_socket,address=8002,suspend=n",
+      "-Xmx256m",
+      "-Dlog4j.configurationFile=/opt/ce-loader/log4j2.xml",
+      "-jar",
+      "/opt/ce-loader/ce-loader-1.0-SNAPSHOT.jar"
+    ],
+    "script": "java",
+    "node_args": [],
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+    "exec_interpreter": "none",
+    "exec_mode": "fork"
+  }]
+}

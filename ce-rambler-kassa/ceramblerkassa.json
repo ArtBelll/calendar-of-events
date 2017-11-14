@@ -1,0 +1,17 @@
+{
+  "apps": [{
+    "name": "ce-rambler-kassa",
+    "cwd": "/usr/bin",
+    "args": [
+      "-Xmx256m",
+      "-Dlog4j.configurationFile=/opt/ce-rambler-kassa/log4j2.xml",
+      "-jar",
+      "/opt/ce-rambler-kassa/ce-rambler-kassa-1.0-SNAPSHOT.jar"
+    ],
+    "script": "java",
+    "node_args": [],
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+    "exec_interpreter": "none",
+    "exec_mode": "fork"
+  }]
+}
