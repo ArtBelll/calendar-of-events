@@ -5,7 +5,8 @@ import ru.korbit.cecommon.dao.ShowtimeDao;
 import ru.korbit.cecommon.domain.Showtime;
 
 import java.time.ZonedDateTime;
-import java.util.stream.Stream;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * Created by Artur Belogur on 17.10.17.
@@ -19,16 +20,18 @@ public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
     }
 
     @Override
-    public Stream<Showtime> getByHallOnDay(Long hallId, ZonedDateTime dateFrom) {
+    public List<Showtime> getByHallAndEventOnDay(Long eventId, Long hallId, ZonedDateTime dateFrom) {
         return getSession()
-                .createQuery("SELECT DISTINCT sh FROM Hall h " +
-                        "JOIN h.showtimeList sh " +
-                        "WHERE h.id = :hallId " +
+                .createQuery("SELECT DISTINCT sh FROM Showtime sh " +
+                        "WHERE sh.hall.id = :hallId " +
+                            "AND sh.cinemaEvent.id = :eventId " +
                             "AND sh.startTime > :dateFrom " +
-                            "AND sh.startTime < :dateTo ", Showtime.class)
+                            "AND sh.startTime < :dateTo " +
+                        "ORDER BY sh.startTime", Showtime.class)
                 .setParameter("hallId", hallId)
+                .setParameter("eventId", eventId)
                 .setParameter("dateFrom", dateFrom)
-                .setParameter("dateTo", dateFrom.plusDays(1))
-                .stream();
+                .setParameter("dateTo", dateFrom.plusDays(1).truncatedTo(ChronoUnit.DAYS))
+                .getResultList();
     }
 }

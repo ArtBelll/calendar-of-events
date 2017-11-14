@@ -121,9 +121,12 @@ public class EventsController extends BaseController {
     @GetMapping(value = "{eventId}")
     public ResponseEntity<?> getEvent(@PathVariable("cityId") Long cityId,
                                       @PathVariable("eventId") Long eventId) {
-        val cityZone = getCityZone(cityId);
+        val city = cityDao.get(cityId)
+                .orElseThrow(() -> new BadRequest("City not exist"));
+
         return eventDao.get(eventId)
-                .map(event -> responseEventFactory.getResponseEvent(event, cityId, ZonedDateTime.now(cityZone)))
+                .map(event -> responseEventFactory.getResponseEvent(event, city,
+                        ZonedDateTime.now(city.getZoneOffset())))
                 .map(event -> {
                     log.info("Get event by id = {}. Event = {}", eventId, event);
                     return new ResponseEntity<>(getResponseBody(event.getType(), event), HttpStatus.OK);

@@ -13,8 +13,11 @@ public class RShowtime {
 
     private int price;
 
+    private String format;
+
     public RShowtime(Showtime showtime) {
         this.time = showtime.getStartTime().toEpochSecond();
         this.price = showtime.getPrice();
+        this.format = showtime.getFormat();
     }
 }
