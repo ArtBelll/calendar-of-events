@@ -5,11 +5,13 @@ import ru.korbit.cecommon.domain.Event;
 import ru.korbit.cecommon.packet.DateRange;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -29,10 +31,10 @@ public final class DateTimeUtils {
     }
 
     public static Stream<Long> getListOfDayInSecondsBetween(ZonedDateTime start, ZonedDateTime finish) {
-        val days = ChronoUnit.DAYS.between(start, finish);
+        val days = ChronoUnit.DAYS.between(LocalDate.from(start), LocalDate.from(finish));
         return LongStream.range(0, days + 1)
                 .boxed()
-                .map(i -> start.plusDays(i).toEpochSecond());
+                .map(i -> TimeUnit.SECONDS.convert(LocalDate.from(start).plusDays(i).toEpochDay(), TimeUnit.DAYS));
     }
 
     public static List<DateRange> getActiveDateRanges(Stream<Event> events, ZonedDateTime endRange) {

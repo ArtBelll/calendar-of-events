@@ -77,6 +77,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 "ERR"
         );
 
+        log.error(ex.getMessage(), ex);
+
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 

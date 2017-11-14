@@ -6,7 +6,7 @@ import ru.korbit.ceramblerkasse.responses.RamblerCity;
 import ru.korbit.ceramblerkasse.responses.RamblerEvent;
 import ru.korbit.ceramblerkasse.responses.RamblerShowtime;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -21,8 +21,8 @@ public interface RamblerKassaApi {
     List<RamblerCinema> getCinemasAtCity(@NonNull Integer cityRamblerId);
 
     List<RamblerEvent> getEventsLessDateAtCity(@NonNull Integer cityRamblerId,
-                                               @NonNull ZonedDateTime maxDate);
+                                               @NonNull LocalDate maxDate);
 
     List<RamblerShowtime> getShowtimesCityLessDate(@NonNull Integer cityRamblerId,
-                                                   @NonNull ZonedDateTime maxDate);
+                                                   @NonNull LocalDate maxDate);
 }
