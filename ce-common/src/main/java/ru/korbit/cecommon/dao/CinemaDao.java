@@ -9,7 +9,5 @@ import java.util.Optional;
  */
 public interface CinemaDao extends GenericDao<Cinema> {
 
-    Cinema save(Cinema cinema);
-
     Optional<Cinema> getByName(String name);
 }
