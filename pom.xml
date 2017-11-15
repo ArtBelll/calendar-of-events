@@ -12,6 +12,7 @@
         <module>ce-common</module>
         <module>ce-rambler-kassa</module>
         <module>ce-loader</module>
+        <module>ce-admin</module>
     </modules>
     <packaging>pom</packaging>
 
