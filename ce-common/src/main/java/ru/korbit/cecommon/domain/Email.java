@@ -23,7 +23,7 @@ public class Email {
 
     private String recipient;
 
-    private long attempts = 0;
+    private int attempts = 0;
 
     @Enumerated(EnumType.STRING)
     private TypeOfMail type;

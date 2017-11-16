@@ -1,7 +1,5 @@
 package ru.korbit.ceadmin;
 
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -19,9 +17,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 
@@ -29,6 +27,7 @@ import java.io.IOException;
         JpaRepositoriesAutoConfiguration.class})
 @Slf4j
 @ComponentScan(value = {"ru.korbit.ceadmin", "ru.korbit.cecommon"})
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
     @Override
