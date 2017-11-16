@@ -26,6 +26,7 @@ public class Email {
     private int attempts = 0;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private TypeOfMail type;
 
     private LocalDateTime firstAttempt = LocalDateTime.now();

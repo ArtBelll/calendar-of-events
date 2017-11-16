@@ -1,6 +1,7 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import ru.korbit.cecommon.packet.StatusOfOrganisation;
 
 import javax.persistence.*;
 
@@ -19,4 +20,8 @@ public class Organisation {
 
     @Column(name = "email")
     private String email;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private StatusOfOrganisation status;
 }
