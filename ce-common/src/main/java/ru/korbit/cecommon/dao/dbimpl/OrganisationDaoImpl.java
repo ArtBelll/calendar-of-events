@@ -1,10 +1,12 @@
 package ru.korbit.cecommon.dao.dbimpl;
 
+import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.dao.OrganisationDao;
 import ru.korbit.cecommon.domain.Organisation;
 
 import java.util.Optional;
 
+@Repository(value = "organisationDao")
 public class OrganisationDaoImpl extends SessionFactoryHolder<Organisation> implements OrganisationDao {
 
     @Override

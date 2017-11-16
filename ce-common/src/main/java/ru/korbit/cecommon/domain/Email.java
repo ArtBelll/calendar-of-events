@@ -21,6 +21,8 @@ public class Email {
 
     private String password;
 
+    private String recipient;
+
     private long attempts = 0;
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +34,7 @@ public class Email {
 
     private String body;
 
-    @OneToOne(mappedBy = "organisation")
+    @OneToOne
     @JoinColumn(name = "organisation")
     private Organisation organisation;
 }
