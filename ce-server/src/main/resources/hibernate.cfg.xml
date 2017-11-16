@@ -22,6 +22,8 @@
         <mapping class="ru.korbit.cecommon.domain.Hall"/>
         <mapping class="ru.korbit.cecommon.domain.SimpleEvent"/>
         <mapping class="ru.korbit.cecommon.domain.Showtime"/>
+        <mapping class="ru.korbit.cecommon.domain.Organisation"/>
+        <mapping class="ru.korbit.cecommon.domain.Email"/>
 
 
     </session-factory>
