@@ -106,6 +106,12 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>scrypt</artifactId>
+            <version>${scrypt.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
