@@ -24,6 +24,8 @@
         <mapping class="ru.korbit.cecommon.domain.Showtime"/>
         <mapping class="ru.korbit.cecommon.domain.Organisation"/>
         <mapping class="ru.korbit.cecommon.domain.Email"/>
+        <mapping class="ru.korbit.cecommon.domain.User"/>
+        <mapping class="ru.korbit.cecommon.domain.Role"/>
 
 
     </session-factory>

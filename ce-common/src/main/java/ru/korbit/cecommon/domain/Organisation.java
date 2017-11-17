@@ -24,4 +24,7 @@ public class Organisation {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status")
     private StatusOfOrganisation status;
+
+    @OneToOne(mappedBy = "organisation")
+    private User user;
 }
