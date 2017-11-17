@@ -11,4 +11,6 @@ public interface OrganisationDao extends GenericDao<Organisation> {
     Optional<Organisation> getByName(String name);
 
     Stream<Organisation> getByStatus(StatusOfOrganisation status);
+
+    Optional<Organisation> searchByIdAndStatus(Long id, StatusOfOrganisation status);
 }

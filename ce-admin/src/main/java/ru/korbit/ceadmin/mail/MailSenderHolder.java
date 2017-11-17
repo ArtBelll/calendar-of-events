@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import ru.korbit.cecommon.dao.EmailDao;
 import ru.korbit.cecommon.domain.Email;
 
+import java.time.LocalDateTime;
+
 @Component
 @Slf4j
 public class MailSenderHolder {
@@ -16,23 +18,18 @@ public class MailSenderHolder {
     private final MailSender sender;
 
     @Autowired
-    public MailSenderHolder(EmailDao emailDao, MailSender sender) {
+    public MailSenderHolder(MailSender sender) {
         this.sender = sender;
     }
 
     public boolean sendEmail(Email email) {
-        switch (email.getType()) {
-            case REQUEST: return sendRequestEmail(email);
-            default: throw new RuntimeException("Unhandled email type");
-        }
-    }
+        email.setLastAttempt(LocalDateTime.now());
+        email.increaseAttempts();
 
-    private boolean sendRequestEmail(Email email) {
         val simpleEmail = new SimpleMailMessage();
+        simpleEmail.setSubject(email.getSubject());
         simpleEmail.setTo(email.getRecipient());
-        simpleEmail.setSubject("Request for admin rights");
-        // TODO: change url to url page with list requests for admin rights
-        simpleEmail.setText("Check page korbit.ru");
+        simpleEmail.setText(email.getBody());
         try {
             sender.send(simpleEmail);
             return true;

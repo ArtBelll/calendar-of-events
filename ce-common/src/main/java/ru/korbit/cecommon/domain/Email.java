@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import ru.korbit.cecommon.packet.TypeOfMail;
 
 import javax.persistence.*;
@@ -12,30 +15,30 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "emails")
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Email {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    private String password;
+    @NonNull
+    private String subject;
 
+    @NonNull
     private String recipient;
 
-    private int attempts = 0;
+    @NonNull
+    private String body;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private TypeOfMail type;
+    private int attempts = 0;
 
     private LocalDateTime firstAttempt = LocalDateTime.now();
 
     private LocalDateTime lastAttempt = LocalDateTime.now();
 
-    private String body;
-
-    @OneToOne
-    @JoinColumn(name = "organisation")
-    private Organisation organisation;
+    public void increaseAttempts() {
+        attempts++;
+    }
 }

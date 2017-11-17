@@ -26,4 +26,14 @@ public class OrganisationDaoImpl extends SessionFactoryHolder<Organisation> impl
                 .setParameter("status", status)
                 .stream();
     }
+
+    @Override
+    public Optional<Organisation> searchByIdAndStatus(Long id, StatusOfOrganisation status) {
+        return getSession()
+                .createQuery("SELECT o FROM Organisation o " +
+                        "WHERE o.id = :id AND o.status = :status", Organisation.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .uniqueResultOptional();
+    }
 }

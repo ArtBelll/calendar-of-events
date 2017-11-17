@@ -42,7 +42,7 @@ public class Showtime implements GetIdable {
 
     @NonNull
     @Column(name = "price")
-    private int price;
+    private Integer price;
 
     @JsonIgnore
     @NonNull
