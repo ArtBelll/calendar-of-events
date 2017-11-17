@@ -76,7 +76,7 @@ public class EmailAuthController {
 
         val password = PasswordHelper.generate();
 
-        val user = new User(organisation.getEmail(), password, organisation);
+        val user = new User(organisation.getEmail(), PasswordHelper.hashPassword(password), organisation);
         user.getRoles().add(RoleOfUser.ADMIN);
         userDao.save(user);
         organisation.setStatus(StatusOfOrganisation.APPROVED);
