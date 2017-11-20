@@ -47,6 +47,9 @@ public abstract class Event implements GetIdable {
     @Column(name = "finish_date", nullable = false)
     private ZonedDateTime finishDay = MIN_TIME;
 
+    @NonNull
+    private String additionally;
+
     @ManyToMany(mappedBy = "events")
     private List<City> cities = new ArrayList<>();
 

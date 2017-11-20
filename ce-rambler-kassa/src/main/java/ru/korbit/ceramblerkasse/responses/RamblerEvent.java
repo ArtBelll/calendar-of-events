@@ -33,6 +33,8 @@ public class RamblerEvent {
     @JsonProperty("ClassType")
     private String type;
 
+    private String genre;
+
     public CinemaEvent toDBEvent() {
         // TODO: load default images for movie
         if (images == null) {
@@ -43,6 +45,6 @@ public class RamblerEvent {
             }
         }
         val duration = TimeUtility.durationFromString(this.duration);
-        return new CinemaEvent(duration, title, description, images);
+        return new CinemaEvent(duration, title, description, images, genre);
     }
 }

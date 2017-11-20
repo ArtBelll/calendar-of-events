@@ -26,7 +26,4 @@ public class SimpleEvent extends Event {
 
     @Column(name = "address")
     private String address;
-
-    @Column(name = "place")
-    private String place;
 }
