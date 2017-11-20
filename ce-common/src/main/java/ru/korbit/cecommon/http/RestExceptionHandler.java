@@ -1,4 +1,4 @@
-package ru.korbit.ceserver.http;
+package ru.korbit.cecommon.http;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -15,6 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.korbit.cecommon.exeptions.BadRequest;
 import ru.korbit.cecommon.exeptions.NotExist;
+import ru.korbit.cecommon.exeptions.UnAuthorized;
 
 /**
  * Created by Artur Belogur on 19.10.17.
@@ -42,6 +43,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+
+    @ExceptionHandler({UnAuthorized.class})
+    protected ResponseEntity<Object> handleUnauthorizedRequest(UnAuthorized ex, WebRequest request) {
+        HttpHeaders headers = jsonHeaders();
+
+        ErrorResponse error = new ErrorResponse(
+                new Error(401, "Unauthorized request: " + ex.getMessage()),
+                "ERR");
+
+        return handleExceptionInternal(ex, error, headers, HttpStatus.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler({BadRequest.class})

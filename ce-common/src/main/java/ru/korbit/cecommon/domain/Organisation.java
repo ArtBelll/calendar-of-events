@@ -18,7 +18,7 @@ public class Organisation {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
+    @Column(unique = true)
     private String email;
 
     @Enumerated(value = EnumType.STRING)

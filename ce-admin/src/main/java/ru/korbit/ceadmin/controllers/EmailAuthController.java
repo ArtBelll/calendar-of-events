@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import ru.korbit.ceadmin.dto.RequestUser;
 import ru.korbit.ceadmin.mail.MailFactory;
 import ru.korbit.ceadmin.mail.MailSenderHolder;
 import ru.korbit.cecommon.dao.EmailDao;
@@ -15,33 +17,36 @@ import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.domain.Organisation;
 import ru.korbit.cecommon.domain.User;
 import ru.korbit.cecommon.exeptions.BadRequest;
+import ru.korbit.cecommon.exeptions.UserNotExists;
 import ru.korbit.cecommon.packet.RoleOfUser;
 import ru.korbit.cecommon.packet.StatusOfOrganisation;
 import ru.korbit.cecommon.utility.PasswordHelper;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "auth")
 @Slf4j
 @Transactional
-public class EmailAuthController {
+public class EmailAuthController extends SessionController {
 
     private final MailSenderHolder sender;
     private final EmailDao emailDao;
     private final OrganisationDao organisationDao;
-    private final UserDao userDao;
 
     @Autowired
     public EmailAuthController(MailSenderHolder sender,
                                EmailDao emailDao,
                                OrganisationDao organisationDao,
                                UserDao userDao) {
+        super(userDao);
         this.sender = sender;
         this.emailDao = emailDao;
         this.organisationDao = organisationDao;
-        this.userDao = userDao;
     }
 
     @PostMapping(value = "admin-request")
@@ -106,5 +111,26 @@ public class EmailAuthController {
 
         log.info("Request rejected for organisation {}", organisation);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "login")
+    public ResponseEntity<?> login(HttpServletRequest request,
+                                   @RequestBody RequestUser requestUser) throws URISyntaxException {
+        if (StringUtils.isEmpty(requestUser.getLogin()) || StringUtils.isEmpty(requestUser.getPassword())) {
+            throw new BadRequest("Missed one or more request fields");
+        }
+
+        val user = userDao.getByLogin(requestUser.getLogin())
+                .orElseThrow(() -> new UserNotExists(requestUser.getLogin()));
+
+        val password = requestUser.getPassword();
+        if (!PasswordHelper.checkPassword(password, user.getPassword())) {
+            log.warn("No password hash in db");
+            throw new BadRequest("Invalid password");
+        }
+
+        val jwt = setSessionUser(user);
+        user.setLogged(LocalDateTime.now());
+        return createdResponse(requestUser, jwt, isSslRequest(request));
     }
 }
