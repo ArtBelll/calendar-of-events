@@ -56,7 +56,6 @@ public class StoresHelpersHolder {
             currentObject = storeHelper.searchFromDb(objectDb);
             if (!currentObject.isPresent()) {
                 currentObject = Optional.of(storeHelper.addToDb(objectDb));
-                log.info("Add entity: {}", currentObject.orElse(null));
             }
             currentObject.ifPresent(currentObjectDb ->
                     storeHelper.addToCache(cacheId,

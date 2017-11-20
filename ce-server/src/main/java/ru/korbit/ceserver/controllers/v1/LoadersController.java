@@ -15,6 +15,7 @@ import ru.korbit.cecommon.services.RamblerKassaAsyncService;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Artur Belogur on 13.10.17.
@@ -40,7 +41,7 @@ public class LoadersController {
         log.info("Start load Rambler.Kassa data manually");
 
         try {
-            ramblerKassaService.load().get();
+            ramblerKassaService.load().get(1, TimeUnit.HOURS);
         } catch (Throwable e) {
             throw new RuntimeException("Load field");
         }
