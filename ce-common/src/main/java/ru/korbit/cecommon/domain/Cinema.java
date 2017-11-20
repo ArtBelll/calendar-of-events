@@ -21,26 +21,22 @@ public class Cinema implements GetIdable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
     @NonNull
-    @Column(name = "cinema_name")
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "place")
-    private String place;
-
     @NonNull
-    @Column(name = "address")
+    @Column(nullable = false)
     private String address;
 
     @NonNull
-    @Column(name = "latitude")
+    @Column(nullable = false)
     private Float latitude;
 
     @NonNull
-    @Column(name = "longitude")
+    @Column(nullable = false)
     private Float longitude;
 
     @JsonIgnore

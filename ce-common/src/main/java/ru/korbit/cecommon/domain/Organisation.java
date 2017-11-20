@@ -12,17 +12,16 @@ public class Organisation {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "status")
+    @Column(nullable = false)
     private StatusOfOrganisation status;
 
     @OneToOne(mappedBy = "organisation")

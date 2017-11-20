@@ -21,10 +21,9 @@ public class EventType implements GetIdable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(unique = true, nullable = false)
     @NonNull private String name;
 
     @ManyToMany

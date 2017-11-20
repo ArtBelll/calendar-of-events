@@ -23,13 +23,13 @@ public class Showtime implements GetIdable {
     @JsonIgnore
     @Id
     @ManyToOne
-    @JoinColumn(name = "cinema_event_id", referencedColumnName = "id")
+    @JoinColumn(name = "cinema_event_id", referencedColumnName = "id", nullable = false)
     private CinemaEvent cinemaEvent;
 
     @JsonIgnore
     @Id
     @ManyToOne
-    @JoinColumn(name = "hall_id", referencedColumnName = "id")
+    @JoinColumn(name = "hall_id", referencedColumnName = "id", nullable = false)
     private Hall hall;
 
     @NonNull
@@ -37,17 +37,17 @@ public class Showtime implements GetIdable {
     private String format;
 
     @NonNull
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private ZonedDateTime startTime;
 
     @NonNull
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Integer price;
 
     @JsonIgnore
     @NonNull
     @Id
-    @Column(name = "rambler_id")
+    @Column(name = "rambler_id", nullable = false, unique = true)
     private Long ramblerId;
 
     @Override

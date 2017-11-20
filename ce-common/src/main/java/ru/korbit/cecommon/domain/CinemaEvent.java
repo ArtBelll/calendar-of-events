@@ -19,8 +19,9 @@ import java.util.List;
 @ToString(exclude = {"showtimeList"})
 public class CinemaEvent extends Event {
 
-    @Column(name = "duration")
-    @NonNull private Duration duration;
+    @NonNull
+    @Column(nullable = false)
+    private Duration duration;
 
     @OneToMany(mappedBy = "cinemaEvent")
     private List<Showtime> showtimeList = new ArrayList<>();

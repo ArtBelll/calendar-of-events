@@ -21,14 +21,13 @@ public class City implements GetIdable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
     @NonNull
-    @Column(name = "name")
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "time_zone")
+    @Column(name = "time_zone", nullable = false)
     private ZoneOffset zoneOffset;
 
     @ManyToMany

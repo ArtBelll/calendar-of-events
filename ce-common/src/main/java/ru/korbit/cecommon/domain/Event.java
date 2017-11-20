@@ -27,25 +27,24 @@ public abstract class Event implements GetIdable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
+    @Column(nullable = false)
     @NonNull private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     @NonNull private String description;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     @NonNull private URL imageURL;
 
     @Column(name = "thumb_image_url")
     private URL thumbImageURL;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private ZonedDateTime startDay = MAX_TIME;
 
-    @Column(name = "finish_date")
+    @Column(name = "finish_date", nullable = false)
     private ZonedDateTime finishDay = MIN_TIME;
 
     @ManyToMany(mappedBy = "events")

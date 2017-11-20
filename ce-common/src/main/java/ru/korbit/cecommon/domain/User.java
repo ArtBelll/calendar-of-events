@@ -23,12 +23,14 @@ public class User {
     private Long id;
 
     @NonNull
+    @Column(nullable = false, unique = true)
     private String login;
 
     @NonNull
+    @Column(nullable = false)
     private String password;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private UUID uuid = UUID.randomUUID();
 
     private LocalDateTime created = LocalDateTime.now();

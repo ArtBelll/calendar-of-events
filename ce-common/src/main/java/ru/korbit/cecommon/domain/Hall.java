@@ -20,15 +20,14 @@ public class Hall implements GetIdable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
 
     @NonNull
-    @Column(name = "name")
+    @Column(nullable = false)
     private String name;
 
     @NonNull
-    @Column(name = "rambler_id")
+    @Column(name = "rambler_id", unique = true, nullable = false)
     private String ramblerId;
 
     @ManyToOne
