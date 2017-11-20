@@ -22,13 +22,13 @@ public class RGeneralEvent {
     @JsonProperty("image_url")
     private URL imageUrl;
 
-    private String place;
+    private String additionally;
 
-    public RGeneralEvent(Event event, String place) {
+    public RGeneralEvent(Event event) {
         id = event.getId();
         title = event.getTitle();
         thumbImageUrl = event.getThumbImageURL();
         imageUrl = event.getImageURL();
-        this.place = place;
+        this.additionally = event.getAdditionally();
     }
 }

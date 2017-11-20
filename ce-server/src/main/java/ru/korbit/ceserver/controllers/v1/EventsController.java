@@ -77,7 +77,7 @@ public class EventsController extends BaseController {
         val cityZone = getCityZone(cityId);
 
         val events = eventDao.searchEvents(title, place, ZonedDateTime.now(cityZone), cityId)
-                .map(event -> new RGeneralEvent(event, ""))
+                .map(RGeneralEvent::new)
                 .collect(Collectors.toList());
         log.info("Search event: title = {}, place = {}, number = {}", title, place, events.size());
         return new ResponseEntity<>(getResponseBody(events), HttpStatus.OK);
@@ -98,7 +98,7 @@ public class EventsController extends BaseController {
 
         eventDao.getByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
                 .forEach(event -> {
-                    val generalEvent = new RGeneralEvent(event, "");
+                    val generalEvent = new RGeneralEvent(event);
                     event.getEventTypes().forEach(eventType -> {
                         events.put(eventType.getName(), generalEvent);
                     });
@@ -114,10 +114,6 @@ public class EventsController extends BaseController {
                                       @RequestParam("date") Long dateTimestamp) {
         val city = cityDao.get(cityId)
                 .orElseThrow(() -> new BadRequest("City not exist"));
-
-        if (dateTimestamp == null) {
-            throw new BadRequest("Required Long parameter 'date' is not present");
-        }
 
         val date =  ZonedDateTime.ofInstant(Instant.ofEpochSecond(dateTimestamp), city.getZoneOffset());
         return eventDao.get(eventId)

@@ -27,7 +27,7 @@ public class City implements GetIdable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "time_zone", nullable = false)
+    @Column(name = "time_zone")
     private ZoneOffset zoneOffset;
 
     @ManyToMany

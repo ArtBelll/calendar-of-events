@@ -35,14 +35,15 @@ public class LoadersController {
     @GetMapping(value = "rambler-kassa")
     public ResponseEntity<?> loadRamblerKassa() throws ExecutionException, InterruptedException {
         val remoteService = redissonClient.getRemoteService(Constants.QUEUE_NAME);
-        val ramblerKassaService = remoteService.get(RamblerKassaAsyncService.class);
+        val ramblerKassaService = remoteService.get(RamblerKassaAsyncService.class,1, TimeUnit.HOURS);
 
         val startTime = LocalDateTime.now();
         log.info("Start load Rambler.Kassa data manually");
 
         try {
-            ramblerKassaService.load().get(1, TimeUnit.HOURS);
+            ramblerKassaService.load().get();
         } catch (Throwable e) {
+            log.error("Load field", e);
             throw new RuntimeException("Load field");
         }
 

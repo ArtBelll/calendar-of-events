@@ -96,6 +96,5 @@ public class StoresHelpersHolder {
     @SuppressWarnings("unchecked")
     public void updateDb(Object object) {
         holder.get(object.getClass()).updateInDb(object);
-        log.info("Update entity: {}", object);
     }
 }

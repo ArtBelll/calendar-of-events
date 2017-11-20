@@ -32,13 +32,13 @@ public class RamblerTask implements Runnable, Serializable {
             val startTime = LocalDateTime.now();
             log.info("Start load Rambler.Kassa data");
             redissonClient.getRemoteService(Constants.QUEUE_NAME)
-                    .get(RamblerKassaAsyncService.class).load().get(1, TimeUnit.HOURS);
+                    .get(RamblerKassaAsyncService.class, 1, TimeUnit.HOURS).load().get();
             log.info("Load Rambler.Kassa successful. Load time = {}", Duration.between(startTime, LocalDateTime.now()));
         }
         catch (NullPointerException e) {
             log.error("Rambler Kassa loader wasn't run");
         }
-        catch (TimeoutException | InterruptedException | ExecutionException e) {
+        catch (InterruptedException | ExecutionException e) {
             log.error("Load Rambler.Kassa fail", e);
         }
     }
