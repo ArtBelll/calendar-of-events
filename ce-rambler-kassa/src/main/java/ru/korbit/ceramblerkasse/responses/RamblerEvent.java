@@ -33,6 +33,7 @@ public class RamblerEvent {
     @JsonProperty("ClassType")
     private String type;
 
+    @JsonProperty("Genre")
     private String genre;
 
     public CinemaEvent toDBEvent() {

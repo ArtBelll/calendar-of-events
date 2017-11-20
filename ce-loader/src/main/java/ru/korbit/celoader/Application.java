@@ -45,21 +45,6 @@ public class Application {
         return Redisson.create(config);
     }
 
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(HikariDataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setConfigLocation(hibernateProperties);
-        return sessionFactory;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
-        return txManager;
-    }
-
     @PostConstruct
     public void clearExecutor() throws Exception {
         redissonClient().getKeys().deleteByPattern("*" + LoaderConstants.EXECUTOR_NAME + "*");

@@ -1,4 +1,4 @@
-package ru.korbit.cecommon.http;
+package ru.korbit.ceserver.http;
 
 import lombok.Data;
 import lombok.NonNull;

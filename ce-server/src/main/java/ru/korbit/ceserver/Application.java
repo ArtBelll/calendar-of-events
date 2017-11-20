@@ -46,9 +46,6 @@ public class Application extends SpringBootServletInitializer {
     @Value(value = "classpath:redisson.json")
     private Resource redissonConfig;
 
-    @Value(value = "classpath:hibernate.cfg.xml")
-    private Resource hibernateProperties;
-
     @Bean
     public RedissonClient redissonClient() throws IOException {
         val config = Config.fromJSON(redissonConfig.getInputStream());
@@ -61,20 +58,4 @@ public class Application extends SpringBootServletInitializer {
         b.modulesToInstall(new GuavaModule(), new Hibernate5Module());
         return b;
     }
-
-    @Bean
-    public LocalSessionFactoryBean sessionFactory(HikariDataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setConfigLocation(hibernateProperties);
-        return sessionFactory;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
-        return txManager;
-    }
-
 }

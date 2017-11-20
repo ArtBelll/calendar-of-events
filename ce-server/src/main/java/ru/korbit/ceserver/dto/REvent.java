@@ -24,12 +24,15 @@ public abstract class REvent {
 
     private List<URL> links;
 
+    private String additionally;
+
     public REvent(Event event) {
         this.id = event.getId();
         this.title = event.getTitle();
         this.description = event.getDescription();
         this.imageURL = event.getImageURL();
         this.links = event.getLinks();
+        this.additionally = event.getAdditionally();
     }
 
     public abstract int getType();

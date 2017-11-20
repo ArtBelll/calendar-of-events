@@ -1,4 +1,4 @@
 @NonNullApi
-package ru.korbit.cecommon.http;
+package ru.korbit.ceserver.http;
 
 import org.springframework.lang.NonNullApi;

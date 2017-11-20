@@ -25,7 +25,6 @@ public class RCinema {
 
     public RCinema(Cinema cinema, List<RHall> halls) {
         this.name = cinema.getName();
-        this.place = cinema.getPlace();
         this.address = cinema.getAddress();
         this.latitude = cinema.getLatitude();
         this.longitude = cinema.getLongitude();

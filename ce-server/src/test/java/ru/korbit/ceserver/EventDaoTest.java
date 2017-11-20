@@ -66,7 +66,6 @@ public class EventDaoTest {
     public void searchEvent() {
         val city = cityDao.save(new City("TestCity"));
         Cinema cinema = new Cinema();
-        cinema.setPlace(PLACE);
         cinema.setName(PLACE);
         List<Cinema> cinemas = new ArrayList<>();
         cinema.setCity(city);
@@ -105,7 +104,6 @@ public class EventDaoTest {
 
 
         simpleEvent.setTitle(title);
-        simpleEvent.setPlace(place);
 
         simpleEvent.setStartDay(ZonedDateTime.now().minusDays(1));
         simpleEvent.setFinishDay(ZonedDateTime.now().plusDays(1));
