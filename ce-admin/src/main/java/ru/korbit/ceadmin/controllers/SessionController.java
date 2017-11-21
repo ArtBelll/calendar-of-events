@@ -33,7 +33,7 @@ public class SessionController {
 
     final UserDao userDao;
 
-    SessionController(UserDao userDao) {
+    protected SessionController(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -75,7 +75,7 @@ public class SessionController {
         }
     }
 
-    boolean isSuperuser(HttpServletRequest request) {
+    protected boolean isSuperuser(HttpServletRequest request) {
         val user = getSessionUser(request);
         return user.getRoles().contains(RoleOfUser.SUPERUSER);
     }

@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class UserNotExists extends RuntimeException {
-    public UserNotExists(final String login) { super("Account with this login doesn't exist:" + login); }
+    public UserNotExists(final String email) { super("Account with this email doesn't exist:" + email); }
 }
