@@ -9,5 +9,5 @@ public interface UserDao extends GenericDao<User> {
 
     Optional<User> get(UUID uuid);
 
-    Optional<User> getByLogin(String login);
+    Optional<User> getByEmail(String email);
 }

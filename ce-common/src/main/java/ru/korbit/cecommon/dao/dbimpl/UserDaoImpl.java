@@ -19,10 +19,10 @@ public class UserDaoImpl extends SessionFactoryHolder<User> implements UserDao {
     }
 
     @Override
-    public Optional<User> getByLogin(String login) {
+    public Optional<User> getByEmail(String email) {
         return getSession()
-                .createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
-                .setParameter("login", login)
+                .createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email)
                 .uniqueResultOptional();
     }
 }

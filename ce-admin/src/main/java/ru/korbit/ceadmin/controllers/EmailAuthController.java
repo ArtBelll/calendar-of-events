@@ -17,6 +17,7 @@ import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.domain.Organisation;
 import ru.korbit.cecommon.domain.User;
 import ru.korbit.cecommon.exeptions.BadRequest;
+import ru.korbit.cecommon.exeptions.Forbidden;
 import ru.korbit.cecommon.exeptions.UserNotExists;
 import ru.korbit.cecommon.packet.RoleOfUser;
 import ru.korbit.cecommon.packet.StatusOfOrganisation;
@@ -68,13 +69,21 @@ public class EmailAuthController extends SessionController {
     }
 
     @GetMapping(value = "admin-requests")
-    public ResponseEntity<?> getAdminsRequest() {
+    public ResponseEntity<?> getAdminsRequest(HttpServletRequest request) {
+        if (!isSuperuser(request)) {
+            throw new Forbidden("Permission denied");
+        }
         val organisations = organisationDao.getByStatus(StatusOfOrganisation.REQUEST).collect(Collectors.toList());
         return new ResponseEntity<>(organisations, HttpStatus.OK);
     }
 
     @GetMapping(value = "request-accepted/{organisationId}")
-    public ResponseEntity<?> acceptAdmin(@PathVariable("organisationId") Long organisationId) {
+    public ResponseEntity<?> acceptAdmin(HttpServletRequest request,
+                                         @PathVariable("organisationId") Long organisationId) {
+        if (!isSuperuser(request)) {
+            throw new Forbidden("Permission denied");
+        }
+
         val organisation = organisationDao
                 .searchByIdAndStatus(organisationId, StatusOfOrganisation.REQUEST)
                 .orElseThrow(() -> new BadRequest("Organisation is not exist"));
@@ -116,12 +125,12 @@ public class EmailAuthController extends SessionController {
     @PostMapping(value = "login")
     public ResponseEntity<?> login(HttpServletRequest request,
                                    @RequestBody RequestUser requestUser) throws URISyntaxException {
-        if (StringUtils.isEmpty(requestUser.getLogin()) || StringUtils.isEmpty(requestUser.getPassword())) {
+        if (StringUtils.isEmpty(requestUser.getEmail()) || StringUtils.isEmpty(requestUser.getPassword())) {
             throw new BadRequest("Missed one or more request fields");
         }
 
-        val user = userDao.getByLogin(requestUser.getLogin())
-                .orElseThrow(() -> new UserNotExists(requestUser.getLogin()));
+        val user = userDao.getByEmail(requestUser.getEmail())
+                .orElseThrow(() -> new UserNotExists(requestUser.getEmail()));
 
         val password = requestUser.getPassword();
         if (!PasswordHelper.checkPassword(password, user.getPassword())) {

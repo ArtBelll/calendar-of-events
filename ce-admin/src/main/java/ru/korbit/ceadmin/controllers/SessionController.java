@@ -11,6 +11,7 @@ import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.domain.User;
 import ru.korbit.cecommon.exeptions.ResourceNotFoundException;
 import ru.korbit.cecommon.exeptions.UnAuthorized;
+import ru.korbit.cecommon.packet.RoleOfUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class SessionController {
         val claims = new HashMap<String, Object>();
         claims.put(USER_ID, user.getUuid());
         return Jwts.builder()
-                .setSubject(user.getLogin())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, K64)
@@ -72,6 +73,11 @@ public class SessionController {
             log.error("getSessionUser parseClaimsJws failed: {}", e);
             throw new UnAuthorized("");
         }
+    }
+
+    boolean isSuperuser(HttpServletRequest request) {
+        val user = getSessionUser(request);
+        return user.getRoles().contains(RoleOfUser.SUPERUSER);
     }
 
     ResponseEntity<?> createdResponse(final Object data,

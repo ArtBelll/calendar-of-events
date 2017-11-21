@@ -14,7 +14,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @ToString(exclude = {"organisation"})
 public class User {
 
@@ -24,7 +23,7 @@ public class User {
 
     @NonNull
     @Column(nullable = false, unique = true)
-    private String login;
+    private String email;
 
     @NonNull
     @Column(nullable = false)
@@ -37,10 +36,15 @@ public class User {
 
     private LocalDateTime logged = LocalDateTime.now();
 
-    @NonNull
     @OneToOne
     private Organisation organisation;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<RoleOfUser> roles = new ArrayList<>();
+
+    public User(String email, String password, Organisation organisation) {
+        this.email = email;
+        this.password = password;
+        this.organisation = organisation;
+    }
 }
