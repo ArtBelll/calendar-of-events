@@ -47,7 +47,8 @@ public class ResponseEventFactory {
                             .map(hall -> {
                                 val showtimes = new ArrayList<RShowtime>();
                                 showtimeDao.getByHallAndEventOnDay(cinemaEvent.getId(), hall.getId(), now)
-                                        .forEach(showtime -> showtimes.add(new RShowtime(showtime)));
+                                        .forEach(showtime ->
+                                                showtimes.add(new RShowtime(showtime, city.getZoneOffset())));
 
                                 return new RHall(hall, showtimes);
                             })
