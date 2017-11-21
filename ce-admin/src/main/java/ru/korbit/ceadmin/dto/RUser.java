@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class ResponseUser {
+public class RUser {
     private String email;
     private UUID uuid;
     private List<RoleOfUser> roles;
 
-    public ResponseUser(User user) {
+    public RUser(User user) {
         this.email = user.getEmail();
         this.uuid = user.getUuid();
         this.roles = user.getRoles();

@@ -75,9 +75,9 @@ public class SessionController {
         }
     }
 
-    protected boolean isSuperuser(HttpServletRequest request) {
+    protected boolean isRole(HttpServletRequest request, RoleOfUser role) {
         val user = getSessionUser(request);
-        return user.getRoles().contains(RoleOfUser.SUPERUSER);
+        return user.getRoles().contains(role);
     }
 
     ResponseEntity<?> createdResponse(final Object data,
