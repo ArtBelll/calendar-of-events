@@ -13,8 +13,6 @@ public class RCinema {
 
     private String name;
 
-    private String place;
-
     private String address;
 
     private Float latitude;

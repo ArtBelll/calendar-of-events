@@ -30,7 +30,10 @@ public class RamblerShowtime {
     private String startTime;
 
     @JsonProperty("MinPrice")
-    private int price;
+    private Integer priceMin;
+
+    @JsonProperty("MaxPrice")
+    private Integer priceMax;
 
     @JsonProperty("PlaceObjectID")
     private Integer placeId;
@@ -48,6 +51,6 @@ public class RamblerShowtime {
     public Showtime toDbShowtime(ZoneOffset offset) {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         val startTime = ZonedDateTime.of(LocalDateTime.parse(this.startTime, formatter), offset);
-        return new Showtime(format, startTime, price, showtimeRamblerId);
+        return new Showtime(format, startTime, priceMin, priceMax, showtimeRamblerId);
     }
 }

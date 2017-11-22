@@ -33,7 +33,6 @@ public class Showtime implements GetIdable {
     private Hall hall;
 
     @NonNull
-    @Column(name = "format")
     private String format;
 
     @NonNull
@@ -41,8 +40,12 @@ public class Showtime implements GetIdable {
     private ZonedDateTime startTime;
 
     @NonNull
-    @Column(name = "price", nullable = false)
-    private Integer price;
+    @Column(name = "price_min", nullable = false)
+    private Integer priceMin;
+
+    @NonNull
+    @Column(name = "price_max", nullable = false)
+    private Integer priceMax;
 
     @JsonIgnore
     @NonNull

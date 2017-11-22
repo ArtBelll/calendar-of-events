@@ -77,7 +77,8 @@ public class RamblerKasseLoader implements RamblerKassaService {
     }
 
     private void loadEvents(Integer cityRamblerId, City currentCity) {
-        ramblerKassa.getEventsLessDateAtCity(cityRamblerId, TimeUtility.getMaxDate(currentCity.getZoneOffset()))
+        ramblerKassa.getEventsLessDateAtCity(cityRamblerId,
+                TimeUtility.getMaxDate(currentCity.getZoneOffset()).plusDays(1))
                 .forEach(ramblerEvent -> {
                     val eventType = storesHelpersHolder.putIfAbsent(
                             ramblerEvent.getType(),
@@ -107,6 +108,10 @@ public class RamblerKasseLoader implements RamblerKassaService {
     private void loadShowtimes(Integer cityRamblerId, ZoneOffset offset) {
         ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate(offset))
                 .forEach(ramblerShowtime -> {
+
+                    if (ramblerShowtime.getPriceMin() == null || ramblerShowtime.getPriceMax() == null) {
+                        return;
+                    }
 
                     val currentEvent = storesHelpersHolder.getUsingCache(
                             ramblerShowtime.getEventId(),

@@ -1,5 +1,6 @@
 package ru.korbit.ceserver.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.korbit.cecommon.domain.Showtime;
 
@@ -13,13 +14,18 @@ public class RShowtime {
 
     private Long time;
 
-    private int price;
+    @JsonProperty("price_min")
+    private Integer priceMin;
+
+    @JsonProperty("price_max")
+    private Integer priceMax;
 
     private String format;
 
     public RShowtime(Showtime showtime, ZoneOffset cityZone) {
         this.time = getLocalTimeInEpochSecond(showtime, cityZone);
-        this.price = showtime.getPrice();
+        this.priceMin = showtime.getPriceMin();
+        this.priceMax = showtime.getPriceMax();
         this.format = showtime.getFormat();
     }
 

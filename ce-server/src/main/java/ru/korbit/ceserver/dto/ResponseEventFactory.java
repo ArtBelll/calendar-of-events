@@ -39,6 +39,7 @@ public class ResponseEventFactory {
     }
 
     private RCinemaEvent getRCinemaEvent(CinemaEvent cinemaEvent, City city, ZonedDateTime now) {
+        val priceRange = new PriceRange();
         List<RCinema> cinemas = city.getCinemas()
                 .stream()
                 .map(cinema -> {
@@ -47,8 +48,16 @@ public class ResponseEventFactory {
                             .map(hall -> {
                                 val showtimes = new ArrayList<RShowtime>();
                                 showtimeDao.getByHallAndEventOnDay(cinemaEvent.getId(), hall.getId(), now)
-                                        .forEach(showtime ->
-                                                showtimes.add(new RShowtime(showtime, city.getZoneOffset())));
+                                        .forEach(showtime -> {
+                                                    if (showtime.getPriceMin() < priceRange.min) {
+                                                        priceRange.min = showtime.getPriceMin();
+                                                    }
+                                                    if (showtime.getPriceMax() > priceRange.max) {
+                                                        priceRange.max = showtime.getPriceMax();
+                                                    }
+                                                    showtimes.add(new RShowtime(showtime, city.getZoneOffset()));
+                                                }
+                                        );
 
                                 return new RHall(hall, showtimes);
                             })
@@ -59,6 +68,11 @@ public class ResponseEventFactory {
                 .filter(cinema -> !cinema.getHalls().isEmpty())
                 .collect(Collectors.toList());
 
-        return new RCinemaEvent(cinemaEvent, cinemas);
+        return new RCinemaEvent(cinemaEvent, cinemas, priceRange.min, priceRange.max);
+    }
+
+    private class PriceRange {
+        Integer min = Integer.MAX_VALUE;
+        Integer max = Integer.MIN_VALUE;
     }
 }
