@@ -19,7 +19,7 @@ public class RCinemaEvent extends REvent {
 
     public RCinemaEvent(CinemaEvent cinemaEvent, List<RCinema> cinemas) {
         super(cinemaEvent);
-        this.duration = cinemaEvent.getDuration().toMillis();
+        this.duration = cinemaEvent.getDuration().toMillis() / 1000;
         this.cinemas = cinemas;
     }
 
