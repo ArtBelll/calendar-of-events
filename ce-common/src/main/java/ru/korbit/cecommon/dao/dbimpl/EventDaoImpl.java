@@ -55,9 +55,8 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
                         "LEFT JOIN c.cinemas cin " +
                         "WHERE e.finishDay >= :startDate " +
                             "AND LOWER(e.title) LIKE :title " +
-                            "AND (LOWER(se.place) LIKE :place " +
-                                "OR LOWER(cin.place) LIKE :place " +
-                                "OR LOWER(cin.name) LIKE :place)" , Event.class)
+                            "AND (LOWER(cin.name) LIKE :place " +
+                                "OR LOWER(se.place) LIKE :place)" , Event.class)
                 .setParameter("cityId", cityId)
                 .setParameter("title", StringUtils.getSqlPatternInAnyPosition(title))
                 .setParameter("place", StringUtils.getSqlPatternInAnyPosition(place))

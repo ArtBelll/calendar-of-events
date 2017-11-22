@@ -15,15 +15,13 @@ import javax.persistence.Table;
 @Data
 public class SimpleEvent extends Event {
 
-    @Column(name = "price")
     private int price;
 
-    @Column(name = "latitude")
     private Float latitude;
 
-    @Column(name = "longitude")
     private Float longitude;
 
-    @Column(name = "address")
     private String address;
+
+    private String place;
 }
