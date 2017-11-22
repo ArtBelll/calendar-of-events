@@ -3,7 +3,6 @@ package ru.korbit.ceserver.dto;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.korbit.cecommon.dao.CinemaDao;
 import ru.korbit.cecommon.dao.ShowtimeDao;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.City;
@@ -24,7 +23,7 @@ public class ResponseEventFactory {
     private final ShowtimeDao showtimeDao;
 
     @Autowired
-    public ResponseEventFactory(CinemaDao cinemaDao, ShowtimeDao showtimeDao) {
+    public ResponseEventFactory(ShowtimeDao showtimeDao) {
         this.showtimeDao = showtimeDao;
     }
 
@@ -49,16 +48,19 @@ public class ResponseEventFactory {
                                 val showtimes = new ArrayList<RShowtime>();
                                 showtimeDao.getByHallAndEventOnDay(cinemaEvent.getId(), hall.getId(), now)
                                         .forEach(showtime -> {
-                                                    if (showtime.getPriceMin() < priceRange.min) {
-                                                        priceRange.min = showtime.getPriceMin();
-                                                    }
-                                                    if (showtime.getPriceMax() > priceRange.max) {
-                                                        priceRange.max = showtime.getPriceMax();
-                                                    }
-                                                    showtimes.add(new RShowtime(showtime, city.getZoneOffset()));
-                                                }
-                                        );
+                                            if (showtime.getStartTime().isBefore(now)) {
+                                                return;
+                                            }
 
+                                            showtimes.add(new RShowtime(showtime, city.getZoneOffset()));
+
+                                            if (showtime.getPriceMin() < priceRange.min) {
+                                                priceRange.min = showtime.getPriceMin();
+                                            }
+                                            if (showtime.getPriceMax() > priceRange.max) {
+                                                priceRange.max = showtime.getPriceMax();
+                                            }
+                                        });
                                 return new RHall(hall, showtimes);
                             })
                             .filter(hall -> !hall.getShowtimes().isEmpty())
