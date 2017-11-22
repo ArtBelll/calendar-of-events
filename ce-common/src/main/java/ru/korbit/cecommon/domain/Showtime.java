@@ -23,13 +23,13 @@ public class Showtime implements GetIdable {
     @JsonIgnore
     @Id
     @ManyToOne
-    @JoinColumn(name = "cinema_event_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "cinema_event_id", referencedColumnName = "id")
     private CinemaEvent cinemaEvent;
 
     @JsonIgnore
     @Id
     @ManyToOne
-    @JoinColumn(name = "hall_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private Hall hall;
 
     @NonNull

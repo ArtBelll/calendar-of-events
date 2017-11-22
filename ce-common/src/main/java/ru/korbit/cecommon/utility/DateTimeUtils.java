@@ -62,6 +62,6 @@ public final class DateTimeUtils {
     }
 
     public static Long getExpireMillis(ZonedDateTime endTime) {
-        return Math.abs(Duration.between(ZonedDateTime.now(ZoneId.systemDefault()), endTime).toMillis());
+        return Duration.between(ZonedDateTime.now(ZoneId.systemDefault()), endTime).abs().toMillis();
     }
 }
