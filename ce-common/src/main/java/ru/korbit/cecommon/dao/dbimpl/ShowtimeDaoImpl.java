@@ -30,8 +30,8 @@ public class ShowtimeDaoImpl extends SessionFactoryHolder<Showtime>
                         "ORDER BY sh.startTime", Showtime.class)
                 .setParameter("hallId", hallId)
                 .setParameter("eventId", eventId)
-                .setParameter("dateFrom", dateFrom)
-                .setParameter("dateTo", dateFrom.plusDays(1).truncatedTo(ChronoUnit.DAYS))
+                .setParameter("dateFrom", dateFrom.plusHours(1))
+                .setParameter("dateTo", dateFrom.plusDays(1).truncatedTo(ChronoUnit.DAYS).plusHours(1))
                 .getResultList();
     }
 }
