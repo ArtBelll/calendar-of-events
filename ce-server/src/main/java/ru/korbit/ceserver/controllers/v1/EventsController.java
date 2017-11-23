@@ -13,6 +13,7 @@ import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.dao.EventDao;
 import ru.korbit.cecommon.exeptions.BadRequest;
 import ru.korbit.cecommon.exeptions.NotExist;
+import ru.korbit.cecommon.utility.EventActionHelper;
 import ru.korbit.cecommon.utility.DateTimeUtils;
 import ru.korbit.ceserver.dto.RGeneralEvent;
 import ru.korbit.ceserver.dto.ResponseEventFactory;
@@ -59,7 +60,9 @@ public class EventsController extends BaseController {
         val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone);
         val finish = ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone);
 
-        val events = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes);
+        val timeChecker = new EventActionHelper(cityId, start, finish);
+        val events = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes)
+                .filter(timeChecker::getSetActives);
         val activeDaysLong = DateTimeUtils
                 .getActiveDateRanges(events, finish)
                 .stream()
