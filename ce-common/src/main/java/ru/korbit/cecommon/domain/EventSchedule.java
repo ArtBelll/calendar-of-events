@@ -1,41 +1,39 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.Date;
-import java.util.List;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
-/**
- * Created by Artur Belogur on 11.10.17.
- */
 @Entity
-@Table(name = "events_schedules")
+@Table(name = "schedules")
+@IdClass(CinemaEventHall.class)
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class EventSchedule {
+
+    private static ZonedDateTime MAX_TIME = ZonedDateTime.parse("9999-12-31T23:59:59+00:00");
+    private static ZonedDateTime MIN_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0), ZoneOffset.UTC);
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
-    private Long id;
+    private Long eventId;
 
-    @ElementCollection
-    @Column(name = "specific_days")
-    private List<Date> specificDays;
+    @Id
+    @GeneratedValue
+    private Long cityId;
 
-    @ElementCollection
-    @Column(name = "daysOfWeek")
-    private List<DayOfWeek> daysOfWeek;
+    @NonNull
+    @Column(name = "start", nullable = false)
+    private ZonedDateTime start = MAX_TIME;
 
-    @Column(name = "srart_time")
-    private LocalTime startTime;
-
-    @Column(name = "finish_time")
-    private LocalTime finishTime;
-
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @NonNull
+    @Column(name = "finish",nullable = false)
+    private ZonedDateTime finish = MIN_TIME;
 }

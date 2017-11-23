@@ -22,9 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class Event implements GetIdable {
 
-    private static ZonedDateTime MAX_TIME = ZonedDateTime.parse("9999-12-31T23:59:59+00:00");
-    private static ZonedDateTime MIN_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0), ZoneOffset.UTC);
-
     @Id
     @GeneratedValue
     private Long id;
@@ -41,12 +38,6 @@ public abstract class Event implements GetIdable {
     @Column(name = "thumb_image_url")
     private URL thumbImageURL;
 
-    @Column(name = "start_date", nullable = false)
-    private ZonedDateTime startDay = MAX_TIME;
-
-    @Column(name = "finish_date", nullable = false)
-    private ZonedDateTime finishDay = MIN_TIME;
-
     @NonNull
     private String additionally;
 
@@ -59,7 +50,4 @@ public abstract class Event implements GetIdable {
 
     @ManyToMany(mappedBy = "events")
     private List<EventType> eventTypes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "event")
-    private List<EventSchedule> eventSchedules;
 }
