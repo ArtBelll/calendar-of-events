@@ -34,7 +34,7 @@ public class StoresHelpersHolder {
         holder.put(Cinema.class, cinemaStoreHelper);
         holder.put(Event.class, eventStoreHelper);
         holder.put(CinemaEvent.class, eventStoreHelper);
-        holder.put(SimpleEvent.class, eventStoreHelper);
+        holder.put(RecurringEvent.class, eventStoreHelper);
         holder.put(EventSchedule.class, eventScheduleStoreHelper);
         holder.put(Hall.class, hallStoreHelper);
         holder.put(Showtime.class, showtimeStoreHelper);

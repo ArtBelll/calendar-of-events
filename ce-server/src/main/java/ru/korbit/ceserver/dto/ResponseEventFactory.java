@@ -7,7 +7,7 @@ import ru.korbit.cecommon.dao.ShowtimeDao;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.City;
 import ru.korbit.cecommon.domain.Event;
-import ru.korbit.cecommon.domain.SimpleEvent;
+import ru.korbit.cecommon.domain.RecurringEvent;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ResponseEventFactory {
         if (event instanceof CinemaEvent) {
             return getRCinemaEvent((CinemaEvent) event, city, now);
         }
-        if (event instanceof SimpleEvent) {
+        if (event instanceof RecurringEvent) {
             return new RSimpleEvent(event);
         }
         throw new RuntimeException("Not exist response for event = " + event.toString());

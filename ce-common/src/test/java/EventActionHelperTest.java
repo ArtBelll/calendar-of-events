@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.korbit.cecommon.domain.ActionSchedule;
 import ru.korbit.cecommon.domain.City;
-import ru.korbit.cecommon.domain.SimpleEvent;
+import ru.korbit.cecommon.domain.RecurringEvent;
 import ru.korbit.cecommon.utility.EventActionHelper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,20 +54,20 @@ public class EventActionHelperTest {
     @SuppressWarnings("unchecked")
     public void getSetActiveDaysTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method = EventActionHelper.class
-                .getDeclaredMethod("getSetActiveDays", SimpleEvent.class);
+                .getDeclaredMethod("getSetActiveDays", RecurringEvent.class);
         method.setAccessible(true);
 
         val set = (Set<ZonedDateTime>) method.invoke(helper, getSimpleEvent());
         Assert.assertTrue(set.size() == 4);
     }
 
-    private SimpleEvent getSimpleEvent() {
-        val simpleEvent = new SimpleEvent();
+    private RecurringEvent getSimpleEvent() {
+        val simpleEvent = new RecurringEvent();
         val schedule = new ActionSchedule();
 
         schedule.setCron(cronExpression);
         schedule.setDuration(Duration.ofHours(2));
-        schedule.setSimpleEvent(simpleEvent);
+        schedule.setRecurringEvent(simpleEvent);
 
         val city = new City();
         city.setId(cityId);

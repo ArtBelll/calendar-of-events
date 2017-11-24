@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "simple_events")
 @Data
-public class SimpleEvent extends Event {
+public class RecurringEvent extends Event {
 
     private int price;
 

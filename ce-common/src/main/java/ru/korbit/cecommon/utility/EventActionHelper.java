@@ -6,7 +6,7 @@ import com.cronutils.parser.CronParser;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.Event;
-import ru.korbit.cecommon.domain.SimpleEvent;
+import ru.korbit.cecommon.domain.RecurringEvent;
 import ru.korbit.cecommon.packet.EventCronIterator;
 
 import java.time.Duration;
@@ -37,8 +37,8 @@ public class EventActionHelper {
     public Stream<ZonedDateTime> getSetActiveDays(Event event) {
         if (event instanceof CinemaEvent) {
             return this.getSetActiveDays((CinemaEvent) event);
-        } else if (event instanceof SimpleEvent) {
-            return getSetActiveDays((SimpleEvent) event);
+        } else if (event instanceof RecurringEvent) {
+            return getSetActiveDays((RecurringEvent) event);
         } else {
             throw new RuntimeException("Unknown event");
         }
@@ -67,8 +67,8 @@ public class EventActionHelper {
         return DateTimeUtils.getListOfDayBetween(realStart.truncatedTo(ChronoUnit.DAYS), finish);
     }
 
-    private Stream<ZonedDateTime> getSetActiveDays(SimpleEvent simpleEvent) {
-        Stream<ZonedDateTime> resultSet = simpleEvent.getActionSchedules()
+    private Stream<ZonedDateTime> getSetActiveDays(RecurringEvent recurringEvent) {
+        Stream<ZonedDateTime> resultSet = recurringEvent.getActionSchedules()
                 .parallelStream()
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
@@ -76,11 +76,11 @@ public class EventActionHelper {
                     return getSetActiveDaysInCron(cron, action.getDuration());
                 })
                 .flatMap(set -> set.map(date -> date.truncatedTo(ChronoUnit.DAYS)))
-                .filter(date -> !DateTimeUtils.dateInDates(simpleEvent.getNoneAction(), date)
-                        && !DateTimeUtils.dateInDates(simpleEvent.getDatesException(), date));
+                .filter(date -> !DateTimeUtils.dateInDates(recurringEvent.getNoneAction(), date)
+                        && !DateTimeUtils.dateInDates(recurringEvent.getDatesException(), date));
 
         val dateExceptions = new HashSet<ZonedDateTime>();
-        simpleEvent.getDatesException().forEach(date -> {
+        recurringEvent.getDatesException().forEach(date -> {
             if (date.isBefore(to) && date.isAfter(from)) {
                 dateExceptions.add(date);
             }
