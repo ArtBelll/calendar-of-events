@@ -61,9 +61,9 @@ public class EventsController extends BaseController {
         val start = ZonedDateTime.ofInstant(Instant.ofEpochSecond(beginRange), cityZone);
         val finish = ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone);
 
-        val timeChecker = new EventActionHelper(cityId, start, finish);
+        val eventActionHelper = new EventActionHelper(cityId, start, finish);
         val activeDaysLong = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes)
-                .flatMap(timeChecker::getSetActiveDays)
+                .flatMap(eventActionHelper::getSetActiveDays)
                 .collect(Collectors.toCollection(() -> new TreeSet<>(DateTimeUtils.zonedDateComparator)));
 
         log.info("Get active days in rage, start = {}, finish = {}, number = {}", start, finish, activeDaysLong.size());
@@ -96,7 +96,9 @@ public class EventsController extends BaseController {
 
         ListMultimap<String, RGeneralEvent> events = MultimapBuilder.hashKeys().arrayListValues().build();
 
+        val eventActionHelper = new EventActionHelper(cityId, start, finish);
         eventDao.getByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
+                .flatMap()
                 .forEach(event -> {
                     val generalEvent = new RGeneralEvent(event);
                     event.getEventTypes().forEach(eventType -> {
