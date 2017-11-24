@@ -69,7 +69,10 @@ public class EventActionHelper {
                     val cron = ExecutionTime.forCron(parser.parse(action.getCron()));
                     return getSetActiveDaysInCron(cron, action.getDuration());
                 })
-                .anyMatch(dates -> dates.anyMatch(date -> date.isAfter(from) && date.isBefore(to)));
+                .anyMatch(dates -> dates.anyMatch(date -> date.isAfter(from) && date.isBefore(to)
+                        && recurringEvent.getNoneAction()
+                        .parallelStream()
+                        .noneMatch(noneAction -> DateTimeUtils.compareDays(noneAction, date))));
     }
 
     public Stream<ZonedDateTime> getSetActiveDays(Event event) {
