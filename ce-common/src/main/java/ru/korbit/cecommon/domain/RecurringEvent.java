@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "simple_events")
+@Table(name = "recurring_events")
 @Data
 public class RecurringEvent extends Event {
 
@@ -29,7 +29,7 @@ public class RecurringEvent extends Event {
 
     private String place;
 
-    @OneToMany(mappedBy = "simpleEvent")
+    @OneToMany(mappedBy = "recurringEvent")
     private List<ActionSchedule> actionSchedules = new ArrayList<>();
 
     @ElementCollection

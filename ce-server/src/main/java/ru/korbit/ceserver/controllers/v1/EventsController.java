@@ -98,7 +98,7 @@ public class EventsController extends BaseController {
 
         val eventActionHelper = new EventActionHelper(cityId, start, finish);
         eventDao.getByDateRangeAtCity(start, finish, cityId, new ArrayList<>())
-                .flatMap()
+                .filter(eventActionHelper::hasAction)
                 .forEach(event -> {
                     val generalEvent = new RGeneralEvent(event);
                     event.getEventTypes().forEach(eventType -> {

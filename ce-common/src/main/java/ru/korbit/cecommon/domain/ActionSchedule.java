@@ -26,7 +26,7 @@ public class ActionSchedule {
     private Duration duration;
 
     @ManyToOne
-    @JoinColumn(name = "simple_event_id")
+    @JoinColumn(name = "recurring_event_id")
     private RecurringEvent recurringEvent;
 
     @ManyToOne

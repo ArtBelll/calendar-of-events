@@ -34,6 +34,44 @@ public class EventActionHelper {
         this.to = to;
     }
 
+    public boolean hasAction(Event event) {
+        if (event instanceof CinemaEvent) {
+            return hasAction((CinemaEvent) event);
+        } else if (event instanceof RecurringEvent) {
+            return hasAction((RecurringEvent) event);
+        } else {
+            throw new RuntimeException("Unknown event");
+        }
+    }
+
+    private boolean hasAction(CinemaEvent cinemaEvent) {
+        val schedule = cinemaEvent.getEventSchedules()
+                .stream()
+                .filter(eventSchedule -> eventSchedule.getCity().getId().equals(cityId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Event haven't schedule"));
+
+        val start = schedule.getStart().isBefore(from) ? from : schedule.getStart();
+
+        return !DateTimeUtils.compareDays(ZonedDateTime.now(), start)
+                || cinemaEvent.getShowtimeList()
+                .stream()
+                .anyMatch(showtime -> showtime.getHall().getCinema().getCity().getId().equals(cityId)
+                        && showtime.getStartTime().isBefore(start.plusDays(1))
+                        && showtime.getStartTime().isAfter(start));
+    }
+
+    private boolean hasAction(RecurringEvent recurringEvent) {
+        return recurringEvent.getActionSchedules()
+                .parallelStream()
+                .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
+                .map(action -> {
+                    val cron = ExecutionTime.forCron(parser.parse(action.getCron()));
+                    return getSetActiveDaysInCron(cron, action.getDuration());
+                })
+                .anyMatch(dates -> dates.anyMatch(date -> date.isAfter(from) && date.isBefore(to)));
+    }
+
     public Stream<ZonedDateTime> getSetActiveDays(Event event) {
         if (event instanceof CinemaEvent) {
             return this.getSetActiveDays((CinemaEvent) event);
@@ -58,9 +96,9 @@ public class EventActionHelper {
         if (DateTimeUtils.compareDays(ZonedDateTime.now(), start) && !isExistToday) {
             isCurrentDay = isExistToday = cinemaEvent.getShowtimeList()
                     .stream()
-                    .anyMatch(showtime -> showtime.getStartTime().isBefore(start.plusDays(1))
+                    .anyMatch(showtime -> showtime.getHall().getCinema().getCity().getId().equals(cityId)
+                            && showtime.getStartTime().isBefore(start.plusDays(1))
                             && showtime.getStartTime().isAfter(start));
-
         }
 
         val realStart = isCurrentDay ? start : start.plusDays(1);
