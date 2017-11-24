@@ -32,12 +32,10 @@ public class EventDaoImpl extends SessionFactoryHolder<Event> implements ru.korb
                                               Long cityId, List<Long> ignoreTypes) {
         ignoreTypes.add(-1L);
         return getSession()
-                .createQuery("SELECT e FROM City c " +
-                        "JOIN c.events e " +
-                        "JOIN e.eventTypes et " +
-                        "WHERE c.id = :cityId AND e.startDay <= :finishDay AND e.finishDay >= :startDay " +
-                        "AND et.id NOT IN (:ignoreTypes) " +
-                        "ORDER BY e.startDay", Event.class)
+                .createQuery("SELECT e FROM Event e " +
+                        "JOIN e.eventTypes et ON et.id NOT IN (:ignoreTypes)" +
+                        "JOIN e.eventSchedules es ON es.city.id = :cityId " +
+                        "WHERE es.start <= :finishDay AND es.finish >= :startDay", Event.class)
                 .setParameter("cityId", cityId)
                 .setParameter("ignoreTypes", ignoreTypes)
                 .setParameter("startDay", startDate)

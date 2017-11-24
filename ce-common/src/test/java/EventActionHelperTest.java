@@ -75,7 +75,7 @@ public class EventActionHelperTest {
 
         simpleEvent.getActionSchedules().add(schedule);
         simpleEvent.getNoneAction().add(from.plusDays(4));
-        simpleEvent.getDateExceptions().add(from.plusDays(5).plusHours(10).plusMinutes(30));
+        simpleEvent.getDatesException().add(from.plusDays(5).plusHours(10).plusMinutes(30));
         return simpleEvent;
     }
 }

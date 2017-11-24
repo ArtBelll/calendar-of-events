@@ -41,8 +41,8 @@ public abstract class Event implements GetIdable {
     @NonNull
     private String additionally;
 
-    @ManyToMany(mappedBy = "events")
-    private List<City> cities = new ArrayList<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private List<EventSchedule> eventSchedules = new ArrayList<>();
 
     @ElementCollection
     @Column(name = "links")

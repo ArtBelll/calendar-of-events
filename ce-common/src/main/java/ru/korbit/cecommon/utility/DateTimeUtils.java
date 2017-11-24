@@ -20,8 +20,8 @@ public final class DateTimeUtils {
 
     private DateTimeUtils() {}
 
-    public static Comparator<ZonedDateTime> zonedDateTimeComparator = (d1, d2) -> {
-        if (d1.isEqual(d2)) return 0;
+    public static Comparator<ZonedDateTime> zonedDateComparator = (d1, d2) -> {
+        if (compareDays(d1, d2)) return 0;
         return d1.isBefore(d2) ? -1 : 1;
     };
 
@@ -33,11 +33,12 @@ public final class DateTimeUtils {
         return d1.isBefore(d2) || d1.isEqual(d2);
     }
 
-    public static Stream<Long> getListOfDayInSecondsBetween(ZonedDateTime start, ZonedDateTime finish) {
-        val days = ChronoUnit.DAYS.between(LocalDate.from(start), LocalDate.from(finish));
+    public static Stream<ZonedDateTime> getListOfDayBetween(ZonedDateTime start, ZonedDateTime finish) {
+        val days = ChronoUnit.DAYS.between(start, finish);
+        val offset = start.getOffset().getTotalSeconds();
         return LongStream.range(0, days + 1)
                 .boxed()
-                .map(i -> TimeUnit.SECONDS.convert(LocalDate.from(start).plusDays(i).toEpochDay(), TimeUnit.DAYS));
+                .map(i -> start.plusDays(i).plusSeconds(offset));
     }
 
     public static Long getExpireMillis(ZonedDateTime endTime) {
@@ -46,7 +47,10 @@ public final class DateTimeUtils {
 
     public static boolean dateInDates(List<ZonedDateTime> dates, ZonedDateTime date) {
         return dates.parallelStream()
-                .anyMatch(currentDate -> currentDate.truncatedTo(ChronoUnit.DAYS)
-                        .equals(date.truncatedTo(ChronoUnit.DAYS)));
+                .anyMatch(currentDate -> compareDays(currentDate, date));
+    }
+
+    public static boolean compareDays(ZonedDateTime d1, ZonedDateTime d2) {
+        return d1.truncatedTo(ChronoUnit.DAYS).isEqual(d2.truncatedTo(ChronoUnit.DAYS));
     }
 }

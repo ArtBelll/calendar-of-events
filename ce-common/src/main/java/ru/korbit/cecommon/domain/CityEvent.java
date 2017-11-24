@@ -5,10 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class CityEvent {
-    @NonNull private Long eventId;
-    @NonNull private Long cityId;
+public class CityEvent implements Serializable {
+    @NonNull private Long event;
+    @NonNull private Long city;
 }

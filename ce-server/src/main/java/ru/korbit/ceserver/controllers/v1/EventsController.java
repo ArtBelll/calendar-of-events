@@ -13,8 +13,8 @@ import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.dao.EventDao;
 import ru.korbit.cecommon.exeptions.BadRequest;
 import ru.korbit.cecommon.exeptions.NotExist;
-import ru.korbit.cecommon.utility.EventActionHelper;
 import ru.korbit.cecommon.utility.DateTimeUtils;
+import ru.korbit.cecommon.utility.EventActionHelper;
 import ru.korbit.ceserver.dto.RGeneralEvent;
 import ru.korbit.ceserver.dto.ResponseEventFactory;
 
@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -61,13 +62,9 @@ public class EventsController extends BaseController {
         val finish = ZonedDateTime.ofInstant(Instant.ofEpochSecond(endRange), cityZone);
 
         val timeChecker = new EventActionHelper(cityId, start, finish);
-        val events = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes)
-                .filter(timeChecker::getSetActives);
-        val activeDaysLong = DateTimeUtils
-                .getActiveDateRanges(events, finish)
-                .stream()
-                .flatMap(rangeDate -> DateTimeUtils.getListOfDayInSecondsBetween(rangeDate.getStart(), rangeDate.getFinish()))
-                .collect(Collectors.toList());
+        val activeDaysLong = eventDao.getByDateRangeAtCity(start, finish, cityId, ignoreTypes)
+                .flatMap(timeChecker::getSetActiveDays)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(DateTimeUtils.zonedDateComparator)));
 
         log.info("Get active days in rage, start = {}, finish = {}, number = {}", start, finish, activeDaysLong.size());
         return new ResponseEntity<>(getResponseBody(activeDaysLong), HttpStatus.OK);

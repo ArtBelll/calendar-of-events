@@ -1,5 +1,6 @@
 package ru.korbit.ceramblerkasse;
 
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import ru.korbit.cecommon.utility.DateTimeUtils;
 import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
 
-import java.time.ZoneOffset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Artur Belogur on 13.10.17.
@@ -45,6 +47,7 @@ public class RamblerKasseLoader implements RamblerKassaService {
     @Override
     //TODO for all city
     public void load() {
+        ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         ramblerKassa.getCities().stream()
                 .filter(city -> city.getCityRamblerId().equals(KALININGRAD_ID)
                         || city.getCityRamblerId().equals(MOSCOW_ID))
@@ -61,7 +64,10 @@ public class RamblerKasseLoader implements RamblerKassaService {
 
                     loadCinemas(ramblerCity.getCityRamblerId(), currentCity);
                     loadEvents(ramblerCity.getCityRamblerId(), currentCity);
-                    loadShowtimes(ramblerCity.getCityRamblerId(), currentCity.getZoneOffset());
+                    service.submit(() -> {
+                        loadShowtimes(ramblerCity.getCityRamblerId(), currentCity);
+                    });
+                    service.shutdown();
                 });
     }
 
@@ -97,16 +103,17 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         currentEvent.getEventTypes().add(eventType);
                         storesHelpersHolder.updateDb(currentEvent);
                     }
-                    if (!currentEvent.getCities().contains(currentCity)) {
-                        currentCity.getEvents().add(currentEvent);
-                        currentEvent.getCities().add(currentCity);
-                        storesHelpersHolder.updateDb(currentEvent);
-                    }
+
+                    storesHelpersHolder.putIfAbsent(
+                            new Pair<>(ramblerEvent.getEventRamblerId(), cityRamblerId),
+                            new EventSchedule(currentEvent, currentCity),
+                            RamblerCacheRegion.EVENT_SCHEDULE
+                    );
                 });
     }
 
-    private void loadShowtimes(Integer cityRamblerId, ZoneOffset offset) {
-        ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate(offset))
+    private void loadShowtimes(Integer cityRamblerId, City currentCity) {
+        ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate(currentCity.getZoneOffset()))
                 .forEach(ramblerShowtime -> {
 
                     if (ramblerShowtime.getPriceMin() == null || ramblerShowtime.getPriceMax() == null) {
@@ -133,7 +140,7 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         currentHall.setCinema(currentCinema);
                     }
 
-                    val showtimeDb = ramblerShowtime.toDbShowtime(offset);
+                    val showtimeDb = ramblerShowtime.toDbShowtime(currentCity.getZoneOffset());
                     showtimeDb.setCinemaEvent((CinemaEvent) currentEvent);
                     showtimeDb.setHall(currentHall);
                     val currentShowtime = storesHelpersHolder.putIfAbsent(
@@ -143,16 +150,22 @@ public class RamblerKasseLoader implements RamblerKassaService {
                             DateTimeUtils.getExpireMillis(showtimeDb.getStartTime())
                     );
 
-                    if (currentShowtime.getStartTime().isBefore(currentEvent.getStartDay())) {
-                        currentEvent.setStartDay(currentShowtime.getStartTime());
+                    val currentEventSchedule = storesHelpersHolder.getUsingCache(
+                            new Pair<>(ramblerShowtime.getEventId(), cityRamblerId),
+                            RamblerCacheRegion.EVENT_SCHEDULE,
+                            EventSchedule.class
+                    );
+
+                    if (currentShowtime.getStartTime().isBefore(currentEventSchedule.getStart())) {
+                        currentEventSchedule.setStart(currentShowtime.getStartTime());
                     }
-                    if (currentShowtime.getStartTime().isAfter(currentEvent.getFinishDay())) {
-                        currentEvent.setFinishDay(currentShowtime.getStartTime());
+                    if (currentShowtime.getStartTime().isAfter(currentEventSchedule.getFinish())) {
+                        currentEventSchedule.setFinish(currentShowtime.getStartTime());
                         storesHelpersHolder.updateExpire(
                                 ramblerShowtime.getEventId(),
                                 currentEvent.getId(),
                                 RamblerCacheRegion.EVENT,
-                                DateTimeUtils.getExpireMillis(currentEvent.getFinishDay().plusDays(1)),
+                                DateTimeUtils.getExpireMillis(currentEventSchedule.getFinish().plusDays(1)),
                                 Event.class);
                     }
                 });

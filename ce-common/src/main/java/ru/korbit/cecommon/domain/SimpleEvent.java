@@ -33,7 +33,7 @@ public class SimpleEvent extends Event {
     private List<ActionSchedule> actionSchedules = new ArrayList<>();
 
     @ElementCollection
-    private List<ZonedDateTime> dateExceptions = new ArrayList<>();
+    private List<ZonedDateTime> datesException = new ArrayList<>();
 
     @ElementCollection
     private List<ZonedDateTime> noneAction = new ArrayList<>();

@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"events", "cinemas"})
+@ToString(exclude = {"cinemas"})
 public class City implements GetIdable {
 
     @Id
@@ -30,11 +30,8 @@ public class City implements GetIdable {
     @Column(name = "time_zone")
     private ZoneOffset zoneOffset;
 
-    @ManyToMany
-    @JoinTable(name = "city_event",
-            joinColumns = @JoinColumn(name = "city_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
-    private List<Event> events = new ArrayList<>();
+    @OneToMany(mappedBy = "city")
+    private List<EventSchedule> eventSchedules = new ArrayList<>();
 
     @OneToMany(mappedBy = "city")
     private List<Cinema> cinemas = new ArrayList<>();

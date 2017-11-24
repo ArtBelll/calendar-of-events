@@ -6,16 +6,13 @@ import com.cronutils.parser.CronParser;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.Event;
-import ru.korbit.cecommon.domain.Showtime;
 import ru.korbit.cecommon.domain.SimpleEvent;
 import ru.korbit.cecommon.packet.EventCronIterator;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -25,9 +22,7 @@ public class EventActionHelper {
 
     private final CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(QUARTZ));
 
-    private final Supplier<TreeSet<ZonedDateTime>> supplier =
-            () -> new TreeSet<>(DateTimeUtils.zonedDateTimeComparator);
-
+    private boolean isExistToday = false;
 
     private final Long cityId;
     private final ZonedDateTime from;
@@ -39,48 +34,62 @@ public class EventActionHelper {
         this.to = to;
     }
 
-    public Set<ZonedDateTime> getSetActives(Event event) {
+    public Stream<ZonedDateTime> getSetActiveDays(Event event) {
         if (event instanceof CinemaEvent) {
-            return this.getSetActives((CinemaEvent) event);
+            return this.getSetActiveDays((CinemaEvent) event);
         } else if (event instanceof SimpleEvent) {
-            return getSetActives((SimpleEvent) event);
+            return getSetActiveDays((SimpleEvent) event);
         } else {
             throw new RuntimeException("Unknown event");
         }
     }
 
-    private Set<ZonedDateTime> getSetActives(SimpleEvent simpleEvent) {
-        TreeSet<ZonedDateTime> resultSet = simpleEvent.getActionSchedules()
+    private Stream<ZonedDateTime> getSetActiveDays(CinemaEvent cinemaEvent) {
+        val schedule = cinemaEvent.getEventSchedules()
+                .stream()
+                .filter(eventSchedule -> eventSchedule.getCity().getId().equals(cityId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Event haven't schedule"));
+
+        val start = schedule.getStart().isBefore(from) ? from : schedule.getStart();
+        val finish = schedule.getFinish().isAfter(to) ? to : schedule.getFinish();
+
+        boolean isCurrentDay = false;
+        if (DateTimeUtils.compareDays(ZonedDateTime.now(), start) && !isExistToday) {
+            isCurrentDay = isExistToday = cinemaEvent.getShowtimeList()
+                    .stream()
+                    .anyMatch(showtime -> showtime.getStartTime().isBefore(start.plusDays(1))
+                            && showtime.getStartTime().isAfter(start));
+
+        }
+
+        val realStart = isCurrentDay ? start : start.plusDays(1);
+        return DateTimeUtils.getListOfDayBetween(realStart.truncatedTo(ChronoUnit.DAYS), finish);
+    }
+
+    private Stream<ZonedDateTime> getSetActiveDays(SimpleEvent simpleEvent) {
+        Stream<ZonedDateTime> resultSet = simpleEvent.getActionSchedules()
                 .parallelStream()
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
                     val cron = ExecutionTime.forCron(parser.parse(action.getCron()));
                     return getSetActiveDaysInCron(cron, action.getDuration());
                 })
-                .flatMap(set -> set)
+                .flatMap(set -> set.map(date -> date.truncatedTo(ChronoUnit.DAYS)))
                 .filter(date -> !DateTimeUtils.dateInDates(simpleEvent.getNoneAction(), date)
-                        && !DateTimeUtils.dateInDates(simpleEvent.getDateExceptions(), date))
-                .collect(Collectors.toCollection(supplier));
+                        && !DateTimeUtils.dateInDates(simpleEvent.getDatesException(), date));
 
-        simpleEvent.getDateExceptions().forEach(date -> {
+        val dateExceptions = new HashSet<ZonedDateTime>();
+        simpleEvent.getDatesException().forEach(date -> {
             if (date.isBefore(to) && date.isAfter(from)) {
-                resultSet.add(date);
+                dateExceptions.add(date);
             }
         });
-        return resultSet;
+        return Stream.concat(resultSet, dateExceptions.stream());
     }
 
     private Stream<ZonedDateTime> getSetActiveDaysInCron(ExecutionTime cron, Duration duration) {
         Iterable<ZonedDateTime> iterable = () -> new EventCronIterator(cron, duration, from, to);
         return StreamSupport.stream(iterable.spliterator(), false);
-    }
-
-    private Set<ZonedDateTime> getSetActives(CinemaEvent cinemaEvent) {
-        return cinemaEvent.getShowtimeList()
-                .parallelStream()
-                .filter(showtime -> showtime.getHall().getCinema().getCity().getId().equals(cityId)
-                        && showtime.getStartTime().isBefore(to) && showtime.getStartTime().isAfter(from))
-                .map(Showtime::getStartTime)
-                .collect(Collectors.toCollection(supplier));
     }
 }
