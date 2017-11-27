@@ -14,7 +14,7 @@ import java.util.HashMap;
 @RestController
 public class StatusConnectionController {
 
-    @GetMapping(value = "/status")
+    @GetMapping(value = "status")
     public ResponseEntity<?> getStatus() {
         val body = new HashMap<String, String>();
         body.put("message", "OK");

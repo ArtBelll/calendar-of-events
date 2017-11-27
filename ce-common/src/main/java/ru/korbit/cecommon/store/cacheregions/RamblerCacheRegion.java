@@ -12,7 +12,7 @@ public enum RamblerCacheRegion implements CacheRegion {
     HALL("hall"),
     SHOWTIME("showtime"),
     EVENT("event"),
-    EVENT_SCHEDULE("event_schedule"),
+    EVENT_SCHEDULE("event-schedule"),
     EVENT_TYPE("event-type");
 
     private static final String PREFIX = "rambler-";

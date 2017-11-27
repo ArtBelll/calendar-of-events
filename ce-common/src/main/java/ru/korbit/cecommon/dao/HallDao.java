@@ -9,5 +9,5 @@ import java.util.Optional;
  */
 public interface HallDao extends GenericDao<Hall> {
 
-    Optional<Hall> getByRamblerId(String id);
+    Optional<Hall> getByThirdPartyId(String id);
 }

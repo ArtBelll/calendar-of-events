@@ -44,8 +44,8 @@ public class RamblerShowtime {
     @JsonProperty("HallName")
     private String hallName;
 
-    public Hall toDBHall() {
-        return new Hall(hallName, hallRamblerId);
+    public Hall toDBHall(String cinemaName) {
+        return new Hall(hallName, cinemaName + hallRamblerId);
     }
 
     public Showtime toDbShowtime(ZoneOffset offset) {

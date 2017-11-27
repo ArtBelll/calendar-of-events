@@ -24,6 +24,6 @@ public class HallStoreHelper extends BaseStoreHelper<Hall> implements CommonStor
 
     @Override
     public Optional<Hall> searchFromDb(Hall hall) {
-        return hallDao.getByRamblerId(hall.getRamblerId());
+        return hallDao.getByThirdPartyId(hall.getThirdPartyId());
     }
 }

@@ -27,8 +27,8 @@ public class Hall implements GetIdable {
     private String name;
 
     @NonNull
-    @Column(name = "rambler_id", unique = true, nullable = false)
-    private String ramblerId;
+    @Column(name = "third_party_id", unique = true, nullable = false)
+    private String thirdPartyId;
 
     @ManyToOne
     @JoinColumn(name = "cinema_id")

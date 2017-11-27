@@ -11,12 +11,9 @@ import ru.korbit.cecommon.services.RamblerKassaService;
 import ru.korbit.cecommon.services.TimeZone;
 import ru.korbit.cecommon.store.StoresHelpersHolder;
 import ru.korbit.cecommon.store.cacheregions.RamblerCacheRegion;
-import ru.korbit.cecommon.utility.DateTimeUtils;
 import ru.korbit.ceramblerkasse.api.RamblerKassaApi;
 import ru.korbit.ceramblerkasse.utility.TimeUtility;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import sun.awt.Mutex;
 
 /**
  * Created by Artur Belogur on 13.10.17.
@@ -33,21 +30,25 @@ public class RamblerKasseLoader implements RamblerKassaService {
 
     private final StoresHelpersHolder storesHelpersHolder;
 
+    private final AsyncLoader asyncLoader;
+
     private final TimeZone timeZone;
+
+    private final Mutex timeZoneMutex = new Mutex();
 
     @Autowired
     public RamblerKasseLoader(RamblerKassaApi ramblerKassa,
                               StoresHelpersHolder storesHelpersHolder,
-                              TimeZone timeZone) {
+                              AsyncLoader asyncLoader, TimeZone timeZone) {
         this.ramblerKassa = ramblerKassa;
         this.storesHelpersHolder = storesHelpersHolder;
+        this.asyncLoader = asyncLoader;
         this.timeZone = timeZone;
     }
 
     @Override
     //TODO for all city
     public void load() {
-        ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         ramblerKassa.getCities().stream()
                 .filter(city -> city.getCityRamblerId().equals(KALININGRAD_ID)
                         || city.getCityRamblerId().equals(MOSCOW_ID))
@@ -58,16 +59,15 @@ public class RamblerKasseLoader implements RamblerKassaService {
                             RamblerCacheRegion.CITY);
 
                     if (currentCity.getZoneOffset() == null) {
+                        timeZoneMutex.lock();
+                        unlockTimeZoneMutex();
                         currentCity.setZoneOffset(timeZone
                                 .getZoneOffsetByLatlng(ramblerCity.getLat(), ramblerCity.getLng()));
                     }
 
                     loadCinemas(ramblerCity.getCityRamblerId(), currentCity);
                     loadEvents(ramblerCity.getCityRamblerId(), currentCity);
-                    service.submit(() -> {
-                        loadShowtimes(ramblerCity.getCityRamblerId(), currentCity);
-                    });
-                    service.shutdown();
+                    asyncLoader.loadShowtimes(ramblerCity.getCityRamblerId(), currentCity);
                 });
     }
 
@@ -103,71 +103,17 @@ public class RamblerKasseLoader implements RamblerKassaService {
                         currentEvent.getEventTypes().add(eventType);
                         storesHelpersHolder.updateDb(currentEvent);
                     }
-
-                    storesHelpersHolder.putIfAbsent(
-                            new Pair<>(ramblerEvent.getEventRamblerId(), cityRamblerId),
-                            new EventSchedule(currentEvent, currentCity),
-                            RamblerCacheRegion.EVENT_SCHEDULE
-                    );
                 });
     }
 
-    private void loadShowtimes(Integer cityRamblerId, City currentCity) {
-        ramblerKassa.getShowtimesCityLessDate(cityRamblerId, TimeUtility.getMaxDate(currentCity.getZoneOffset()))
-                .forEach(ramblerShowtime -> {
-
-                    if (ramblerShowtime.getPriceMin() == null || ramblerShowtime.getPriceMax() == null) {
-                        return;
-                    }
-
-                    val currentEvent = storesHelpersHolder.getUsingCache(
-                            ramblerShowtime.getEventId(),
-                            RamblerCacheRegion.EVENT,
-                            Event.class
-                    );
-                    val currentCinema = storesHelpersHolder.getUsingCache(
-                            ramblerShowtime.getPlaceId(),
-                            RamblerCacheRegion.CINEMA,
-                            Cinema.class
-                    );
-                    val currentHall = storesHelpersHolder.putIfAbsent(
-                            ramblerShowtime.getHallRamblerId(),
-                            ramblerShowtime.toDBHall(),
-                            RamblerCacheRegion.HALL
-                    );
-
-                    if (!currentCinema.getHalls().contains(currentHall)) {
-                        currentHall.setCinema(currentCinema);
-                    }
-
-                    val showtimeDb = ramblerShowtime.toDbShowtime(currentCity.getZoneOffset());
-                    showtimeDb.setCinemaEvent((CinemaEvent) currentEvent);
-                    showtimeDb.setHall(currentHall);
-                    val currentShowtime = storesHelpersHolder.putIfAbsent(
-                            ramblerShowtime.getShowtimeRamblerId(),
-                            showtimeDb,
-                            RamblerCacheRegion.SHOWTIME,
-                            DateTimeUtils.getExpireMillis(showtimeDb.getStartTime())
-                    );
-
-                    val currentEventSchedule = storesHelpersHolder.getUsingCache(
-                            new Pair<>(ramblerShowtime.getEventId(), cityRamblerId),
-                            RamblerCacheRegion.EVENT_SCHEDULE,
-                            EventSchedule.class
-                    );
-
-                    if (currentShowtime.getStartTime().isBefore(currentEventSchedule.getStart())) {
-                        currentEventSchedule.setStart(currentShowtime.getStartTime());
-                    }
-                    if (currentShowtime.getStartTime().isAfter(currentEventSchedule.getFinish())) {
-                        currentEventSchedule.setFinish(currentShowtime.getStartTime());
-                        storesHelpersHolder.updateExpire(
-                                ramblerShowtime.getEventId(),
-                                currentEvent.getId(),
-                                RamblerCacheRegion.EVENT,
-                                DateTimeUtils.getExpireMillis(currentEventSchedule.getFinish().plusDays(1)),
-                                Event.class);
-                    }
-                });
+    private void unlockTimeZoneMutex() {
+        // service allows to make requests only once a second
+        val zoneTimeInterval = 1100;
+        try {
+            Thread.sleep(zoneTimeInterval);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timeZoneMutex.unlock();
     }
 }
