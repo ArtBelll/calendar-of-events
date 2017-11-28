@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 public class OrganisationDaoImpl extends SessionFactoryHolder<Organisation> implements OrganisationDao {
 
     @Override
-    public Optional<Organisation> getByName(String name) {
+    public Optional<Organisation> getByEmail(String email) {
         return getSession()
-                .createQuery("SELECT o FROM Organisation o WHERE o.name = :name", Organisation.class)
-                .setParameter("name", name)
+                .createQuery("SELECT o FROM Organisation o WHERE o.email = :email", Organisation.class)
+                .setParameter("email", email)
                 .uniqueResultOptional();
     }
 

@@ -51,6 +51,11 @@ public class EmailAuthController extends SessionController {
 
     @PostMapping(value = "auth/admin-request")
     public ResponseEntity<?> sendEmailRequest(@RequestBody Organisation organisation) throws MessagingException {
+        if (organisationDao.getByEmail(organisation.getEmail()).isPresent()) {
+            log.warn("Email {} is used", organisation.getEmail());
+            throw new BadRequest("Email" + organisation.getEmail() + " is used");
+        }
+
         organisation.setStatus(StatusOfOrganisation.REQUEST);
         organisationDao.save(organisation);
 

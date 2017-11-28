@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public interface OrganisationDao extends GenericDao<Organisation> {
 
-    Optional<Organisation> getByName(String name);
+    Optional<Organisation> getByEmail(String email);
 
     Stream<Organisation> getByStatus(StatusOfOrganisation status);
 
