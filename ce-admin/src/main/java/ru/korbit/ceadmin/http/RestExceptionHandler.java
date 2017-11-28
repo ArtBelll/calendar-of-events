@@ -108,8 +108,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> runtimeException(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        log.error(ex.getMessage(), ex);
-
         if (ex.getCause() instanceof InvalidDefinitionException) {
             ErrorResponse error = new ErrorResponse(
                     new Error(400, "Missing field: " + ex.getCause().getCause().getMessage()),
@@ -123,6 +121,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new Error(500, ex.getMessage()),
                 "ERR"
         );
+
+        log.error(ex.getMessage(), ex);
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

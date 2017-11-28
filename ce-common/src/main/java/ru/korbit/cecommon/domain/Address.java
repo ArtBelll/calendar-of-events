@@ -1,27 +1,27 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "addresses")
 @Data
+@EqualsAndHashCode(exclude = "organisation")
 public class Address {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private City city;
+    private String city;
 
     private String street;
 
     private String house;
 
-    private int postcode;
+    private Integer postcode;
 
     @ManyToOne
     @JoinColumn(name = "organisation_id")

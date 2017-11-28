@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.korbit.cecommon.packet.StatusOfOrganisation;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import java.util.Set;
 @Table(name = "organisations")
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"addresses", "contacts"})
 public class Organisation {
 
     @Id

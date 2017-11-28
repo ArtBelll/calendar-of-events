@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 @Data
 public class ROrganisation {
     private Long id;
-    private String email;
     private String name;
     private String legalName;
     private String workingHours;
@@ -20,7 +19,6 @@ public class ROrganisation {
     public ROrganisation(Organisation organisation) {
         this.id = organisation.getId();
         this.name = organisation.getName();
-        this.email = organisation.getEmail();
         this.legalName = organisation.getLegalName();
         this.workingHours = organisation.getWorkingHours();
         this.type = organisation.getType();
