@@ -40,9 +40,6 @@ public class Organisation {
     @Column(nullable = false)
     private String type;
 
-    @ElementCollection
-    private Set<String> address = new HashSet<>();
-
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private StatusOfOrganisation status;
