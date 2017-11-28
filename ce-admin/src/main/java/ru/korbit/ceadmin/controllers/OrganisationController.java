@@ -51,6 +51,7 @@ public class OrganisationController extends SessionController {
 
         origin.setName(modify.getName());
         origin.setLegalName(modify.getLegalName());
+        origin.setOwner(modify.getOwner());
         origin.setType(modify.getType());
         origin.setWorkingHours(modify.getWorkingHours());
 

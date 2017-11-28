@@ -11,6 +11,7 @@ public class ModifyOrganisation {
     private String name;
     private String legalName;
     private String workingHours;
+    private String owner;
     private String type;
     private Set<Address> addresses;
     private Set<Contact> contacts;

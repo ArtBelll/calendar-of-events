@@ -36,6 +36,10 @@ public class Organisation {
 
     @NonNull
     @Column(nullable = false)
+    private String owner;
+
+    @NonNull
+    @Column(nullable = false)
     private String type;
 
     @Enumerated(value = EnumType.STRING)
