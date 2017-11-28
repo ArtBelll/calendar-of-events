@@ -26,6 +26,8 @@
         <mapping class="ru.korbit.cecommon.domain.Email"/>
         <mapping class="ru.korbit.cecommon.domain.User"/>
         <mapping class="ru.korbit.cecommon.domain.ActionSchedule"/>
+        <mapping class="ru.korbit.cecommon.domain.Contact"/>
+        <mapping class="ru.korbit.cecommon.domain.Address"/>
 
     </session-factory>
 </hibernate-configuration>
