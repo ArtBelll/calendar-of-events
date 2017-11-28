@@ -1,6 +1,9 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import ru.korbit.cecommon.packet.StatusOfOrganisation;
 
 import javax.persistence.*;
@@ -10,24 +13,31 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "organisations")
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Organisation {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @NonNull
+    @Column(nullable = false)
     private String name;
 
+    @NonNull
     @Column(unique = true, nullable = false)
     private String legalName;
 
+    @NonNull
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(name = "working_hours")
     private String workingHours;
 
+    @NonNull
+    @Column(nullable = false)
     private String type;
 
     @ElementCollection

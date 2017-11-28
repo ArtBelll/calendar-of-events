@@ -51,11 +51,6 @@ public class EmailAuthController extends SessionController {
 
     @PostMapping(value = "auth/admin-request")
     public ResponseEntity<?> sendEmailRequest(@RequestBody Organisation organisation) throws MessagingException {
-        if (organisationDao.getByName(organisation.getName()).isPresent()) {
-            log.warn("Organisation {} is already exist", organisation.getName());
-            throw new BadRequest("Organisation " + organisation.getName() + " is already exist");
-        }
-
         organisation.setStatus(StatusOfOrganisation.REQUEST);
         organisationDao.save(organisation);
 

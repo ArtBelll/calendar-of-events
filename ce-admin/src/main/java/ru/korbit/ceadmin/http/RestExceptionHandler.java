@@ -1,5 +1,6 @@
 package ru.korbit.ceadmin.http;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+
+    @ExceptionHandler({NullPointerException.class})
+    protected ResponseEntity<?> handleInvalidBody(NullPointerException ex, WebRequest request) {
+        HttpHeaders headers = jsonHeaders();
+
+        ErrorResponse error = new ErrorResponse(
+                new Error(400, "Missing field " + ex.getMessage()),
+                "ERR");
+
+        return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler({UnAuthorized.class})
@@ -96,12 +108,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> runtimeException(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
+        log.error(ex.getMessage(), ex);
+
+        if (ex.getCause() instanceof InvalidDefinitionException) {
+            ErrorResponse error = new ErrorResponse(
+                    new Error(400, "Missing field: " + ex.getCause().getCause().getMessage()),
+                    "ERR"
+            );
+
+            return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
+        }
+
         ErrorResponse error = new ErrorResponse(
                 new Error(500, ex.getMessage()),
                 "ERR"
         );
-
-        log.error(ex.getMessage(), ex);
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
