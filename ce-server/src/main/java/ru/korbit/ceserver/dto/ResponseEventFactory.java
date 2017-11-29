@@ -4,12 +4,12 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.korbit.cecommon.dao.ShowtimeDao;
-import ru.korbit.cecommon.domain.CinemaEvent;
-import ru.korbit.cecommon.domain.City;
-import ru.korbit.cecommon.domain.Event;
-import ru.korbit.cecommon.domain.RecurringEvent;
+import ru.korbit.cecommon.domain.*;
+import ru.korbit.cecommon.exeptions.BadRequest;
+import ru.korbit.cecommon.utility.EventActionHelper;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ public class ResponseEventFactory {
             return getRCinemaEvent((CinemaEvent) event, city, now);
         }
         if (event instanceof RecurringEvent) {
-            return new RSimpleEvent(event);
+            return getRRecurringEvent((RecurringEvent) event, city, now);
         }
         throw new RuntimeException("Not exist response for event = " + event.toString());
     }
@@ -71,6 +71,21 @@ public class ResponseEventFactory {
                 .collect(Collectors.toList());
 
         return new RCinemaEvent(cinemaEvent, cinemas, priceRange.min, priceRange.max);
+    }
+
+    private RRecurringEvent getRRecurringEvent(RecurringEvent recurringEvent, City city, ZonedDateTime now) {
+        val eventActionHelper = new EventActionHelper(city.getId(), now, now.truncatedTo(ChronoUnit.DAYS).plusDays(1));
+        val time = eventActionHelper.getSetActiveDays(recurringEvent)
+                .findFirst()
+                .orElseThrow(() -> new BadRequest("Haven't actions today"));
+        val duration = recurringEvent.getActionSchedules()
+                .stream()
+                .filter(actionSchedule -> actionSchedule.getCity().getId().equals(city.getId()))
+                .findFirst()
+                .map(ActionSchedule::getDuration)
+                .orElseThrow(() -> new BadRequest("Event haven't schedule"));
+
+        return new RRecurringEvent(recurringEvent, time, duration);
     }
 
     private class PriceRange {

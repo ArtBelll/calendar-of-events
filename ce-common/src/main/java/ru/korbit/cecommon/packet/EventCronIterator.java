@@ -9,14 +9,14 @@ import java.util.Iterator;
 
 public class EventCronIterator implements Iterator<ZonedDateTime> {
 
-    private final ExecutionTime cron;
+    private final ExecutionTime executionTime;
     private final Duration duration;
 
     private ZonedDateTime i;
     private ZonedDateTime to;
 
-    public EventCronIterator(ExecutionTime cron, Duration duration, ZonedDateTime from, ZonedDateTime to) {
-        this.cron = cron;
+    public EventCronIterator(ExecutionTime executionTime, Duration duration, ZonedDateTime from, ZonedDateTime to) {
+        this.executionTime = executionTime;
         this.duration = duration;
         this.i = from;
         this.to = to;
@@ -24,13 +24,13 @@ public class EventCronIterator implements Iterator<ZonedDateTime> {
 
     @Override
     public boolean hasNext() {
-        return cron.nextExecution(i).isPresent()
-                && cron.nextExecution(i).get().isBefore(to);
+        return executionTime.nextExecution(i).isPresent()
+                && executionTime.nextExecution(i).get().isBefore(to);
     }
 
     @Override
     public ZonedDateTime next() {
-        val nextAction = cron.nextExecution(i).get();
+        val nextAction = executionTime.nextExecution(i).get();
         i = nextAction.plus(duration);
         return nextAction;
     }
