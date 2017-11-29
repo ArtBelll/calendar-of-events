@@ -1,8 +1,11 @@
 package ru.korbit.cecommon.utility;
 
 import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
+import com.google.common.collect.Iterables;
 import lombok.val;
+import ru.korbit.cecommon.packet.EventCronIterator;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -12,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.cronutils.model.CronType.QUARTZ;
 
@@ -56,5 +60,11 @@ public final class DateTimeUtils {
 
     public static boolean compareDays(ZonedDateTime d1, ZonedDateTime d2) {
         return d1.truncatedTo(ChronoUnit.DAYS).isEqual(d2.truncatedTo(ChronoUnit.DAYS));
+    }
+
+    public static Stream<ZonedDateTime> getSetActiveDaysInCron(ExecutionTime cron, Duration duration,
+                                                         ZonedDateTime from, ZonedDateTime to) {
+        Iterable<ZonedDateTime> iterable = () -> new EventCronIterator(cron, duration, from, to);
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }

@@ -2,6 +2,7 @@ package ru.korbit.ceadmin.controllers;
 
 import com.cronutils.model.time.ExecutionTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import jodd.io.FileNameUtil;
 import jodd.util.RandomString;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.dao.*;
 import ru.korbit.cecommon.domain.EventSchedule;
 import ru.korbit.cecommon.exeptions.BadRequest;
+import ru.korbit.cecommon.packet.EventCronIterator;
 import ru.korbit.cecommon.store.cacheregions.AdminCacheRegion;
 import ru.korbit.cecommon.store.impl.EventStoreHelper;
 import ru.korbit.cecommon.utility.DateTimeUtils;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @RestController
@@ -99,10 +102,13 @@ public class EventController extends SessionController {
 
                     val executionTime = ExecutionTime.forCron(DateTimeUtils.parser.parse(actionScheduleDto.getCron()));
 
-                    val start = executionTime.nextExecution(ZonedDateTime.now(city.getZoneOffset()))
-                            .orElseThrow(() -> new BadRequest("Cron expression haven't start"));
-                    val finish = executionTime.lastExecution(ZonedDateTime.now(city.getZoneOffset()))
-                            .orElseThrow(() -> new BadRequest("Cron expression haven't finish"));
+                    Iterable<ZonedDateTime> iterable = () ->
+                            new EventCronIterator(executionTime, actionSchedule.getDuration(),
+                                    ZonedDateTime.now(city.getZoneOffset()),
+                                    LocalDateTime.MAX.atZone(city.getZoneOffset()));
+
+                    val start = Iterables.getFirst(iterable, null);
+                    val finish = Iterables.getLast(iterable, null);
                     val eventSchedule = new EventSchedule(recurringEvent, city);
                     eventSchedule.setStart(start);
                     eventSchedule.setFinish(finish);

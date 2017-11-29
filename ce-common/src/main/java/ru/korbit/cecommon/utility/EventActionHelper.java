@@ -61,7 +61,8 @@ public class EventActionHelper {
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
                     val cron = ExecutionTime.forCron(DateTimeUtils.parser.parse(action.getCron()));
-                    return getSetActiveDaysInCron(cron, action.getDuration());
+                    return DateTimeUtils.getSetActiveDaysInCron(cron, action.getDuration(),
+                            from, to);
                 })
                 .anyMatch(dates -> dates.anyMatch(date -> date.isAfter(from) && date.isBefore(to)
                         && recurringEvent.getNoneAction()
@@ -108,7 +109,8 @@ public class EventActionHelper {
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
                     val cron = ExecutionTime.forCron(DateTimeUtils.parser.parse(action.getCron()));
-                    return getSetActiveDaysInCron(cron, action.getDuration());
+                    return DateTimeUtils.getSetActiveDaysInCron(cron, action.getDuration(),
+                            from, to);
                 })
                 .flatMap(set -> set.map(date -> date.truncatedTo(ChronoUnit.DAYS)))
                 .filter(date -> !DateTimeUtils.dateInDates(recurringEvent.getNoneAction(), date)
@@ -121,10 +123,5 @@ public class EventActionHelper {
             }
         });
         return Stream.concat(resultSet, dateExceptions.stream());
-    }
-
-    private Stream<ZonedDateTime> getSetActiveDaysInCron(ExecutionTime cron, Duration duration) {
-        Iterable<ZonedDateTime> iterable = () -> new EventCronIterator(cron, duration, from, to);
-        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }
