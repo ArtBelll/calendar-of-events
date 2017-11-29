@@ -1,5 +1,7 @@
 package ru.korbit.cecommon.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -23,6 +25,7 @@ public class ActionSchedule {
     private String cron;
 
     @NonNull
+    @JsonDeserialize(using = DurationDeserializer.class)
     private Duration duration;
 
     @ManyToOne
