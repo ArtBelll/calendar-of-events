@@ -54,4 +54,7 @@ public class Organisation {
 
     @OneToMany(mappedBy = "organisation")
     private Set<Contact> contacts = new HashSet<>();
+
+    @OneToMany(mappedBy = "organisation")
+    private Set<Event> events = new HashSet<>();
 }

@@ -1,12 +1,11 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.*;
 import java.util.ArrayList;
@@ -19,21 +18,30 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 public abstract class Event implements GetIdable {
+
+    public Event(String title, String description, URL imageURL, String additionally) {
+        this.title = title;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.additionally = additionally;
+    }
 
     @Id
     @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
-    @NonNull private String title;
+    @NonNull
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    @NonNull private String description;
+    @NonNull
+    private String description;
 
     @Column(name = "image_url", nullable = false)
-    @NonNull private URL imageURL;
+    @NonNull
+    private URL imageURL = Constants.getDefaultImage();
 
     @Column(name = "thumb_image_url")
     private URL thumbImageURL;
@@ -50,4 +58,8 @@ public abstract class Event implements GetIdable {
 
     @ManyToMany(mappedBy = "events")
     private List<EventType> eventTypes = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "organisation_id")
+    private Organisation organisation;
 }
