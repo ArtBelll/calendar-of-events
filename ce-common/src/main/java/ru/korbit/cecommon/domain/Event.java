@@ -1,15 +1,17 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Artur Belogur on 10.10.17.
@@ -57,7 +59,7 @@ public abstract class Event implements GetIdable {
     private List<URL> links = new ArrayList<>();
 
     @ManyToMany(mappedBy = "events")
-    private List<EventType> eventTypes = new ArrayList<>();
+    private Set<EventType> eventTypes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "organisation_id")

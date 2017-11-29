@@ -1,6 +1,7 @@
 package ru.korbit.ceadmin.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.korbit.cecommon.domain.RecurringEvent;
 
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class RecurringEventDto {
     private Long id;
     private String title;
@@ -18,6 +20,7 @@ public class RecurringEventDto {
     private Float longitude;
     private String address;
     private String place;
+    private Set<EventTypeDto> eventTypes;
     private Set<ActionScheduleDto> actionSchedules = new HashSet<>();
 
     public RecurringEventDto(RecurringEvent recurringEvent) {
@@ -30,6 +33,10 @@ public class RecurringEventDto {
         this.longitude = recurringEvent.getLongitude();
         this.address = recurringEvent.getAddress();
         this.place = recurringEvent.getPlace();
+        this.eventTypes = recurringEvent.getEventTypes()
+                .stream()
+                .map(EventTypeDto::new)
+                .collect(Collectors.toSet());
         this.actionSchedules = recurringEvent.getActionSchedules()
                 .stream()
                 .map(ActionScheduleDto::new)

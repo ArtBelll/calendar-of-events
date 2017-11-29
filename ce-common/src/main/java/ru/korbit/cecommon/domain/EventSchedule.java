@@ -26,13 +26,13 @@ public class EventSchedule implements GetIdable {
     @NonNull
     @Id
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
 
     @NonNull
     @Id
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
     private City city;
 
     @NonNull

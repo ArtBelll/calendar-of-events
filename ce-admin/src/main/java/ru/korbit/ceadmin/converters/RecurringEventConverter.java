@@ -1,6 +1,5 @@
 package ru.korbit.ceadmin.converters;
 
-import lombok.val;
 import ru.korbit.ceadmin.dto.RecurringEventDto;
 import ru.korbit.cecommon.domain.RecurringEvent;
 import ru.korbit.cecommon.packet.Converter;
@@ -9,7 +8,7 @@ public class RecurringEventConverter extends Converter<RecurringEventDto, Recurr
 
     public RecurringEventConverter() {
         super(recurringEventDto -> {
-            val event = new RecurringEvent();
+            RecurringEvent event = new RecurringEvent();
             event.setTitle(recurringEventDto.getTitle());
             event.setDescription(recurringEventDto.getDescription());
             event.setAdditionally(recurringEventDto.getAdditionally());
