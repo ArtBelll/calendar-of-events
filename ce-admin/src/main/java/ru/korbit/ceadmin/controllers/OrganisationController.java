@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.korbit.ceadmin.dto.ModifyOrganisation;
-import ru.korbit.ceadmin.dto.ROrganisation;
+import ru.korbit.ceadmin.dto.OrganisationDto;
 import ru.korbit.cecommon.dao.AddressDao;
 import ru.korbit.cecommon.dao.ContactDao;
 import ru.korbit.cecommon.dao.OrganisationDao;
@@ -39,7 +39,7 @@ public class OrganisationController extends SessionController {
     @GetMapping(value = "admin/organisation")
     public ResponseEntity<?> getProfile(HttpServletRequest request) {
         val user = getSessionUser(request);
-        val organisation = new ROrganisation(user.getOrganisation());
+        val organisation = new OrganisationDto(user.getOrganisation());
         return new ResponseEntity<>(organisation, HttpStatus.OK);
     }
 
@@ -105,6 +105,6 @@ public class OrganisationController extends SessionController {
                     }
                 });
 
-        return new ResponseEntity<>(new ROrganisation(origin), HttpStatus.OK);
+        return new ResponseEntity<>(new OrganisationDto(origin), HttpStatus.OK);
     }
 }

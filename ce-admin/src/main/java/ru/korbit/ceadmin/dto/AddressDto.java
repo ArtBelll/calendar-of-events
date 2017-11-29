@@ -4,14 +4,14 @@ import lombok.Data;
 import ru.korbit.cecommon.domain.Address;
 
 @Data
-public class RAddress {
+public class AddressDto {
     private Long id;
     private String city;
     private String street;
     private String house;
     private Integer postcode;
 
-    public RAddress(Address address) {
+    public AddressDto(Address address) {
         this.id = address.getId();
         this.city = address.getCity();
         this.street = address.getStreet();

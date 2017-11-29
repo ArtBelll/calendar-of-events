@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.korbit.ceadmin.dto.RUser;
+import ru.korbit.ceadmin.dto.UserDto;
 import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.packet.RoleOfUser;
 
@@ -27,7 +27,7 @@ public class UserController extends SessionController {
     @GetMapping(value = "me")
     public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
         val user = getSessionUser(request);
-        return new ResponseEntity<>(new RUser(user), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDto(user), HttpStatus.OK);
     }
 
     @GetMapping(value = "permission/{role}")

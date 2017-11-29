@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import ru.korbit.ceadmin.dto.ROrganisation;
-import ru.korbit.ceadmin.dto.RUser;
+import ru.korbit.ceadmin.dto.OrganisationDto;
+import ru.korbit.ceadmin.dto.UserDto;
 import ru.korbit.ceadmin.mail.MailFactory;
 import ru.korbit.ceadmin.mail.MailSenderHolder;
 import ru.korbit.cecommon.dao.EmailDao;
@@ -70,7 +70,7 @@ public class EmailAuthController extends SessionController {
     @GetMapping(value = "superuser/auth/admin-requests")
     public ResponseEntity<?> getAdminsRequest() {
         val organisations = organisationDao.getByStatus(StatusOfOrganisation.REQUEST)
-                .map(ROrganisation::new)
+                .map(OrganisationDto::new)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(organisations, HttpStatus.OK);
     }
@@ -133,6 +133,6 @@ public class EmailAuthController extends SessionController {
 
         val jwt = setSessionUser(user);
         user.setLogged(LocalDateTime.now());
-        return createdResponse(new RUser(user), jwt, isSslRequest(request));
+        return createdResponse(new UserDto(user), jwt, isSslRequest(request));
     }
 }

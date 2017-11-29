@@ -2,10 +2,7 @@ package ru.korbit.cecommon.domain;
 
 import lombok.Data;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +26,7 @@ public class RecurringEvent extends Event {
 
     private String place;
 
-    @OneToMany(mappedBy = "recurringEvent")
+    @OneToMany(mappedBy = "recurringEvent", cascade = CascadeType.REMOVE)
     private List<ActionSchedule> actionSchedules = new ArrayList<>();
 
     @ElementCollection

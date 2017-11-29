@@ -7,16 +7,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-public class ROrganisation {
+public class OrganisationDto {
     private Long id;
     private String name;
     private String legalName;
     private String workingHours;
     private String type;
-    private Set<RAddress> addresses;
-    private Set<RContact> contacts;
+    private Set<AddressDto> addresses;
+    private Set<ContactDto> contacts;
 
-    public ROrganisation(Organisation organisation) {
+    public OrganisationDto(Organisation organisation) {
         this.id = organisation.getId();
         this.name = organisation.getName();
         this.legalName = organisation.getLegalName();
@@ -24,11 +24,11 @@ public class ROrganisation {
         this.type = organisation.getType();
         this.addresses = organisation.getAddresses()
                 .stream()
-                .map(RAddress::new)
+                .map(AddressDto::new)
                 .collect(Collectors.toSet());
         this.contacts = organisation.getContacts()
                 .stream()
-                .map(RContact::new)
+                .map(ContactDto::new)
                 .collect(Collectors.toSet());
     }
 }
