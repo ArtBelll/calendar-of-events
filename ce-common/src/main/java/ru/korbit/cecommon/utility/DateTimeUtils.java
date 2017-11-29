@@ -1,22 +1,26 @@
 package ru.korbit.cecommon.utility;
 
+import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.parser.CronParser;
 import lombok.val;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.cronutils.model.CronType.QUARTZ;
 
 /**
  * Created by Artur Belogur on 19.10.17.
  */
 public final class DateTimeUtils {
+
+    public static final CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(QUARTZ));
 
     private DateTimeUtils() {}
 

@@ -1,8 +1,6 @@
 package ru.korbit.cecommon.utility;
 
-import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
-import com.cronutils.parser.CronParser;
 import lombok.val;
 import ru.korbit.cecommon.domain.CinemaEvent;
 import ru.korbit.cecommon.domain.Event;
@@ -16,11 +14,7 @@ import java.util.HashSet;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.cronutils.model.CronType.QUARTZ;
-
 public class EventActionHelper {
-
-    private final CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(QUARTZ));
 
     private boolean isExistToday = false;
 
@@ -66,7 +60,7 @@ public class EventActionHelper {
                 .parallelStream()
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
-                    val cron = ExecutionTime.forCron(parser.parse(action.getCron()));
+                    val cron = ExecutionTime.forCron(DateTimeUtils.parser.parse(action.getCron()));
                     return getSetActiveDaysInCron(cron, action.getDuration());
                 })
                 .anyMatch(dates -> dates.anyMatch(date -> date.isAfter(from) && date.isBefore(to)
@@ -113,7 +107,7 @@ public class EventActionHelper {
                 .parallelStream()
                 .filter(actionSchedule -> actionSchedule.getCity().getId().equals(cityId))
                 .map(action -> {
-                    val cron = ExecutionTime.forCron(parser.parse(action.getCron()));
+                    val cron = ExecutionTime.forCron(DateTimeUtils.parser.parse(action.getCron()));
                     return getSetActiveDaysInCron(cron, action.getDuration());
                 })
                 .flatMap(set -> set.map(date -> date.truncatedTo(ChronoUnit.DAYS)))
