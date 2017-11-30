@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.domain.User;
 import ru.korbit.cecommon.packet.RoleOfUser;
@@ -69,5 +71,15 @@ public class Application extends SpringBootServletInitializer {
             user.getRoles().add(RoleOfUser.SUPERUSER);
             userDao.save(user);
         }
+    }
+
+    @Bean
+    public WebMvcConfigurer crossConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
     }
 }
