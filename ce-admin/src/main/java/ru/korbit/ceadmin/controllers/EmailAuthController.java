@@ -1,5 +1,6 @@
 package ru.korbit.ceadmin.controllers;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.korbit.ceadmin.dto.OrganisationDto;
-import ru.korbit.ceadmin.dto.UserDto;
 import ru.korbit.ceadmin.mail.MailFactory;
 import ru.korbit.ceadmin.mail.MailSenderHolder;
 import ru.korbit.cecommon.dao.EmailDao;
@@ -18,13 +18,13 @@ import ru.korbit.cecommon.dao.UserDao;
 import ru.korbit.cecommon.domain.Organisation;
 import ru.korbit.cecommon.domain.User;
 import ru.korbit.cecommon.exeptions.BadRequest;
-import ru.korbit.cecommon.exeptions.UserNotExists;
 import ru.korbit.cecommon.packet.RoleOfUser;
 import ru.korbit.cecommon.packet.StatusOfOrganisation;
 import ru.korbit.cecommon.utility.PasswordHelper;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -133,6 +133,15 @@ public class EmailAuthController extends SessionController {
 
         val jwt = setSessionUser(user);
         user.setLogged(LocalDateTime.now());
-        return createdResponse(new UserDto(user), jwt, isSslRequest(request));
+        return new ResponseEntity<>(new Token(jwt), HttpStatus.OK);
+    }
+
+    @Data
+    private static class Token implements Serializable {
+        String token;
+
+        Token(String token) {
+            this.token = token;
+        }
     }
 }
