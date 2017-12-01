@@ -28,18 +28,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Data
     @RequiredArgsConstructor
-    private class Error {
-        @NonNull private Integer code;
+    private class ErrorResponse {
+        @NonNull private int status;
         @NonNull private String message;
     }
-
-    @Data
-    @RequiredArgsConstructor
-    private class ErrorResponse {
-        @NonNull private Error error;
-        @NonNull private String status;
-    }
-
 
     private static HttpHeaders jsonHeaders() {
         HttpHeaders headers = new HttpHeaders();
@@ -47,24 +39,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return headers;
     }
 
-    @ExceptionHandler({NullPointerException.class})
-    protected ResponseEntity<?> handleInvalidBody(NullPointerException ex, WebRequest request) {
-        HttpHeaders headers = jsonHeaders();
-
-        ErrorResponse error = new ErrorResponse(
-                new Error(400, "Missing field " + ex.getMessage()),
-                "ERR");
-
-        return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
-    }
-
     @ExceptionHandler({UnAuthorized.class})
     protected ResponseEntity<?> handleUnauthorizedRequest(UnAuthorized ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(401, "Unauthorized request: " + ex.getMessage()),
-                "ERR");
+        ErrorResponse error = new ErrorResponse(401,
+                "Unauthorized request: " + ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.UNAUTHORIZED, request);
     }
@@ -73,9 +53,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> forbidden(Forbidden ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(403, ex.getMessage()),
-                "ERR");
+        ErrorResponse error = new ErrorResponse(403, ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.FORBIDDEN, request);
     }
@@ -84,10 +62,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> badRequest(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(400, ex.getMessage()),
-                "ERR"
-        );
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -96,10 +71,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> notExist(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(400, ex.getMessage()),
-                "ERR"
-        );
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -109,19 +81,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders headers = jsonHeaders();
 
         if (ex.getCause() instanceof InvalidDefinitionException) {
-            ErrorResponse error = new ErrorResponse(
-                    new Error(400, "Missing field: " + ex.getCause().getCause().getMessage()),
-                    "ERR"
-            );
+            ErrorResponse error = new ErrorResponse(400,
+                    "Missing field: " + ex.getCause().getCause().getMessage());
 
             return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
         }
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(500, ex.getMessage()),
-                "ERR"
-        );
-
+        ErrorResponse error = new ErrorResponse(500, ex.getMessage());
         log.error(ex.getMessage(), ex);
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
@@ -132,11 +98,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                           HttpHeaders headers,
                                                                           HttpStatus status,
                                                                           WebRequest request) {
-        ErrorResponse error = new ErrorResponse(
-                new Error(status.value(), ex.getMessage()),
-                "ERR"
-        );
-
+        ErrorResponse error = new ErrorResponse(status.value(), ex.getMessage());
         log.warn(ex.getMessage());
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
@@ -146,11 +108,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> unhandledError(Exception ex, WebRequest request) {
         HttpHeaders headers = jsonHeaders();
 
-        ErrorResponse error = new ErrorResponse(
-                new Error(500, "Unhandled error"),
-                "ERR"
-        );
-
+        ErrorResponse error = new ErrorResponse(500, "Unhandled error");
         log.error("Unhandled error", ex);
 
         return handleExceptionInternal(ex, error, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);

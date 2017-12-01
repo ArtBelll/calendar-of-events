@@ -123,7 +123,7 @@ public class EmailAuthController extends SessionController {
         }
 
         val user = userDao.getByEmail(requestUser.getEmail())
-                .orElseThrow(() -> new UserNotExists(requestUser.getEmail()));
+                .orElseThrow(() -> new BadRequest("User with mail doesn't exist " + requestUser.getEmail()));
 
         val password = requestUser.getPassword();
         if (!PasswordHelper.checkPassword(password, user.getPassword())) {
