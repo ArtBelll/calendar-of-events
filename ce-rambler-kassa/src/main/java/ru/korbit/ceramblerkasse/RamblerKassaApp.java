@@ -27,14 +27,14 @@ import java.util.concurrent.Executor;
         exclude = {HibernateJpaAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class})
 @EnableAsync
 @Slf4j
-public class Application {
+public class RamblerKassaApp {
 
     public static void main(final String[] args) {
         if (args.length > 0 && args[0].equals("dev")) {
             Environment.host = Environment.PROXY;
         }
 
-        val app = SpringApplication.run(Application.class, args);
+        val app = SpringApplication.run(RamblerKassaApp.class, args);
         val redissonClient = app.getBean(RedissonClient.class);
         val ramblerKasseLoader = app.getBean(RamblerKasseLoader.class);
         val service = redissonClient.getRemoteService(Constants.QUEUE_NAME);

@@ -2,10 +2,8 @@ package ru.korbit.ceserver;
 
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.hibernate.SessionFactory;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -20,8 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import java.io.IOException;
 
@@ -32,15 +28,15 @@ import java.io.IOException;
         JpaRepositoriesAutoConfiguration.class})
 @Slf4j
 @ComponentScan(value = {"ru.korbit.ceserver", "ru.korbit.cecommon"})
-public class Application extends SpringBootServletInitializer {
+public class RestApp extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
+        return application.sources(RestApp.class);
     }
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(RestApp.class, args);
     }
 
     @Value(value = "classpath:redisson.json")

@@ -33,15 +33,15 @@ import java.io.IOException;
 @Slf4j
 @ComponentScan(value = {"ru.korbit.ceadmin", "ru.korbit.cecommon"})
 @EnableScheduling
-public class Application extends SpringBootServletInitializer {
+public class AdminApp extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
+        return application.sources(AdminApp.class);
     }
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(AdminApp.class, args);
     }
 
     @Value(value = "classpath:redisson.json")
