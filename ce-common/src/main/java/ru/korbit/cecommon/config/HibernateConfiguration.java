@@ -1,32 +1,21 @@
 package ru.korbit.cecommon.config;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+
+import javax.persistence.EntityManagerFactory;
 
 @Configuration
+@EntityScan("ru.korbit.cecommon.domain")
 public class HibernateConfiguration {
 
-    @Value(value = "classpath:hibernate.cfg.xml")
-    private Resource hibernateProperties;
-
     @Bean
-    public LocalSessionFactoryBean sessionFactory(HikariDataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setConfigLocation(hibernateProperties);
-        return sessionFactory;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+    public HibernateTransactionManager getTransactionManager(EntityManagerFactory entityManagerFactory) {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
+        txManager.setSessionFactory(entityManagerFactory.unwrap(SessionFactory.class));
         return txManager;
     }
 }

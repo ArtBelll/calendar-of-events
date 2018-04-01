@@ -28,10 +28,9 @@ import ru.korbit.cecommon.utility.PasswordHelper;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 
-@SpringBootApplication(exclude = {HibernateJpaAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class})
+@SpringBootApplication(
+        scanBasePackages = {"ru.korbit.ceadmin", "ru.korbit.cecommon"})
 @Slf4j
-@ComponentScan(value = {"ru.korbit.ceadmin", "ru.korbit.cecommon"})
 @EnableScheduling
 public class AdminApp extends SpringBootServletInitializer {
 

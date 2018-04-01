@@ -10,12 +10,8 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
@@ -24,16 +20,10 @@ import java.io.IOException;
 /**
  * Created by Artur Belogur on 02.11.17.
  */
-@SpringBootApplication(exclude = {HibernateJpaAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class})
+@SpringBootApplication(
+        scanBasePackages = {"ru.korbit.ceserver", "ru.korbit.cecommon"})
 @Slf4j
-@ComponentScan(value = {"ru.korbit.ceserver", "ru.korbit.cecommon"})
-public class RestApp extends SpringBootServletInitializer {
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(RestApp.class);
-    }
+public class RestApp {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(RestApp.class, args);

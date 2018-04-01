@@ -1,10 +1,8 @@
 package ru.korbit.cecommon.dao.dbimpl;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import ru.korbit.cecommon.dao.GenericDao;
 
 import javax.persistence.EntityManagerFactory;
@@ -14,13 +12,11 @@ import java.util.Optional;
 /**
  * Created by Artur Belogur on 11.10.17.
  */
-@Transactional
 public abstract class SessionFactoryHolder<T> implements GenericDao<T>  {
 
     private Class<T> tClass;
 
-    @Autowired
-    protected SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     protected SessionFactoryHolder() {}
 
@@ -28,9 +24,13 @@ public abstract class SessionFactoryHolder<T> implements GenericDao<T>  {
         this.tClass = tClass;
     }
 
-    @Transactional
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    @Autowired
+    protected void setSessionFactory(EntityManagerFactory entityManagerFactory) {
+        this.sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
     }
 
     public T save(T obj) {

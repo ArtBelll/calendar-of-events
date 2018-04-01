@@ -19,8 +19,8 @@ import java.io.IOException;
 /**
  * Created by Artur Belogur on 13.10.17.
  */
-@SpringBootApplication(scanBasePackages = {"ru.korbit.celoader", "ru.korbit.cecommon"},
-        exclude = {HibernateJpaAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class})
+@SpringBootApplication(
+        scanBasePackages = {"ru.korbit.celoader", "ru.korbit.cecommon"})
 @Slf4j
 public class LoaderApp {
 

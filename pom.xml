@@ -23,8 +23,6 @@
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <lombok.version>1.16.16</lombok.version>
         <postgresql.version>9.4.1208</postgresql.version>
-        <hikari.version>2.7.2</hikari.version>
-        <hibernate.version>5.2.11.Final</hibernate.version>
         <junit.version>4.12</junit.version>
         <jackson.version>2.9.1</jackson.version>
         <redisson.version>3.5.4</redisson.version>
