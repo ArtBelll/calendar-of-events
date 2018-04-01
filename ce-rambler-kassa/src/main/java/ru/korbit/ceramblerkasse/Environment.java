@@ -10,7 +10,7 @@ public abstract class Environment {
     // base_url = host/api_version/api_key/format
     private final static String BASE_URL = "%s/%s/%s/%s";
 
-    public final static String PROXY = "http://37.46.129.213:8888";
+    public final static String PROXY = "http://188.225.9.247:8888";
 
     public final static String API_VERSION = "v2";
     public final static String API_KEY = "1a294004-f4db-47ee-a63e-4702cadbc621";

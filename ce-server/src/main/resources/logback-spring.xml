@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_PATH}/spring.log"/>
+    <property name="LOG_ERROR_FILE" value="${LOG_PATH}/error.log"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_ERROR_FILE}</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="default">
+        <logger name="ru.korbit.ceserver" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="ru.korbit.cecommon" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR_FILE" />
+        </root>
+    </springProfile>
+
+</configuration>

@@ -1,5 +1,6 @@
 package ru.korbit.cecommon.dao.dbimpl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.korbit.cecommon.dao.CityDao;
 import ru.korbit.cecommon.domain.City;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
  * Created by Artur Belogur on 11.10.17.
  */
 @Repository(value = "cityDao")
+@Slf4j
 public class CityDaoImpl extends SessionFactoryHolder<City> implements CityDao {
 
     CityDaoImpl() {

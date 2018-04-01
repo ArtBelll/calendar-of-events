@@ -20,8 +20,6 @@
         <ed.group>${project.groupId}</ed.group>
         <ed.version>${project.version}</ed.version>
 
-        <spring.version>5.0.0.RELEASE</spring.version>
-        <sprint.boot.version>2.0.0.M6</sprint.boot.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <lombok.version>1.16.16</lombok.version>
         <postgresql.version>9.4.1208</postgresql.version>
@@ -37,56 +35,14 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- Logging -->
-        <slf4j.version>1.7.12</slf4j.version>
-        <log4j.version>2.4.1</log4j.version>
-
         <guava.version>23.3-jre</guava.version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.M6</version>
+        <version>2.0.0.RELEASE</version>
         <relativePath/>
     </parent>
-
-    <repositories>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
