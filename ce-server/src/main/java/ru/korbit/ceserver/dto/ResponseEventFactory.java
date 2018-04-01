@@ -43,7 +43,7 @@ public class ResponseEventFactory {
                 .stream()
                 .map(cinema -> {
                     List<RHall> halls = cinema.getHalls()
-                            .parallelStream()
+                            .stream()
                             .map(hall -> {
                                 val showtimes = new ArrayList<RShowtime>();
                                 showtimeDao.getByHallAndEventOnDay(cinemaEvent.getId(), hall.getId(), now)
