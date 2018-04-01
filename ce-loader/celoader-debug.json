@@ -6,8 +6,8 @@
       "-Xdebug",
       "-Xrunjdwp:server=y,transport=dt_socket,address=8002,suspend=n",
       "-Xmx256m",
-      "-Dlog4j.configurationFile=/opt/ce-loader/log4j2.xml",
       "-jar",
+      "-Dspring.profiles.active=prod",
       "/opt/ce-loader/ce-loader-1.0-SNAPSHOT.jar"
     ],
     "script": "java",

@@ -19,7 +19,7 @@
     </appender>
 
     <springProfile name="default">
-        <logger name="ru.korbit.ceserver" level="debug" additivity="false">
+        <logger name="ru.korbit.celoader" level="debug" additivity="false">
             <appender-ref ref="CONSOLE" />
         </logger>
 

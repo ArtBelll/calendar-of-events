@@ -1,14 +1,14 @@
 {
   "apps": [{
-    "name": "ce-rambler-kassa-debug",
+    "name": "ce-admin-debug",
     "cwd": "/usr/bin",
     "args": [
       "-Xdebug",
-      "-Xrunjdwp:server=y,transport=dt_socket,address=8001,suspend=n",
+      "-Xrunjdwp:server=y,transport=dt_socket,address=8003,suspend=n",
       "-Xmx256m",
       "-jar",
       "-Dspring.profiles.active=prod",
-      "/opt/ce-rambler-kassa/ce-rambler-kassa-1.0-SNAPSHOT.jar"
+      "/opt/ce-server/ce-admin-1.0-SNAPSHOT.jar"
     ],
     "script": "java",
     "node_args": [],

@@ -4,8 +4,8 @@
     "cwd": "/usr/bin",
     "args": [
       "-Xmx256m",
-      "-Dlog4j.configurationFile=/opt/ce-loader/log4j2.xml",
       "-jar",
+      "-Dspring.profiles.active=prod",
       "/opt/ce-loader/ce-loader-1.0-SNAPSHOT.jar"
     ],
     "script": "java",
