@@ -14,10 +14,9 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "showtime")
 @IdClass(CinemaEventHall.class)
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude={"cinemaEvent", "hall"})
 public class Showtime implements GetIdable {
 
     @JsonIgnore

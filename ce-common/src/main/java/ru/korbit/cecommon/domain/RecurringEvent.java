@@ -1,6 +1,8 @@
 package ru.korbit.cecommon.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -13,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "recurring_events")
-@Data
+@Getter @Setter
 public class RecurringEvent extends Event {
 
     private int price;

@@ -1,18 +1,16 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
  * Created by Artur Belogur on 16.10.17.
  */
-@Data
+
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter @Setter
 public class CinemaEventHall implements Serializable {
     @NonNull private Long cinemaEvent;
     @NonNull private Long hall;

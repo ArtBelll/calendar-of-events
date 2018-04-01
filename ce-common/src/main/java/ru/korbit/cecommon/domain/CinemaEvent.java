@@ -13,10 +13,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "cinema_events")
-@Data
+@Getter @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"showtimeList"})
 public class CinemaEvent extends Event {
 
     @NonNull

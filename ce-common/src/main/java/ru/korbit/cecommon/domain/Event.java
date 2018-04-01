@@ -1,8 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import ru.korbit.cecommon.config.Constants;
 import ru.korbit.cecommon.packet.GetIdable;
 
@@ -18,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Data
+@Getter @Setter
 @NoArgsConstructor
 public abstract class Event implements GetIdable {
 

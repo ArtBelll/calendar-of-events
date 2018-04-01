@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.korbit.cecommon.packet.GetIdable;
 
 import javax.persistence.*;
@@ -15,7 +12,7 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "schedules")
 @IdClass(CityEvent.class)
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class EventSchedule implements GetIdable {

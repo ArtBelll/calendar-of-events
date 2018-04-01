@@ -13,10 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "cities")
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"cinemas"})
 public class City implements GetIdable {
 
     @Id

@@ -1,14 +1,14 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "addresses")
-@Data
-@EqualsAndHashCode(exclude = "organisation")
+@Getter @Setter
 public class Address {
 
     @Id

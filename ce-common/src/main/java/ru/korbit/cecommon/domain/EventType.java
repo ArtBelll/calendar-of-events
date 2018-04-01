@@ -13,10 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "event_types")
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"events"})
 public class EventType implements GetIdable {
 
     @Id

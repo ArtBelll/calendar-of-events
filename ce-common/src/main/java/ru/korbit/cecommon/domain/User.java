@@ -10,11 +10,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table(name = "users")
+@Getter @Setter
 @NoArgsConstructor
-@ToString(exclude = {"organisation"})
 public class User {
 
     @Id

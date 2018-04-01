@@ -7,12 +7,11 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "organisations")
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"addresses", "contacts"})
 public class Organisation {
 
     @Id

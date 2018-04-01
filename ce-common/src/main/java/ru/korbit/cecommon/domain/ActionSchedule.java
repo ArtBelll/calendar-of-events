@@ -2,17 +2,14 @@ package ru.korbit.cecommon.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Duration;
 
 @Entity
 @Table(name = "action_schedules")
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class ActionSchedule {

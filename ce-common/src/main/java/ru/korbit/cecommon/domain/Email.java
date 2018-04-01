@@ -1,9 +1,6 @@
 package ru.korbit.cecommon.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import ru.korbit.cecommon.packet.TypeOfMail;
 
 import javax.persistence.*;
@@ -12,11 +9,11 @@ import java.time.LocalDateTime;
 /**
  * Created by Sergey Ignatov on 31/10/16.
  */
-@Data
 @Entity
 @Table(name = "emails")
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter @Setter
 public class Email {
 
     @Id
